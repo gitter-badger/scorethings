@@ -110,3 +110,5 @@ production:
       timeout: 15
       refresh_interval: 10
       skip_version_check: true
+      safe: true
+
