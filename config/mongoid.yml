@@ -104,7 +104,6 @@ production:
   sessions:
     default:
       uri: <%= ENV['MONGOLAB_URI'] %>
-      database: <%= ENV['MONGOLAB_DATABASE'] %>
     options:
       max_retries: 30
       retry_interval: 1
