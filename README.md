@@ -1,7 +1,7 @@
 # yeAskMe
 This is a website that will allow you to rank and score the things you like (or dislike).
 
-It is deployed to Heroku at [https://yeaskme.herokuapp.com](https://yeaskme.herokuapp.com).
+It is deployed to Heroku at https://yeaskme.herokuapp.com.
 
 Its source code it hosted on GitHub at https://github.com/manuisfunny/yeAskMe.
 
