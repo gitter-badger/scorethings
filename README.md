@@ -1,7 +1,7 @@
 # yeaskme
 This is a website that will allow you to rank and score the things you like (or dislike).
 
-It is deployed to Heroku at https://yeaskme.herokuapp.com.  It will take a few seconds to load, because I'm hosting it with 1 web dyno and it sleeps after 1 hour of inactivity.
+It is deployed to Heroku at http://www.yeask.me.  It will take a few seconds to load, because I'm hosting it with 1 web dyno and it sleeps after 1 hour of inactivity.
 
 Its source code it hosted on GitHub at https://github.com/manuisfunny/yeaskme.
 
