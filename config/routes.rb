@@ -1,13 +1,17 @@
 Rails.application.routes.draw do
-  get 'welcome/index'
-  get 'welcome/about'
+  get 'about' => 'home#about', as: :about
+
+  match '/auth/:provider/callback' => 'sessions#create', via: :get
+  match '/auth/failure' => 'sessions#failure', via: :get
+  match '/signout' => 'sessions#destroy', :as => :signout, via: :get
+  match '/signin' => 'sessions#new', :as => :signin, via: :get
 
   resources :subjects
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'welcome#index'
+  root 'home#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

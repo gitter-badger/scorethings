@@ -1,0 +1,14 @@
+<h1>Welcome to yeaskme</h1>
+
+<p>
+  <%= link_to 'About', about_path %>
+</p>
+
+<h3>Home</h3>
+<% @users.each do |user| %>
+    <p>User: <%= user.name %> </p>
+<% end %>
+
+<p>
+<h1><%= link_to 'Subjects', subjects_path %></h1>
+</p>
