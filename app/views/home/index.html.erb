@@ -4,6 +4,8 @@
   <%= link_to 'About', about_path %>
 </p>
 
+
+<h1>Current User: ({{currentUser}})</h1>
 <h3>Home</h3>
 <% @users.each do |user| %>
     <p>User: <%= user.name %> </p>
@@ -12,3 +14,8 @@
 <p>
 <h1><%= link_to 'Subjects', subjects_path %></h1>
 </p>
+
+<h1>Angular Subjects:</h1>
+<ul>
+  <li ng-repeat="subject in subjects">{{subject}}</li>
+</ul>
