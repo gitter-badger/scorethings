@@ -25,10 +25,8 @@ Rails.application.configure do
   config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
-  # config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
-  # copied from http://stackoverflow.com/a/25404498 to solve AngularJs controller missing error
-  config.assets.js_compressor = Uglifier.new(mangle: false)
+  config.assets.js_compressor = :uglifier
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = true
