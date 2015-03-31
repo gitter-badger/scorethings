@@ -38,7 +38,9 @@ gem 'puma'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-twitter'
+gem 'omniauth-facebook'
 gem 'rails_12factor'
+gem 'jwt'
 
 source "https://rails-assets.org" do
   gem "rails-assets-angular-devise"

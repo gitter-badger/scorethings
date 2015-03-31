@@ -1,21 +1,12 @@
 <h1>Welcome to yeaskme</h1>
 
-<p>
-  <%= link_to 'About', about_path %>
-</p>
-
-
 <h1>Current User: ({{currentUser}})</h1>
-<h3>Home</h3>
 <% @users.each do |user| %>
     <p>User: <%= user.name %> </p>
 <% end %>
 
-<p>
-<h1><%= link_to 'Subjects', subjects_path %></h1>
-</p>
+<h1>Secured Thing: ({{securedThing && securedThing.message}})</h1>
 
-<h1>Angular Subjects:</h1>
-<ul>
-  <li ng-repeat="subject in subjects">{{subject}}</li>
-</ul>
+<h3 ng-show="message">Message: ({{message}})</h3>
+
+<a class='btn btn-default' ng-click="getSecuredThing()">Get Secured Thing</a>

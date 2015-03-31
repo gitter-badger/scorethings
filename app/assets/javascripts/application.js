@@ -13,5 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require angular
+//= require angular-local-storage.min
+//= require angular-jwt.min
+//= require bootstrap
 //= require turbolinks
 //= require_tree .

@@ -1,64 +1,16 @@
 Rails.application.routes.draw do
   get 'about' => 'home#about', as: :about
 
-  match '/auth/:provider/callback' => 'sessions#create', via: :get
-  match '/auth/failure' => 'sessions#failure', via: :get
-  match '/signout' => 'sessions#destroy', :as => :signout, via: :get
-  match '/signin' => 'sessions#new', :as => :signin, via: :get
+  match '/auth/:provider/callback' => 'auth_token#create', via: :get
+  match '/auth/failure' => 'auth_token#failure', via: :get
+  # match '/signout' => 'sessions#destroy', :as => :signout, via: :get
+  match '/signin' => 'auth_token#new', :as => :signin, via: :get
+
+  match 'auth' => 'auth#authenticate', via: :post
+
+  # for testing Json Web Token and authorization
+  match '/secured_thing' => 'secured_thing#show', via: :get
 
   resources :subjects
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
   root 'home#index'
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
-
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
 end

@@ -1,12 +1,9 @@
-<% if user_signed_in? %>
-    <li>
-      Logged in as <%= current_user.name %>
-    </li>
-    <li>
-      <%= link_to('Logout', signout_path) %>
-    </li>
-<% else %>
-    <li>
-      <%= link_to('Login', signin_path)  %>
-    </li>
-<% end %>
+<div ng-show="!loggedIn()">
+  <a class='btn btn-primary' ng-click="login('twitter')">Login With Twitter</a>
+  <a class='btn btn-primary' ng-click="login('facebook')">Login With Facebook</a>
+</div>
+<div ng-show="loggedIn()">
+  logged in as ({{currentUser}})
+  <a class='btn btn-danger' ng-click="logout()">Logout</a>
+</div>
+

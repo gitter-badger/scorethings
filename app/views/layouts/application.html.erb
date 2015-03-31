@@ -7,8 +7,7 @@
   <%= csrf_meta_tags %>
 </head>
 <body ng-app="yeaskme" ng-controller="myCtrl">
-    <ul class="hmenu">
-      <%= render 'shared/navigation' %>
+    <ul class="hmenu"> <%= render 'shared/navigation' %>
     </ul>
 
     <% flash.each do |name, msg| %>

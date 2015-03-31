@@ -17,5 +17,13 @@ class User
       end
     end
   end
+
+  def generate_auth_token
+    payload = {
+        user_id: self._id.to_s,
+        name: self.name
+    }
+    AuthToken.encode(payload)
+  end
 end
 

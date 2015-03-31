@@ -1,0 +1,9 @@
+<h3>Authentication Success</h3>
+<script>
+  try {
+      window.opener.$windowScope.handlePopupAuthentication('<%= @auth_token %>');
+  } catch(err) { }
+
+    window.close();
+
+</script>
