@@ -7,20 +7,27 @@
 angular.module('yeaskme', ['LocalStorageModule', 'angular-jwt'])
     .service('AuthToken', ['localStorageService', 'jwtHelper', function(localStorageService, jwtHelper) {
         return {
+            tokenName: 'authToken',
             set: function(token) {
-                localStorageService.set('token', token);
+                localStorageService.set(this.tokenName, token);
+            },
+            isSet: function() {
+                return !!this.get();
             },
             get: function() {
-                return localStorageService.get('token');
+                return localStorageService.get(this.tokenName);
+            },
+            getAttr: function(attr) {
+                var token = this.get();
+                var payload = jwtHelper.decodeToken(token);
+
+                return payload && payload[attr];
             },
             getName: function() {
-                var token = localStorageService.get('token');
-                if(!token) return;
-
-                return jwtHelper.decodeToken(token) && jwtHelper.decodeToken(token).name;
+                return this.getAttr('name');
             },
             clear: function() {
-                localStorageService.remove('token');
+                localStorageService.remove(this.tokenName);
             }
         };
     }])
@@ -46,14 +53,12 @@ angular.module('yeaskme', ['LocalStorageModule', 'angular-jwt'])
             }
         };
     }])
-    .controller('myCtrl', ['$scope', '$rootScope', '$window', '$interval', '$http', 'AuthToken', function($scope, $rootScope, $window, $interval, $http, AuthToken) {
+    .controller('HomeCtrl', ['$scope', '$rootScope', '$window', '$interval', '$http', 'AuthToken', function($scope, $rootScope, $window, $interval, $http, AuthToken) {
         $scope.message = '';
 
         $scope.currentUser = AuthToken.getName();
 
         $scope.applyToken = function(token) {
-            console.log('token received');
-            console.log(token);
             AuthToken.set(token);
             $scope.currentUser = AuthToken.getName();
         };
@@ -64,28 +69,13 @@ angular.module('yeaskme', ['LocalStorageModule', 'angular-jwt'])
             })
         };
 
-        $scope.loggedIn = function() {
-            return !!AuthToken.get();
+        $scope.isLoggedIn = function() {
+            return !!AuthToken.isSet();
         };
 
         $scope.logout = function() {
             AuthToken.clear();
             delete $scope.currentUser;
-            delete $scope.securedThing;
-            $scope.message = 'logged out';
-        };
-
-        $scope.getSecuredThing = function() {
-            delete $scope.securedThing;
-
-            $http.get('/secured_thing')
-                .success(function(data) {
-                    $scope.securedThing = data;
-                    $scope.message = 'succeeded in getting secured thing';
-                })
-                .error(function(resp, error) {
-                    $scope.message = 'failed to get secured thing';
-                });
         };
 
         $scope.login = function(oauthProvider) {
