@@ -16,5 +16,6 @@
 //= require angular-local-storage.min
 //= require angular-jwt.min
 //= require bootstrap
+//= require yeaskme
 //= require turbolinks
 //= require_tree .
