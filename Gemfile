@@ -41,10 +41,11 @@ gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'rails_12factor'
 gem 'jwt'
+gem 'angular-rails-templates', '~> 0.1.4'
 
 source "https://rails-assets.org" do
-  gem "rails-assets-angular-devise"
-  gem "rails-assets-bootstrap"
+  gem 'rails-assets-angular-devise'
+  gem 'rails-assets-bootstrap'
 end
 
 group :development, :test do

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'about' => 'home#about', as: :about
+  get 'about' => 'general#about', as: :about
 
   match '/auth/:provider/callback' => 'auth_token#create', via: :get
   match '/auth/failure' => 'auth_token#failure', via: :get
@@ -8,9 +8,6 @@ Rails.application.routes.draw do
 
   match 'auth' => 'auth#authenticate', via: :post
 
-  # for testing Json Web Token and authorization
-  match '/secured_thing' => 'secured_thing#show', via: :get
-
   resources :subjects
-  root 'home#index'
+  root 'general#index'
 end

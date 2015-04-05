@@ -16,6 +16,9 @@
 //= require angular-local-storage.min
 //= require angular-jwt.min
 //= require bootstrap
+//= require angular-rails-templates.js
+// AngularJS templates location in app/assets/javascript/templates
+//= require_tree ./templates
 //= require yeaskme
 //= require turbolinks
 //= require_tree .

@@ -17,7 +17,7 @@ angular.module('yeaskme')
         $scope.handlePopupAuthentication = function handlePopupAuthentication(token) {
             $scope.$apply(function() {
                 $scope.applyToken(token);
-            })
+            });
         };
 
         $scope.isLoggedIn = function() {

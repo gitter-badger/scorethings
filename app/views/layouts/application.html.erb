@@ -7,8 +7,7 @@
   <%= csrf_meta_tags %>
 </head>
 <body ng-app="yeaskme" ng-controller="HomeCtrl">
-    <ul class="hmenu"> <%= render 'shared/navigation' %>
-    </ul>
+    <div ng-include="'general/navigation.html'"></div>
 
     <% flash.each do |name, msg| %>
         <% if msg.is_a?(String) %>
