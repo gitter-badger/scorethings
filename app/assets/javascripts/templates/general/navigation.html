@@ -1,8 +1,0 @@
-<div ng-show="!isLoggedIn()">
-    <a class='btn btn-primary' ng-click="login('twitter')">Login With Twitter</a>
-    <a class='btn btn-primary' ng-click="login('facebook')">Login With Facebook</a>
-</div>
-<div ng-show="isLoggedIn()">
-    logged in as ({{currentUser}})
-    <a class='btn btn-danger' ng-click="logout()">Logout</a>
-</div>

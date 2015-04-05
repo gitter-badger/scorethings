@@ -44,7 +44,11 @@ gem 'jwt'
 gem 'angular-rails-templates', '~> 0.1.4'
 
 source "https://rails-assets.org" do
-  gem 'rails-assets-angular-devise'
+  gem 'rails-assets-angular'
+  gem 'rails-assets-angular-jwt'
+  gem 'rails-assets-angular-local-storage'
+  gem 'rails-assets-angular-resource'
+  gem 'rails-assets-angular-route'
   gem 'rails-assets-bootstrap'
 end
 

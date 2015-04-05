@@ -12,22 +12,5 @@ class AuthTokenController < ApplicationController
     else
       render 'authentication_error'
     end
-    #if user
-    #  render json: {
-    #             auth_token: user.generate_auth_token
-    #         }
-    #else
-    #  render json: {
-    #             error: 'Failed to authenticate user'
-    #         },
-    #         status: :unauthorized
-    #end
-  end
-
-  def failure
-    render json: {
-              message: "Authentication error: #{params[:message].humanize}"
-           },
-           status: :unauthorized
   end
 end

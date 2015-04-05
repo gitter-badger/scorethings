@@ -13,8 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require angular
-//= require angular-local-storage.min
-//= require angular-jwt.min
+//= require angular-route
+//= require angular-local-storage
+//= require angular-jwt
 //= require bootstrap
 //= require angular-rails-templates.js
 // AngularJS templates location in app/assets/javascript/templates
