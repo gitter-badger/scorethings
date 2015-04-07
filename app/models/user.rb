@@ -23,6 +23,7 @@ class User
         user_id: self.neo_id,
         name: self.name
     }
+    puts "payload: #{payload}"
     AuthToken.encode(payload)
   end
 end

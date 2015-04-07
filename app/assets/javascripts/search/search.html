@@ -1,0 +1,19 @@
+<h1>Search</h1>
+<form ng-submit="submitSearch()">
+    <div class="form-group">
+        <label for="searchTerm">Search Term</label>
+        <input type="search" class="form-control"
+               ng-model="searchTerm"
+               id="searchTerm" placeholder="Search for Movie or TV Show">
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+
+    <div ng-show="searchResults.length">
+        <h2>Search Results</h2>
+        <ul>
+            <li ng-repeat="searchResult in searchResults">
+                {{searchResult.name}} ({{searchResult.date}})
+            </li>
+        </ul>
+    </div>
+</form>

@@ -23,7 +23,8 @@ class ApplicationController < ActionController::Base
     dat = decoded_auth_token
     if !dat.nil?
       user_id = dat[:user_id]
-      @current_user ||= User.find(user_id)
+      puts "user_id: #{user_id}"
+      @current_user ||= User.find_by(neo_id: user_id)
     else
       return nil
     end
