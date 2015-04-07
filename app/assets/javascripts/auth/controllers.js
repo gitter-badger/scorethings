@@ -4,9 +4,8 @@
  */
 
 angular.module('yeaskme')
-    .controller('AuthCtrl', ['$scope', '$rootScope', '$window', '$interval', '$http', 'AuthToken', 'identity', function($scope, $rootScope, $window, $interval, $http, AuthToken, identity) {
-        $scope.message = '';
-
+    .controller('AuthCtrl', ['$scope', '$rootScope', '$window', '$interval', '$http', 'AuthToken', 'identity', 'notifier',
+        function($scope, $rootScope, $window, $interval, $http, AuthToken, identity, notifier) {
         $scope.identity = identity;
 
         $scope.applyToken = function(token) {
@@ -16,6 +15,7 @@ angular.module('yeaskme')
         $scope.handlePopupAuthentication = function handlePopupAuthentication(token) {
             $scope.$apply(function() {
                 $scope.applyToken(token);
+                notifier.success('Logged in');
             });
         };
 
@@ -25,6 +25,7 @@ angular.module('yeaskme')
 
         $scope.logout = function() {
             AuthToken.clear();
+            notifier.success('Logged out');
         };
 
         $scope.login = function(oauthProvider) {

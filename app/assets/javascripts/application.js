@@ -18,6 +18,7 @@
 //= require angular-jwt
 //= require bootstrap
 //= require angular-rails-templates.js
+//= require toastr
 // AngularJS templates location in app/assets/javascript/templates
 //= require_tree ./templates
 //= require yeaskme

@@ -29,7 +29,7 @@ angular.module('yeaskme')
             }
         };
     }])
-    .factory('AuthInterceptor', ['$q', '$injector', function($q, $injector) {
+    .factory('AuthInterceptor', ['$q', '$injector', 'notifier', function($q, $injector, notifier) {
         return {
             request: function(config) {
                 // called on every outgoing HTTP request
@@ -43,6 +43,7 @@ angular.module('yeaskme')
             },
             responseError: function(response) {
                 // TODO handle error response
+                notifier.error('Error executing last action');
                 return $q.reject(response);
             }
         };

@@ -1,4 +1,4 @@
-angular.module('yeaskme').controller('SearchCtrl', ['$scope', '$http', function($scope, $http) {
+angular.module('yeaskme').controller('SearchCtrl', ['$scope', '$http', 'notifier', function($scope, $http, notifier) {
     $scope.submitSearch = function() {
         $scope.searchResults = [];
 
@@ -10,7 +10,7 @@ angular.module('yeaskme').controller('SearchCtrl', ['$scope', '$http', function(
                 $scope.searchResults = data;
             })
             .error(function(res) {
-                console.error(res);
+                notifier.error('Failed to search for ' + $scope.searchTerm);
             });
     };
 }]);

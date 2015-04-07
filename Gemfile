@@ -50,6 +50,7 @@ source "https://rails-assets.org" do
   gem 'rails-assets-angular-resource'
   gem 'rails-assets-angular-route'
   gem 'rails-assets-bootstrap'
+  gem 'rails-assets-toastr'
 end
 
 group :development, :test do
