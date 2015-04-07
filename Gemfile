@@ -4,8 +4,7 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 ruby '2.2.1'
-# Use sqlite3 as the database for Active Record
-gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # UsejUglifier as compressor for JavaScript assets
@@ -42,6 +41,7 @@ gem 'omniauth-facebook'
 gem 'rails_12factor'
 gem 'jwt'
 gem 'angular-rails-templates', '~> 0.1.4'
+gem 'neo4j', '~> 4.1.0'
 
 source "https://rails-assets.org" do
   gem 'rails-assets-angular'

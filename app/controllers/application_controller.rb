@@ -20,15 +20,12 @@ class ApplicationController < ActionController::Base
 
   private
   def current_user
-    begin
-      dat = decoded_auth_token
-      if dat.nil?
-        return User.none
-      end
+    dat = decoded_auth_token
+    if !dat.nil?
       user_id = dat[:user_id]
       @current_user ||= User.find(user_id)
-    rescue Mongoid::Errors::DocumentNotFound
-      User.none
+    else
+      return nil
     end
   end
 

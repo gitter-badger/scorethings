@@ -4,19 +4,13 @@
  */
 
 angular.module('yeaskme')
-    .controller('AuthCtrl', ['$scope', '$rootScope', '$window', '$interval', '$http', 'AuthToken', function($scope, $rootScope, $window, $interval, $http, AuthToken) {
+    .controller('AuthCtrl', ['$scope', '$rootScope', '$window', '$interval', '$http', 'AuthToken', 'identity', function($scope, $rootScope, $window, $interval, $http, AuthToken, identity) {
         $scope.message = '';
 
-        function currentUserChanged() {
-            $rootScope.$broadcast('currentUserChanged', AuthToken.getName());
-        }
-
-        $scope.currentUser = AuthToken.getName();
-        currentUserChanged();
+        $scope.identity = identity;
 
         $scope.applyToken = function(token) {
             AuthToken.set(token);
-            currentUserChanged();
         };
 
         $scope.handlePopupAuthentication = function handlePopupAuthentication(token) {
@@ -31,7 +25,6 @@ angular.module('yeaskme')
 
         $scope.logout = function() {
             AuthToken.clear();
-            currentUserChanged();
         };
 
         $scope.login = function(oauthProvider) {

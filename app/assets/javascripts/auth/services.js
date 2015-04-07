@@ -2,11 +2,12 @@
  * Created by manuisfunny on 4/2/15.
  */
 angular.module('yeaskme')
-    .service('AuthToken', ['localStorageService', 'jwtHelper', function(localStorageService, jwtHelper) {
+    .service('AuthToken', ['localStorageService', 'jwtHelper', 'identity', function(localStorageService, jwtHelper, identity) {
         return {
             tokenName: 'authToken',
             set: function(token) {
                 localStorageService.set(this.tokenName, token);
+                identity.username = this.getName();
             },
             isSet: function() {
                 return !!this.get();
@@ -24,6 +25,7 @@ angular.module('yeaskme')
             },
             clear: function() {
                 localStorageService.remove(this.tokenName);
+                identity.username = this.getName();
             }
         };
     }])
