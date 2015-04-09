@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   helper_method :user_signed_in?
   helper_method :correct_user?
 
+
   rescue_from NotAuthenticatedError do
     render json: {
                error: 'Not Authorized'

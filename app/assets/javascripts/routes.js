@@ -8,8 +8,7 @@ angular.module('yeaskme')
                 templateUrl: 'main/about.html'
             }).
             when('/search', {
-                templateUrl: 'search/search.html',
-                controller: 'SearchCtrl'
+                templateUrl: 'search/index.html'
             }).
             otherwise({
                 redirectTo: '/'

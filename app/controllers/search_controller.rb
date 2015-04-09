@@ -1,26 +1,18 @@
 class SearchController < ApplicationController
   def index
-    search_term = params[:search_term]
+    search_term = params[:query]
     if search_term.nil?
       render json: {
-                 error: 'No search_term'
+                 error: 'No query'
              },
              status: 400
     else
-      render json: [
-                 {
-                     name: 'The Blues Brothers',
-                     date: 1980
-                 },
-                 {
-                     name: 'The Avengers',
-                     date: 2012
-                 },
-                 {
-                     name: 'Furious 7',
-                     date: 2015
-                 }
-             ],
+      search = Tmdb::Search.new
+      search.resource('movie')
+      search.query(params[:query])
+      results = search.fetch
+
+      render json: results,
              status: 200
     end
   end

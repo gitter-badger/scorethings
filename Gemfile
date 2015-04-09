@@ -43,6 +43,8 @@ gem 'jwt'
 gem 'angular-rails-templates', '~> 0.1.4'
 gem 'neo4j', '~> 4.1.0'
 
+gem 'angular-ui-bootstrap-rails'
+
 source "https://rails-assets.org" do
   gem 'rails-assets-angular'
   gem 'rails-assets-angular-jwt'
