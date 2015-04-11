@@ -5,8 +5,8 @@
                 <div class="col-sm-2 col-xs-12">
                     <label for="searchSource">Source</label>
                     <select ng-model="searchSource" id="searchSource" class="form-control">
-                        <option value="movie" selected="selected">Movie</option>
-                        <option value="tvShow">TV Show</option>
+                        <option value="tmdbMovie" selected="selected">Movie</option>
+                        <option value="tmdbTV">TV Show</option>
                     </select>
                 </div>
                 <div class="col-sm-8 col-xs-12">
@@ -25,15 +25,6 @@
         </div>
     </form>
     <div>
-        <p>
-            Page: {{searchResults.page}}
-        </p>
-        <p>
-            Total Pages: {{searchResults.totalPages}}
-        </p>
-        <p>
-            Total Results: {{searchResults.totalResults}}
-        </p>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -48,7 +39,12 @@
                     <td>{{result.title}}</td>
                     <td>{{result.date | date}}</td>
                     <td><img ng-src="{{result.image}}"></td>
-                    <td><button class="btn btn-default btn-md">Rate</button></td>
+                    <td>{{result}}
+                        <a class="btn btn-default btn-md"
+                           ng-href="#/rate_subject?subject_source={{searchSource}}&subject_id={{result.id}}">
+                            Rate
+                        </a>
+                    </td>
                 </tr>
             </tbody>
 

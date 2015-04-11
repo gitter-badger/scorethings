@@ -10,6 +10,10 @@ angular.module('yeaskme')
             when('/search', {
                 templateUrl: 'search/index.html'
             }).
+            when('/rate_subject', {
+                controller: 'RateCtrl',
+                templateUrl: 'rateSubject/rate.html'
+            }).
             otherwise({
                 redirectTo: '/'
             });

@@ -10,7 +10,8 @@ angular.module('yeaskme').factory('tmdbSearchResultFacade', function() {
                 return {
                     title: searchResult.title,
                     date: searchResult.release_date,
-                    image: searchResult.poster_path && theMovieDb.common.images_uri + 'w45' + searchResult.poster_path
+                    image: searchResult.poster_path && theMovieDb.common.images_uri + 'w45' + searchResult.poster_path,
+                    id: searchResult.id
                 };
             });
 
@@ -31,7 +32,8 @@ angular.module('yeaskme').factory('tmdbSearchResultFacade', function() {
                 return {
                     title: searchResult.name,
                     date: searchResult.first_air_date,
-                    image: searchResult.poster_path && theMovieDb.common.images_uri + 'w45' + searchResult.poster_path
+                    image: searchResult.poster_path && theMovieDb.common.images_uri + 'w45' + searchResult.poster_path,
+                    id: searchResult.id
                 };
             });
 

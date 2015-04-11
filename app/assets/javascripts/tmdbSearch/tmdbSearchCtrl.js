@@ -1,5 +1,5 @@
 angular.module('yeaskme').controller('TMDBSearchCtrl', ['$scope', 'tmdbSearch', 'tmdbSearchResultFacade', 'notifier', function($scope, tmdbSearch, tmdbSearchResultFacade, notifier) {
-    $scope.searchSource = 'movie';
+    $scope.searchSource = 'tmdbMovie';
     $scope.searchResults = {};
 
     var handleError = function(msg) {
@@ -32,9 +32,9 @@ angular.module('yeaskme').controller('TMDBSearchCtrl', ['$scope', 'tmdbSearch', 
     $scope.submitSearch = function() {
         $scope.searchResults = {};
 
-        if($scope.searchSource === 'movie') {
+        if($scope.searchSource === 'tmdbMovie') {
             search.movie($scope.query, handleTMDBSearchResults);
-        } else if($scope.searchSource === 'tvShow') {
+        } else if($scope.searchSource === 'tmdbTV') {
             search.tvShows($scope.query, handleTMDBSearchResults);
         }
     };
