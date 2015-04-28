@@ -19,7 +19,6 @@
 //= require bootstrap
 //= require angular-rails-templates.js
 //= require toastr
-//= require themoviedb.min
 //= require angular-ui-bootstrap
 //= require angular-ui-bootstrap-tpls
 // AngularJS templates location in app/assets/javascript/templates

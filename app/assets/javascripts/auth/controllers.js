@@ -28,8 +28,8 @@ angular.module('app')
             notifier.success('Logged out');
         };
 
-        $scope.login = function(oauthProvider) {
-            var openUrl = '/auth/' + oauthProvider;
+        $scope.login = function() {
+            var openUrl = '/auth/twitter';
             window.$windowScope = $scope;
             window.open(openUrl, "Authenticate Account", "width=500, height=500");
         };

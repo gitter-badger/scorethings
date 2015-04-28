@@ -1,14 +1,12 @@
 <div ng-controller="AuthCtrl">
     <div ng-show="!isLoggedIn()">
-        <a class='btn btn-primary' ng-click="login('twitter')">Login With Twitter</a>
-        <a class='btn btn-primary' ng-click="login('facebook')">Login With Facebook</a>
+        <a class='btn btn-primary' ng-click="login()">Login With Twitter</a>
     </div>
     <div ng-show="isLoggedIn()">
         logged in as ({{identity.username}})
         <a class='btn btn-danger' ng-click="logout()">Logout</a>
     </div>
     <div>
-        <a href="#/search">Search</a>
         <a href="#/about">About</a>
         <a href="#/">Home</a>
     </div>
