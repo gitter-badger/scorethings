@@ -44,6 +44,8 @@ gem 'neo4j', '~> 4.1.0'
 
 gem 'angular-ui-bootstrap-rails'
 
+gem 'twitter'
+
 source "https://rails-assets.org" do
   gem 'rails-assets-angular'
   gem 'rails-assets-angular-jwt'
