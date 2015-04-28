@@ -1,4 +1,4 @@
-angular.module('yeaskme').factory('tmdbSearch', ['$q', function($q) {
+angular.module('app').factory('tmdbSearch', ['$q', function($q) {
     return {
         movie: function(query) {
             var deferred = $q.defer();

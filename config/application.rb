@@ -16,6 +16,7 @@ module YeAskMe
 
     config.neo4j.session_type = :server_db
     config.neo4j.session_path = ENV["GRAPHENEDB_URL"] || 'http://localhost:7474'
+    puts config.neo4j
     config.assets.paths << Rails.root.join("vendor", "assets", "images")
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif *.svg)
   end

@@ -24,6 +24,6 @@
 //= require angular-ui-bootstrap-tpls
 // AngularJS templates location in app/assets/javascript/templates
 //= require_tree ./templates
-//= require yeaskme
+//= require app
 //= require turbolinks
 //= require_tree .

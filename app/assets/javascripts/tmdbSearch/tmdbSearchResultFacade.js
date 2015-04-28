@@ -1,4 +1,4 @@
-angular.module('yeaskme').factory('tmdbSearchResultFacade', function() {
+angular.module('app').factory('tmdbSearchResultFacade', function() {
     return {
         buildFromMovieSearchResults: function(unformattedResults) {
             unformattedResults = JSON.parse(unformattedResults);

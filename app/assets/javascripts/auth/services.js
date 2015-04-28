@@ -1,7 +1,7 @@
 /**
  * Created by manuisfunny on 4/2/15.
  */
-angular.module('yeaskme')
+angular.module('app')
     .service('AuthToken', ['localStorageService', 'jwtHelper', 'identity', function(localStorageService, jwtHelper, identity) {
         return {
             tokenName: 'authToken',

@@ -1,4 +1,4 @@
-angular.module('yeaskme').controller('RateCtrl', ['$scope', '$routeParams', 'tmdbResource', function($scope, $routeParams, tmdbResource) {
+angular.module('app').controller('RateCtrl', ['$scope', '$routeParams', 'tmdbResource', function($scope, $routeParams, tmdbResource) {
     var subjectSource = $routeParams['subject_source'];
     var subjectId = $routeParams['subject_id'];
     console.log(subjectSource);

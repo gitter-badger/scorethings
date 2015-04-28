@@ -3,7 +3,7 @@
  * Created by manuisfunny on 4/2/15.
  */
 
-angular.module('yeaskme')
+angular.module('app')
     .controller('AuthCtrl', ['$scope', '$rootScope', '$window', '$interval', '$http', 'AuthToken', 'identity', 'notifier',
         function($scope, $rootScope, $window, $interval, $http, AuthToken, identity, notifier) {
         $scope.identity = identity;

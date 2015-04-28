@@ -1,4 +1,4 @@
-angular.module('yeaskme').controller('TMDBSearchCtrl', ['$scope', 'tmdbSearch', 'tmdbSearchResultFacade', 'notifier', function($scope, tmdbSearch, tmdbSearchResultFacade, notifier) {
+angular.module('app').controller('TMDBSearchCtrl', ['$scope', 'tmdbSearch', 'tmdbSearchResultFacade', 'notifier', function($scope, tmdbSearch, tmdbSearchResultFacade, notifier) {
     $scope.searchSource = 'tmdbMovie';
     $scope.searchResults = {};
 

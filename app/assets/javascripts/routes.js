@@ -1,4 +1,4 @@
-angular.module('yeaskme')
+angular.module('app')
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
             when('/', {
