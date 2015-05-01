@@ -1,6 +1,6 @@
 class Criterion
-  include Neo4j::ActiveNode
-  property :name
-  property :type
-  property :definition
+  include Mongoid::Document
+  field :name, type: String
+  field :type, type: Integer
+  field :definition, type: String
 end
