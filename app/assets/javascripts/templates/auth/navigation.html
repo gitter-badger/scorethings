@@ -3,7 +3,7 @@
         <a class='btn btn-primary' ng-click="login()">Login With Twitter</a>
     </div>
     <div ng-show="isLoggedIn()">
-        logged in as ({{identity.username}})
+        logged in as @{{identity.twitterHandle}}
         <a class='btn btn-danger' ng-click="logout()">Logout</a>
     </div>
     <div>

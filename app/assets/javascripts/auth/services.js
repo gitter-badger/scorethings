@@ -3,11 +3,12 @@
  */
 angular.module('app')
     .service('AuthToken', ['localStorageService', 'jwtHelper', 'identity', function(localStorageService, jwtHelper, identity) {
+        // TODO clean up this service
         return {
             tokenName: 'authToken',
             set: function(token) {
                 localStorageService.set(this.tokenName, token);
-                identity.username = this.getName();
+                identity.twitterHandle = this.getTwitterHandle();
             },
             isSet: function() {
                 return !!this.get();
@@ -20,12 +21,12 @@ angular.module('app')
                 var payload = token && jwtHelper.decodeToken(token);
                 return payload && payload[attr];
             },
-            getName: function() {
-                return this.getAttr('name');
+            getTwitterHandle: function() {
+                return this.getAttr('twitterHandle');
             },
             clear: function() {
                 localStorageService.remove(this.tokenName);
-                identity.username = this.getName();
+                identity.twitterHandle = this.getTwitterHandle();
             }
         };
     }])

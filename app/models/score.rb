@@ -1,6 +1,4 @@
-class Score 
-  include Neo4j::ActiveNode
-  has_one :out, :subject
-  has_one :in, :user
-  has_many :out, :score_criteria
+class Score
+  include Mongoid::Document
+  embeds_many :score_criterion_values
 end
