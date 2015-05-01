@@ -40,7 +40,7 @@ gem 'omniauth-twitter'
 gem 'rails_12factor'
 gem 'jwt'
 gem 'angular-rails-templates', '~> 0.1.4'
-gem 'neo4j', '~> 4.1.0'
+gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
 
 gem 'angular-ui-bootstrap-rails'
 
@@ -65,5 +65,7 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  gem 'minitest-rails'
 end
 

@@ -21,13 +21,15 @@ class ApplicationController < ActionController::Base
 
   private
   def current_user
-    dat = decoded_auth_token
-    if !dat.nil?
+    begin
+      dat = decoded_auth_token
+      if dat.nil?
+        return User.none
+      end
       user_id = dat[:user_id]
-      puts "user_id: #{user_id}"
-      @current_user ||= User.find_by(neo_id: user_id)
-    else
-      return nil
+      @current_user ||= User.find(user_id)
+    rescue Mongoid::Errors::DocumentNotFound
+      User.none
     end
   end
 

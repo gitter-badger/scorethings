@@ -1,0 +1,1 @@
+Criterion.delete_all

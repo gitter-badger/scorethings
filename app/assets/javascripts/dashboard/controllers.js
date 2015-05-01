@@ -1,19 +1,18 @@
 angular.module('app')
-    .controller('DashboardCtrl', ['$scope', 'twitterSearch', function($scope, twitterSearch) {
+    .controller('DashboardCtrl', ['$scope', 'twitterSearch', 'notifier', function($scope, twitterSearch, notifier) {
         $scope.$on('currentUserChanged', function(e, currentUser) {
             $scope.currentUser = currentUser;
         });
 
         $scope.searchForManuIsFunny = function() {
             twitterSearch.searchForManuIsFunny(
-                function success(data) {
-                    console.log('success searching for manuisfunny');
-                    console.log(data);
-                    $scope.data = data;
+                'manuisfunny',
+                function success(things) {
+                    notifier.success('succeeded in getting things');
+                    $scope.things = things;
                 },
-                function error(response) {
+                function error(response, other) {
                     console.log('error searching for manuisfunny');
-                    console.log(response);
                 }
             );
         };

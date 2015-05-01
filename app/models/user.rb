@@ -1,9 +1,9 @@
 class User
-  include Neo4j::ActiveNode
-  property :provider
-  property :uid
-  property :name
-  property :email
+  include Mongoid::Document
+  field :provider, type: String
+  field :uid, type: String
+  field :name, type: String
+  field :email, type: String
 
   def self.create_with_omniauth(auth)
     # copied from
@@ -20,7 +20,7 @@ class User
 
   def generate_auth_token
     payload = {
-        user_id: self.neo_id,
+        user_id: self._id.to_s,
         name: self.name
     }
     puts "payload: #{payload}"

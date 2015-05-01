@@ -1,7 +1,9 @@
-require 'test_helper'
+require "test_helper"
 
-class SubjectTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+describe Subject do
+  let(:subject) { Subject.new }
+
+  it "must be valid" do
+    subject.must_be :valid?
+  end
 end

@@ -1,4 +1,8 @@
 <h1>Welcome to scorethings</h1>
 
 <a class="btn btn-lg btn-success" ng-click="searchForManuIsFunny()">Search for ManuIsFunny</a>
-Data: ({{data}})
+<ul>
+    <li ng-repeat="thing in things">
+        {{thing}}
+    </li>
+</ul>

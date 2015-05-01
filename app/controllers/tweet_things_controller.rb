@@ -1,6 +1,13 @@
 class TweetThingsController < ApplicationController
   def search
-    tweets = $twitter.search(params[:query], result_type: 'recent').take(10)
-    render json: tweets
+    render json: [
+              'buy it',
+              'use it',
+              'break it',
+              'fix it',
+              'trash it',
+              'change it',
+              'etc.'
+           ]
   end
 end
