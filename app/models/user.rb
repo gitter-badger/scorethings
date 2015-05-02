@@ -7,8 +7,15 @@ class User
 
   has_many :scores
 
-  def say_hello
-    "hello twitter user @#{self.twitterHandle}"
+  def create_score(attrs)
+    score = Score.create!(
+        score_subject: ScoreSubject.new(
+            type: attrs[:subject_type],
+            value: attrs[:subject_value]
+        ),
+        user: self)
+    self.scores << score
+    score
   end
 
   def self.create_with_omniauth(auth)

@@ -68,5 +68,17 @@ group :development, :test do
 
   gem 'rspec-rails'
   gem 'mongoid-rspec', '~> 2.1.0'
+
+  gem 'guard-rspec'
+  gem 'guard-livereload'
+  #gem 'spork-rails', github: 'sporkrb/spork-rails'
+  gem 'guard'
+  gem 'guard-spork'
+  gem 'childprocess'
+end
+
+# copied from https://gist.github.com/JanDintel/6077548
+group :test do
   gem 'factory_girl_rails'
+  gem 'database_cleaner'
 end
