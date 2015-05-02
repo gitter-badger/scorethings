@@ -78,6 +78,7 @@ end
 
 # copied from https://gist.github.com/JanDintel/6077548
 group :test do
+  gem 'rspec-mocks'
   gem 'mongoid-rspec', '~> 2.1.0'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
