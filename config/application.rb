@@ -9,10 +9,9 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module YeAskMe
+module Scorething
   class Application < Rails::Application
     config.generators do |g|
-      g.test_framework :minitest, spec: true, fixture: true
     end
   end
 end

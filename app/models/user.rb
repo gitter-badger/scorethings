@@ -7,6 +7,10 @@ class User
 
   has_many :scores
 
+  def say_hello
+    "hello twitter user @#{self.twitterHandle}"
+  end
+
   def self.create_with_omniauth(auth)
     # copied from
     # http://railsapps.github.io/tutorial-rails-mongoid-omniauth.html
