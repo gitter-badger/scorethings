@@ -67,7 +67,6 @@ group :development, :test do
   gem 'spring'
 
   gem 'rspec-rails'
-  gem 'mongoid-rspec', '~> 2.1.0'
 
   gem 'guard-rspec'
   gem 'guard-livereload'
@@ -79,6 +78,7 @@ end
 
 # copied from https://gist.github.com/JanDintel/6077548
 group :test do
+  gem 'mongoid-rspec', '~> 2.1.0'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
 end

@@ -18,6 +18,17 @@ class User
     score
   end
 
+  def add_score_criterion_value(score, criterion, value)
+    if score.user != self
+      throw "cannot add score criterion value to score, user does not own score"
+    end
+    if criterion.nil?
+      throw "cannot add score criterion value to score, criterion is nil"
+    end
+
+    score.add_score_criterion_value(criterion, value)
+  end
+
   def self.create_with_omniauth(auth)
     # copied from
     # http://railsapps.github.io/tutorial-rails-mongoid-omniauth.html
