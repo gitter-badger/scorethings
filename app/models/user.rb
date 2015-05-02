@@ -1,9 +1,8 @@
 class User
   include Mongoid::Document
   # TODO change fields because only twitter will be used for auth provider
-  field :twitterUid, type: String # this is the uid from the provider (ex: twitter:298239)
-  field :twitterHandle, type: String
-  field :email, type: String
+  field :twitter_uid, type: String # this is the uid from the provider (ex: twitter:298239)
+  field :twitter_handle, type: String
 
   has_many :scores
 
@@ -33,11 +32,10 @@ class User
     # copied from
     # http://railsapps.github.io/tutorial-rails-mongoid-omniauth.html
     create! do |user|
-      user.twitterUid = auth['uid']
+      user.twitter_uid = auth['uid']
       if auth['info']
-        # TODO throw error if you can't get the @handle or email?
-        user.twitterHandle = auth['info']['nickname'] || ""
-        user.email = auth['info']['email'] || ""
+        # TODO throw error if you can't get the twitter nickname for the handle?
+        user.twitter_handle = auth['info']['nickname'] || ""
       end
     end
   end
@@ -45,8 +43,8 @@ class User
   def generate_auth_token
     payload = {
         user_id: self._id.to_s,
-        twitterHandle: self.twitterHandle,
-        twitterUid: self.twitterUid
+        twitter_handle: self.twitter_handle,
+        twitter_uid: self.twitter_uid
     }
     AuthToken.encode(payload)
   end

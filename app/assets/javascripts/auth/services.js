@@ -19,10 +19,12 @@ angular.module('app')
             getAttr: function(attr) {
                 var token = this.get();
                 var payload = token && jwtHelper.decodeToken(token);
+                console.log('payload:');
+                console.log(payload);
                 return payload && payload[attr];
             },
             getTwitterHandle: function() {
-                return this.getAttr('twitterHandle');
+                return this.getAttr('twitter_handle');
             },
             clear: function() {
                 localStorageService.remove(this.tokenName);
