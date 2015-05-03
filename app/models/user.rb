@@ -6,7 +6,7 @@ class User
   field :join_date, type: Time
 
   has_many :scores
-  embeds_many :user_criterion_score_balances
+  embeds_many :criterion_balance
 
   def create_score(attrs)
     score = Score.create!(
@@ -19,11 +19,11 @@ class User
     score
   end
 
-  def initialize_score_points_balance(starting_balance)
+  def initialize_criterion_balance(starting_balance)
     balance_change_time = Time.now
 
     Criterion.all.each do |criterion|
-      ucsb = UserCriterionScoreBalance.new
+      ucsb = CriterionBalance.new
       ucsb.date_last_modified = balance_change_time
       ucsb.remaining_balance = starting_balance
       ucsb.user = self
@@ -56,7 +56,7 @@ class User
 
       user.twitter_handle = auth_info[:nickname]
 
-      user.initialize_score_points_balance(1000)
+      user.initialize_criterion_balance(1000)
     end
   end
 

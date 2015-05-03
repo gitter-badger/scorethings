@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Score do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   describe "creating scores" do
-    it "should calculate the total score of all score criteria values it has" do
+    it "should calculate the total score of all subscores it has" do
       score = build(:twitter_handle_score)
       expect(score).to_not be_nil
       score.subscores << build(:positive_subscore, value: 40)

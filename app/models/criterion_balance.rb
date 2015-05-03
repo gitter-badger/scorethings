@@ -1,4 +1,4 @@
-class UserCriterionScoreBalance
+class CriterionBalance
   include Mongoid::Document
   field :criterion, type: Criterion
   field :remaining_balance, type: Integer

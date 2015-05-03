@@ -6,7 +6,7 @@ RSpec.describe User do
   describe "creating a new user with oauth" do
     it "should create a new user account with defaults" do
       # there are 4 criterion, so the new user should have
-      # 4 user_criterion_score_balances
+      # 4 criterion_balance
       positive_criterion = create(:positive_criterion)
       negative_criterion = create(:negative_criterion)
 
@@ -25,15 +25,15 @@ RSpec.describe User do
       expect(patton.twitter_uid).to eq('2121')
       expect(patton.twitter_handle).to eq('pattonoswalt')
       expect(patton.scores.length).to eq(0)
-      expect(patton.user_criterion_score_balances.length).to eq(2)
+      expect(patton.criterion_balance.length).to eq(2)
 
-      # there should be 2 user_criterion_score_balances, one for each of the existing criteria
+      # there should be 2 criterion_balance, one for each of the existing criteria
       # each one should have a remaining balance of 1000
-      first_score_balance = patton.user_criterion_score_balances.where(criterion: positive_criterion._id).first
+      first_score_balance = patton.criterion_balance.where(criterion: positive_criterion._id).first
       expect(first_score_balance).to_not be_nil
       expect(first_score_balance.remaining_balance).to eq(1000)
 
-      second_score_balance = patton.user_criterion_score_balances.where(criterion: negative_criterion._id).first
+      second_score_balance = patton.criterion_balance.where(criterion: negative_criterion._id).first
       expect(second_score_balance).to_not be_nil
       expect(second_score_balance.remaining_balance).to eq(1000)
     end
