@@ -22,7 +22,6 @@ class User
   def initialize_score_points_balance(starting_balance)
     balance_change_time = Time.now
 
-
     Criterion.all.each do |criterion|
       ucsb = UserCriterionScoreBalance.new
       ucsb.date_last_modified = balance_change_time
@@ -34,10 +33,10 @@ class User
 
   def add_score_criterion_value(score, criterion, value)
     if score.user != self
-      throw "cannot add score criterion value to score, user does not own score"
+      raise AccessDeniedError, "cannot add score criterion value to score, user does not own score"
     end
     if criterion.nil?
-      throw "cannot add score criterion value to score, criterion is nil"
+      raise ArgumentError, "cannot add score criterion value to score, criterion is nil"
     end
 
     score.add_score_criterion_value(criterion, value)

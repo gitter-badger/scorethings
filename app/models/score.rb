@@ -16,7 +16,9 @@ class Score
   def add_score_criterion_value(criterion, value)
     self.score_criterion_values.each do |scv|
       if scv.criterion == criterion
-        raise "cannot have two score criterion values with same criterion"
+        # if the score already has a value for this criterion, overwrite it
+        scv.value = value
+        return
       end
     end
     score_criterion_value = ScoreCriterionValue.new

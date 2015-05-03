@@ -1,15 +1,15 @@
 FactoryGirl.define do
-  sequence(:name) { |n| "Criterion #{n}" }
+  sequence(:criterion_name) { |n| "Criterion #{n}" }
 
-  factory :positive_criterion, class: Criterion do
-    name
-    definition 'A positive criterion used in spec tests'
-    type 1
+  factory :positive_criterion, class: Criterion do |t|
+    t.name FactoryGirl.generate(:criterion_name)
+    t.definition 'A positive criterion used in spec tests'
+    t.type 1
   end
 
-  factory :negative_criterion, class: Criterion do
-    name
-    definition 'A negative criterion used in spec tests'
-    type -1
+  factory :negative_criterion, class: Criterion do |t|
+    t.name FactoryGirl.generate(:criterion_name)
+    t.definition 'A negative criterion used in spec tests'
+    t.type -1
   end
 end

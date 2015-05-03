@@ -81,7 +81,7 @@ RSpec.describe User do
   end
 
   describe "adding score criteria values to a score" do
-    it "should add two positive score criteria values to a score" do
+    it "should add two score criteria values to a score" do
       patton = create(:pattonoswalt)
 
       score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
@@ -92,31 +92,28 @@ RSpec.describe User do
       patton.add_score_criterion_value(score, positive_criterion_1, 65)
       patton.add_score_criterion_value(score, positive_criterion_2, 52)
       expect(score.score_criterion_values.length).to eq(2)
-      expect(score.calculate_total_score).to eq(117)
+
+      # total calculation functionality is tested in score_spec
     end
 
-    it "should add two positive and negative score criteria values to a score" do
+    it "should not allow a score criterion value to be added without a criterion" do
       patton = create(:pattonoswalt)
 
       score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
-      positive_criterion = create(:positive_criterion)
+      expect{
+        patton.add_score_criterion_value(score, nil, 65)
+      }.to raise_error(ArgumentError)
+    end
+
+    it "should not allow a score criterion value to be added by a user who is not the score's user" do
+      patton = create(:pattonoswalt)
+      josswhedon = create(:josswhedon)
       negative_criterion = create(:negative_criterion)
 
-      expect(score.score_criterion_values.length).to eq(0)
-      patton.add_score_criterion_value(score, positive_criterion, 65)
-      patton.add_score_criterion_value(score, negative_criterion, 52)
-      expect(score.score_criterion_values.length).to eq(2)
-      expect(score.calculate_total_score).to eq(13)
-    end
-
-    it "should not allow adding two score criteria values with the same criterion" do
-      patton = create(:pattonoswalt)
-
       score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
-      positive_criterion = create(:positive_criterion)
-
-      patton.add_score_criterion_value(score, positive_criterion, 65)
-      expect{ patton.add_score_criterion_value(score, positive_criterion, 52) }.to raise_error(RuntimeError)
+      expect{
+        josswhedon.add_score_criterion_value(score, negative_criterion, 77)
+      }.to raise_error(AccessDeniedError) # That's a dick move, Firefly.  Grant Morrison is legend.
     end
   end
 end
