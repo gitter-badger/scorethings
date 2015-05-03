@@ -6,9 +6,9 @@ class User
   field :join_date, type: Time
 
   has_many :scores
-  embeds_many :criterion_balances
+  embeds_one :user_points_total
 
-  INITIAL_CRITERION_BALANCE = 1000
+  INITIAL_POINTS_TOTAL = 1000
 
   def create_score(attrs)
     score = Score.create!(
@@ -21,27 +21,13 @@ class User
     score
   end
 
-  def initialize_criterion_balance
-    # this initializes the user's criterion_balance to include
-    # an initial balance for all of the current Criterion
+  def initialize_points_balance
+    # this initializes the user's points_balance to an initial amount
+    self.user_points_total = UserPointsTotal.new(last_modified: Time.now, amount: INITIAL_POINTS_TOTAL)
+  end
 
-    # TODO I think some sort of reactive programming should handle
-    # initializing the criterion balances for users when new criterion are added
-    # but I'm not really familiar with reactive programming, so it might not be the
-    # correct solution
-
-    balance_change_time = Time.now
-
-    Criterion.all.each do |criterion|
-      if self.criterion_balances.where(criterion: criterion._id).first.nil?
-        # if the user doesn't have the criterion balance, add it
-        criterion_balance = CriterionBalance.new
-        criterion_balance.date_last_modified = balance_change_time
-        criterion_balance.total_balance = INITIAL_CRITERION_BALANCE
-        criterion_balance.criterion = criterion._id
-        self.criterion_balances << criterion_balance
-      end
-    end
+  def self.increase_user_points_total(user, increase_amount)
+    user.user_points_total.amount += increase_amount
   end
 
   def add_or_change_subscore(score, criterion, value)
@@ -52,11 +38,15 @@ class User
       raise ArgumentError, "cannot add subscore to score, criterion is nil"
     end
 
-    self.initialize_criterion_balance
+    score.add_or_change_subscore(criterion, value)
+  end
 
-    new_criterion_used_balance = score.add_or_change_subscore(criterion, value)
-    criterion_balance = self.criterion_balances.where(criterion: criterion._id).first
-    criterion_balance.used_balance = new_criterion_used_balance
+  def remaining_points
+    total_used = 0
+    self.scores.each do |score|
+      total_used += score.calculate_total_score
+    end
+    self.user_points_total.amount - total_used
   end
 
   def self.create_with_omniauth(auth)
@@ -73,7 +63,7 @@ class User
 
       user.twitter_handle = auth_info[:nickname]
 
-      user.initialize_criterion_balance
+      user.initialize_points_balance
     end
   end
 

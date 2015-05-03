@@ -13,19 +13,17 @@ class Score
     return total_score
   end
   
-  def add_or_change_subscore(criterion, new_subscore_criterion_value)
+  def add_or_change_subscore(criterion, new_subscore_value)
     self.subscores.each do |subscore|
       if subscore.criterion == criterion
         # if the score already has a value for this criterion, overwrite it
-
-        # return the new value as the new used balance (used to keep track of remaining)
-        return subscore.value = new_subscore_criterion_value
+        subscore.value = new_subscore_value
+        return
       end
     end
     subscore = Subscore.new
     subscore.criterion = criterion
-    subscore.value = new_subscore_criterion_value
+    subscore.value = new_subscore_value
     subscore.score = self
-    return new_subscore_criterion_value
   end
 end

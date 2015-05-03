@@ -25,17 +25,9 @@ RSpec.describe User do
       expect(patton.twitter_uid).to eq('2121')
       expect(patton.twitter_handle).to eq('pattonoswalt')
       expect(patton.scores.length).to eq(0)
-      expect(patton.criterion_balances.length).to eq(2)
-
-      # there should be 2 criterion_balance, one for each of the existing criteria
-      # each one should have a remaining balance of 1000
-      first_score_balance = patton.criterion_balances.where(criterion: positive_criterion._id).first
-      expect(first_score_balance).to_not be_nil
-      expect(first_score_balance.remaining_balance).to eq(1000)
-
-      second_score_balance = patton.criterion_balances.where(criterion: negative_criterion._id).first
-      expect(second_score_balance).to_not be_nil
-      expect(second_score_balance.remaining_balance).to eq(1000)
+      expect(patton.user_points_total).to_not be_nil
+      expect(patton.user_points_total.amount).to eq(1000)
+      expect(patton.remaining_points).to eq(1000)
     end
   end
 
@@ -117,37 +109,75 @@ RSpec.describe User do
     end
   end
 
-  describe "keeping track of criterion balance" do
-    it "should reduce it's criterion balance when a subscore is added" do
+  describe "keeping track of remaining points" do
+    it "should calculate the remaining points when a subscore is added and changed" do
       funny_criterion = create(:positive_criterion)
       smart_criterion = create(:positive_criterion)
 
       patton = create(:pattonoswalt)
-      patton.initialize_criterion_balance
+      patton.initialize_points_balance
 
       score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
-      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.remaining_balance).to eq(1000)
-      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.remaining_balance).to eq(1000)
+      expect(patton.user_points_total.amount).to eq(1000)
+      expect(patton.remaining_points).to eq(1000)
 
-      patton.add_or_change_subscore(score, funny_criterion, 65)
-      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.used_balance).to eq(65)
-      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.used_balance).to eq(0)
-      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.remaining_balance).to eq(935)
-      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.remaining_balance).to eq(1000)
+      patton.add_or_change_subscore(score, funny_criterion, 40)
+      expect(patton.remaining_points).to eq(960)
 
-      patton.add_or_change_subscore(score, smart_criterion, 52)
-      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.used_balance).to eq(65)
-      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.used_balance).to eq(52)
-      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.remaining_balance).to eq(935)
-      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.remaining_balance).to eq(948)
+      patton.add_or_change_subscore(score, smart_criterion, 30)
+      expect(patton.remaining_points).to eq(930)
 
-      # user reduces subscore for funny_criterion,
-      patton.add_or_change_subscore(score, funny_criterion, 22)
-      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.used_balance).to eq(22)
-      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.used_balance).to eq(52)
-      # remaining balance for funny_criteria is increased (new used balance is less than before)
-      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.remaining_balance).to eq(978)
-      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.remaining_balance).to eq(948)
+      patton.add_or_change_subscore(score, funny_criterion, 38)
+      expect(patton.remaining_points).to eq(932)
+    end
+
+    it "should calculate the remaining points when the user has more than one score" do
+      funny_criterion = create(:positive_criterion)
+      smart_criterion = create(:positive_criterion)
+
+      patton = create(:pattonoswalt)
+      patton.initialize_points_balance
+
+      grant_score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
+      cbgirl_score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'cbgirl19')
+      expect(patton.user_points_total.amount).to eq(1000)
+      expect(patton.remaining_points).to eq(1000)
+
+      patton.add_or_change_subscore(grant_score, funny_criterion, 40)
+      expect(patton.remaining_points).to eq(960)
+
+      patton.add_or_change_subscore(cbgirl_score, smart_criterion, 30)
+      expect(patton.remaining_points).to eq(930)
+
+      patton.add_or_change_subscore(grant_score, funny_criterion, 38)
+      expect(patton.remaining_points).to eq(932)
+
+      patton.add_or_change_subscore(cbgirl_score, funny_criterion, 80)
+      expect(patton.remaining_points).to eq(852)
+    end
+
+    it "should calculate the remaining points after the user points total amount has changed" do
+      funny_criterion = create(:positive_criterion)
+      smart_criterion = create(:positive_criterion)
+
+      patton = create(:pattonoswalt)
+      patton.initialize_points_balance
+
+      expect(patton.user_points_total.amount).to eq(1000)
+
+      score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
+      expect(patton.user_points_total.amount).to eq(1000)
+      expect(patton.remaining_points).to eq(1000)
+
+      patton.add_or_change_subscore(score, funny_criterion, 40)
+      patton.add_or_change_subscore(score, smart_criterion, 70)
+      expect(patton.user_points_total.amount).to eq(1000)
+      expect(patton.remaining_points).to eq(890)
+
+      # increase the user's points total, should increase change remaining points calculation
+      User.increase_user_points_total(patton, 200)
+      expect(patton.user_points_total.amount).to eq(1200)
+      expect(patton.remaining_points).to eq(1090)
     end
   end
 end
