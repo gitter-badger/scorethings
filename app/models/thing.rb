@@ -1,4 +1,4 @@
-class ScoreSubject
+class Thing
   include Mongoid::Document
   embedded_in :score
   field :value, type: String

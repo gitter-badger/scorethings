@@ -2,7 +2,7 @@ class Score
   include Mongoid::Document
   embeds_many :subscores
   belongs_to :user
-  embeds_one :score_subject
+  embeds_one :thing
 
   def calculate_total_score
     total_score = 0

@@ -12,9 +12,9 @@ class User
 
   def create_score(attrs)
     score = Score.create!(
-        score_subject: ScoreSubject.new(
-            type: attrs[:subject_type],
-            value: attrs[:subject_value]
+        thing: Thing.new(
+            type: attrs[:thing_type],
+            value: attrs[:thing_value]
         ),
         user: self)
     self.scores << score

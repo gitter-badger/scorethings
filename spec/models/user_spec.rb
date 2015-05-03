@@ -37,13 +37,13 @@ RSpec.describe User do
 
       expect(patton.scores.length).to eq(0)
 
-      score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'josswhedon')
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'josswhedon')
 
       expect(score).to_not be_nil
       expect(score.user).to eq(patton)
-      expect(score.score_subject).to_not be_nil
-      expect(score.score_subject.type).to eq('twitter_handle')
-      expect(score.score_subject.value).to eq('josswhedon')
+      expect(score.thing).to_not be_nil
+      expect(score.thing.type).to eq('twitter_handle')
+      expect(score.thing.value).to eq('josswhedon')
       expect(score.calculate_total_score).to eq(0)
 
       expect(patton.scores.length).to eq(1)
@@ -54,13 +54,13 @@ RSpec.describe User do
 
       expect(patton.scores.length).to eq(0)
 
-      score = patton.create_score(subject_type: 'twitter_hashtag', subject_value: 'stelladoro')
+      score = patton.create_score(thing_type: 'twitter_hashtag', thing_value: 'stelladoro')
 
       expect(score).to_not be_nil
       expect(score.user).to eq(patton)
-      expect(score.score_subject).to_not be_nil
-      expect(score.score_subject.type).to eq('twitter_hashtag')
-      expect(score.score_subject.value).to eq('stelladoro')
+      expect(score.thing).to_not be_nil
+      expect(score.thing.type).to eq('twitter_hashtag')
+      expect(score.thing.value).to eq('stelladoro')
       expect(score.calculate_total_score).to eq(0)
 
       expect(patton.scores.length).to eq(1)
@@ -69,7 +69,7 @@ RSpec.describe User do
     it "should not create an empty score for an unsupported subject type" do
       patton = build(:pattonoswalt)
       expect{
-        patton.create_score(subject_type: 'twitter_whatever', subject_value: 'whatitdo')
+        patton.create_score(thing_type: 'twitter_whatever', thing_value: 'whatitdo')
       }.to raise_error(Mongoid::Errors::Validations)
     end
   end
@@ -78,7 +78,7 @@ RSpec.describe User do
     it "should add two subscores to a score" do
       patton = create(:pattonoswalt)
 
-      score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
       positive_criterion_1 = create(:positive_criterion)
       positive_criterion_2 = create(:positive_criterion)
 
@@ -93,7 +93,7 @@ RSpec.describe User do
     it "should not allow a subscore to be added without a criterion" do
       patton = create(:pattonoswalt)
 
-      score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
       expect{
         patton.add_or_change_subscore(score, nil, 65)
       }.to raise_error(ArgumentError)
@@ -104,7 +104,7 @@ RSpec.describe User do
       josswhedon = create(:josswhedon)
       negative_criterion = create(:negative_criterion)
 
-      score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
       expect{
         josswhedon.add_or_change_subscore(score, negative_criterion, 77)
       }.to raise_error(AccessDeniedError) # That's a dick move, Firefly.  Grant Morrison is legend.
@@ -119,7 +119,7 @@ RSpec.describe User do
       patton = create(:pattonoswalt)
       patton.initialize_points_balance
 
-      score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
       expect(patton.user_points_total.amount).to eq(1000)
       expect(patton.remaining_points).to eq(1000)
 
@@ -140,8 +140,8 @@ RSpec.describe User do
       patton = create(:pattonoswalt)
       patton.initialize_points_balance
 
-      grant_score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
-      cbgirl_score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'cbgirl19')
+      grant_score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      cbgirl_score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'cbgirl19')
       expect(patton.user_points_total.amount).to eq(1000)
       expect(patton.remaining_points).to eq(1000)
 
@@ -167,7 +167,7 @@ RSpec.describe User do
 
       expect(patton.user_points_total.amount).to eq(1000)
 
-      score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
       expect(patton.user_points_total.amount).to eq(1000)
       expect(patton.remaining_points).to eq(1000)
 
