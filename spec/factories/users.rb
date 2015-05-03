@@ -1,11 +1,11 @@
 FactoryGirl.define do
-  factory :pattonoswalt, class: User do
-    twitter_handle 'pattonoswalt'
+  factory :user_alpha, class: User do
+    twitter_handle 'alpha'
     twitter_uid '1234'
   end
 
-  factory :josswhedon, class: User do
-    twitter_handle 'josswhedon'
+  factory :user_bravo, class: User do
+    twitter_handle 'bravo'
     twitter_uid '8888'
   end
 end
