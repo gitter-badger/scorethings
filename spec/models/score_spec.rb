@@ -40,37 +40,34 @@ RSpec.describe Score do
     end
 
     it "should validate subscore values" do
+      def check_score_invalid_with_invalid_subscore_value(score, criterion, invalid_value)
+        valid_value = 20
+        score.add_or_change_subscore(criterion, valid_value)
+        expect(score.valid?).to be true
+        score.add_or_change_subscore(criterion, invalid_value)
+        expect(score.valid?).to be false
+        score.add_or_change_subscore(criterion, valid_value)
+      end
+
       score = build(:twitter_handle_score)
       positive_criterion = create(:positive_criterion)
       negative_criterion = create(:negative_criterion)
 
-      score.add_or_change_subscore(positive_criterion, 40)
-      score.add_or_change_subscore(negative_criterion, 60)
+      # value must be present
+      check_score_invalid_with_invalid_subscore_value(score, positive_criterion, nil)
 
       # value must be >= 0
-      expect(score.valid?).to be true
-      score.add_or_change_subscore(positive_criterion, nil)
-      expect(score.valid?).to be false
-      score.add_or_change_subscore(positive_criterion, 10)
-      expect(score.valid?).to be true
+      check_score_invalid_with_invalid_subscore_value(score, positive_criterion, -5)
 
       # value must be >= 0 (even for negative criterion)
-      score.add_or_change_subscore(negative_criterion, -5)
-      expect(score.valid?).to be false
-      score.add_or_change_subscore(negative_criterion, 10)
-      expect(score.valid?).to be true
+      check_score_invalid_with_invalid_subscore_value(score, negative_criterion, -5)
 
       # value must be <= 100
-      score.add_or_change_subscore(positive_criterion, 120)
-      expect(score.valid?).to be false
-      score.add_or_change_subscore(positive_criterion, 10)
-      expect(score.valid?).to be true
+      check_score_invalid_with_invalid_subscore_value(score, positive_criterion, 120)
 
       # value must be integer
-      score.add_or_change_subscore(positive_criterion, 45.5)
-      expect(score.valid?).to be false
-      score.add_or_change_subscore(positive_criterion, 10)
-      expect(score.valid?).to be true
+      check_score_invalid_with_invalid_subscore_value(score, positive_criterion, 45.5)
     end
+
   end
 end
