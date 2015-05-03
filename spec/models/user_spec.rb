@@ -80,8 +80,8 @@ RSpec.describe User do
     end
   end
 
-  describe "adding score criteria values to a score" do
-    it "should add two score criteria values to a score" do
+  describe "adding subscores to a score" do
+    it "should add two subscores to a score" do
       patton = create(:pattonoswalt)
 
       score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')

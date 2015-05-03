@@ -19,17 +19,24 @@ RSpec.describe Score do
       # it does not result in 2 values for the same criterion
       score = build(:twitter_handle_score)
       positive_criterion = create(:positive_criterion)
+      positive_criterion_2 = create(:positive_criterion)
 
       expect(score.subscores.length).to eq(0)
       # add value once
       score.add_subscore(positive_criterion, 65)
-      expect(score.subscores.length).to eq(1)
+      score.add_subscore(positive_criterion_2, 83)
+      expect(score.subscores.length).to eq(2)
       expect(score.subscores.first.value).to eq(65)
+      expect(score.subscores.second.value).to eq(83)
+
+      expect(score.calculate_total_score).to eq(148)
 
       # add value again with same criterion
       score.add_subscore(positive_criterion, 52)
-      expect(score.subscores.length).to eq(1) # not 2 values, still 1, value is now the 52 just passed in
+      expect(score.subscores.length).to eq(2) # not 3 values, still 2, first value is now the 52 just passed in
       expect(score.subscores.first.value).to eq(52)
+      expect(score.subscores.second.value).to eq(83)
+      expect(score.calculate_total_score).to eq(135)
     end
   end
 end
