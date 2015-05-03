@@ -1,4 +1,4 @@
-class ScoreCriterionValue
+class Subscore
   include Mongoid::Document
   field :value, type: Integer
   field :criterion, type: Criterion

@@ -88,31 +88,31 @@ RSpec.describe User do
       positive_criterion_1 = create(:positive_criterion)
       positive_criterion_2 = create(:positive_criterion)
 
-      expect(score.score_criterion_values.length).to eq(0)
-      patton.add_score_criterion_value(score, positive_criterion_1, 65)
-      patton.add_score_criterion_value(score, positive_criterion_2, 52)
-      expect(score.score_criterion_values.length).to eq(2)
+      expect(score.subscores.length).to eq(0)
+      patton.add_subscore(score, positive_criterion_1, 65)
+      patton.add_subscore(score, positive_criterion_2, 52)
+      expect(score.subscores.length).to eq(2)
 
       # total calculation functionality is tested in score_spec
     end
 
-    it "should not allow a score criterion value to be added without a criterion" do
+    it "should not allow a subscore to be added without a criterion" do
       patton = create(:pattonoswalt)
 
       score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
       expect{
-        patton.add_score_criterion_value(score, nil, 65)
+        patton.add_subscore(score, nil, 65)
       }.to raise_error(ArgumentError)
     end
 
-    it "should not allow a score criterion value to be added by a user who is not the score's user" do
+    it "should not allow a subscore to be added by a user who is not the score's user" do
       patton = create(:pattonoswalt)
       josswhedon = create(:josswhedon)
       negative_criterion = create(:negative_criterion)
 
       score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
       expect{
-        josswhedon.add_score_criterion_value(score, negative_criterion, 77)
+        josswhedon.add_subscore(score, negative_criterion, 77)
       }.to raise_error(AccessDeniedError) # That's a dick move, Firefly.  Grant Morrison is legend.
     end
   end

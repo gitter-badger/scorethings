@@ -31,15 +31,15 @@ class User
     end
   end
 
-  def add_score_criterion_value(score, criterion, value)
+  def add_subscore(score, criterion, value)
     if score.user != self
-      raise AccessDeniedError, "cannot add score criterion value to score, user does not own score"
+      raise AccessDeniedError, "cannot add subscore to score, user does not own score"
     end
     if criterion.nil?
-      raise ArgumentError, "cannot add score criterion value to score, criterion is nil"
+      raise ArgumentError, "cannot add subscore to score, criterion is nil"
     end
 
-    score.add_score_criterion_value(criterion, value)
+    score.add_subscore(criterion, value)
   end
 
   def self.create_with_omniauth(auth)
