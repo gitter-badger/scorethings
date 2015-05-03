@@ -41,6 +41,7 @@ gem 'rails_12factor'
 gem 'jwt'
 gem 'angular-rails-templates', '~> 0.1.4'
 gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
+gem 'mongoid-embedded-errors'
 
 gem 'angular-ui-bootstrap-rails'
 

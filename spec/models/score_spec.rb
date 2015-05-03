@@ -38,5 +38,39 @@ RSpec.describe Score do
       expect(score.subscores.second.value).to eq(83)
       expect(score.calculate_total_score).to eq(135)
     end
+
+    it "should validate subscore values" do
+      score = build(:twitter_handle_score)
+      positive_criterion = create(:positive_criterion)
+      negative_criterion = create(:negative_criterion)
+
+      score.add_or_change_subscore(positive_criterion, 40)
+      score.add_or_change_subscore(negative_criterion, 60)
+
+      # value must be >= 0
+      expect(score.valid?).to be true
+      score.add_or_change_subscore(positive_criterion, nil)
+      expect(score.valid?).to be false
+      score.add_or_change_subscore(positive_criterion, 10)
+      expect(score.valid?).to be true
+
+      # value must be >= 0 (even for negative criterion)
+      score.add_or_change_subscore(negative_criterion, -5)
+      expect(score.valid?).to be false
+      score.add_or_change_subscore(negative_criterion, 10)
+      expect(score.valid?).to be true
+
+      # value must be <= 100
+      score.add_or_change_subscore(positive_criterion, 120)
+      expect(score.valid?).to be false
+      score.add_or_change_subscore(positive_criterion, 10)
+      expect(score.valid?).to be true
+
+      # value must be integer
+      score.add_or_change_subscore(positive_criterion, 45.5)
+      expect(score.valid?).to be false
+      score.add_or_change_subscore(positive_criterion, 10)
+      expect(score.valid?).to be true
+    end
   end
 end

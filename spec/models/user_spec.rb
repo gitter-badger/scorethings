@@ -68,7 +68,9 @@ RSpec.describe User do
 
     it "should not create an empty score for an unsupported subject type" do
       patton = build(:pattonoswalt)
-      expect{ patton.create_score(subject_type: 'twitter_whatever', subject_value: 'whatitdo') }.to raise_error(Mongoid::Errors::Validations)
+      expect{
+        patton.create_score(subject_type: 'twitter_whatever', subject_value: 'whatitdo')
+      }.to raise_error(Mongoid::Errors::Validations)
     end
   end
 

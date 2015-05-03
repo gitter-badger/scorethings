@@ -17,6 +17,7 @@ class Score
     self.subscores.each do |subscore|
       if subscore.criterion == criterion
         # if the score already has a value for this criterion, overwrite it
+        puts "\n\n\nsetting new subscore value:  #{new_subscore_value}"
         subscore.value = new_subscore_value
         return
       end
