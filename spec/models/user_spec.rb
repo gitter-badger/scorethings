@@ -25,15 +25,15 @@ RSpec.describe User do
       expect(patton.twitter_uid).to eq('2121')
       expect(patton.twitter_handle).to eq('pattonoswalt')
       expect(patton.scores.length).to eq(0)
-      expect(patton.criterion_balance.length).to eq(2)
+      expect(patton.criterion_balances.length).to eq(2)
 
       # there should be 2 criterion_balance, one for each of the existing criteria
       # each one should have a remaining balance of 1000
-      first_score_balance = patton.criterion_balance.where(criterion: positive_criterion._id).first
+      first_score_balance = patton.criterion_balances.where(criterion: positive_criterion._id).first
       expect(first_score_balance).to_not be_nil
       expect(first_score_balance.remaining_balance).to eq(1000)
 
-      second_score_balance = patton.criterion_balance.where(criterion: negative_criterion._id).first
+      second_score_balance = patton.criterion_balances.where(criterion: negative_criterion._id).first
       expect(second_score_balance).to_not be_nil
       expect(second_score_balance.remaining_balance).to eq(1000)
     end
@@ -89,8 +89,8 @@ RSpec.describe User do
       positive_criterion_2 = create(:positive_criterion)
 
       expect(score.subscores.length).to eq(0)
-      patton.add_subscore(score, positive_criterion_1, 65)
-      patton.add_subscore(score, positive_criterion_2, 52)
+      patton.add_or_change_subscore(score, positive_criterion_1, 65)
+      patton.add_or_change_subscore(score, positive_criterion_2, 52)
       expect(score.subscores.length).to eq(2)
 
       # total calculation functionality is tested in score_spec
@@ -101,7 +101,7 @@ RSpec.describe User do
 
       score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
       expect{
-        patton.add_subscore(score, nil, 65)
+        patton.add_or_change_subscore(score, nil, 65)
       }.to raise_error(ArgumentError)
     end
 
@@ -112,8 +112,42 @@ RSpec.describe User do
 
       score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
       expect{
-        josswhedon.add_subscore(score, negative_criterion, 77)
+        josswhedon.add_or_change_subscore(score, negative_criterion, 77)
       }.to raise_error(AccessDeniedError) # That's a dick move, Firefly.  Grant Morrison is legend.
+    end
+  end
+
+  describe "keeping track of criterion balance" do
+    it "should reduce it's criterion balance when a subscore is added" do
+      funny_criterion = create(:positive_criterion)
+      smart_criterion = create(:positive_criterion)
+
+      patton = create(:pattonoswalt)
+      patton.initialize_criterion_balance
+
+      score = patton.create_score(subject_type: 'twitter_handle', subject_value: 'grantmorrison')
+      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.remaining_balance).to eq(1000)
+      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.remaining_balance).to eq(1000)
+
+      patton.add_or_change_subscore(score, funny_criterion, 65)
+      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.used_balance).to eq(65)
+      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.used_balance).to eq(0)
+      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.remaining_balance).to eq(935)
+      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.remaining_balance).to eq(1000)
+
+      patton.add_or_change_subscore(score, smart_criterion, 52)
+      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.used_balance).to eq(65)
+      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.used_balance).to eq(52)
+      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.remaining_balance).to eq(935)
+      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.remaining_balance).to eq(948)
+
+      # user reduces subscore for funny_criterion,
+      patton.add_or_change_subscore(score, funny_criterion, 22)
+      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.used_balance).to eq(22)
+      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.used_balance).to eq(52)
+      # remaining balance for funny_criteria is increased (new used balance is less than before)
+      expect(patton.criterion_balances.where(criterion: funny_criterion._id).first.remaining_balance).to eq(978)
+      expect(patton.criterion_balances.where(criterion: smart_criterion._id).first.remaining_balance).to eq(948)
     end
   end
 end

@@ -7,23 +7,25 @@ class Score
   def calculate_total_score
     total_score = 0
 
-    self.subscores.each do |scv|
-      total_score += scv.get_score_calculation
+    self.subscores.each do |subscore|
+      total_score += subscore.get_score_calculation
     end
     return total_score
   end
   
-  def add_subscore(criterion, value)
-    self.subscores.each do |scv|
-      if scv.criterion == criterion
+  def add_or_change_subscore(criterion, new_subscore_criterion_value)
+    self.subscores.each do |subscore|
+      if subscore.criterion == criterion
         # if the score already has a value for this criterion, overwrite it
-        scv.value = value
-        return
+
+        # return the new value as the new used balance (used to keep track of remaining)
+        return subscore.value = new_subscore_criterion_value
       end
     end
     subscore = Subscore.new
     subscore.criterion = criterion
-    subscore.value = value
+    subscore.value = new_subscore_criterion_value
     subscore.score = self
+    return new_subscore_criterion_value
   end
 end
