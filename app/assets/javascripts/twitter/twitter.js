@@ -1,7 +1,7 @@
-angular.module('app').factory('twitterSearch', ['$http', function($http) {
+angular.module('app').factory('twitter', ['$http', function($http) {
     return {
-       searchForManuIsFunny: function(hashTag, successFn, errorFn) {
-           var url = '/tweet_things';
+       getLists: function(successFn, errorFn) {
+           var url = '/twitter/lists.json';
            $http.get(url)
                .success(function(data) {
                    console.log(data);
