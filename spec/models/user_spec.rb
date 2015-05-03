@@ -7,8 +7,8 @@ RSpec.describe User do
     it "should create a new user account with defaults" do
       # there are 4 criterion, so the new user should have
       # 4 criterion_balance
-      positive_criterion = create(:positive_criterion)
-      negative_criterion = create(:negative_criterion)
+      create(:positive_criterion)
+      create(:negative_criterion)
 
       OmniAuth.config.test_mode = true
       OmniAuth.config.mock_auth[:twitter] = {
@@ -77,6 +77,7 @@ RSpec.describe User do
   describe "adding subscores to a score" do
     it "should add two subscores to a score" do
       patton = create(:pattonoswalt)
+      patton.initialize_points_balance
 
       score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
       positive_criterion_1 = create(:positive_criterion)
@@ -111,7 +112,48 @@ RSpec.describe User do
     end
   end
 
-  describe "keeping track of remaining points" do
+  describe "changing an existing subscore value" do
+    it "should change the value of a subscore in a score with one subscore" do
+      patton = create(:pattonoswalt)
+      patton.initialize_points_balance
+
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      positive_criterion = create(:positive_criterion)
+
+      expect(score.subscores.length).to eq(0)
+      patton.add_or_change_subscore(score, positive_criterion, 50)
+      expect(patton.user_points_total.amount).to eq(1000)
+      expect(patton.remaining_points).to eq(950)
+      expect(score.subscores.length).to eq(1)
+
+      patton.add_or_change_subscore(score, positive_criterion, 150)
+      expect(patton.user_points_total.amount).to eq(1000)
+      expect(patton.remaining_points).to eq(850)
+      expect(score.subscores.length).to eq(1)
+    end
+
+    it "should change the value of a subscore in a score with two subscores" do
+      patton = create(:pattonoswalt)
+      patton.initialize_points_balance
+
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      positive_criterion_1 = create(:positive_criterion)
+      positive_criterion_2 = create(:positive_criterion)
+
+      expect(score.subscores.length).to eq(0)
+      patton.add_or_change_subscore(score, positive_criterion_1, 50)
+      patton.add_or_change_subscore(score, positive_criterion_2, 20)
+      expect(score.subscores.length).to eq(2)
+      expect(score.subscores.where(criterion: positive_criterion_1).first.value).to eq(50)
+      expect(score.subscores.where(criterion: positive_criterion_2).first.value).to eq(20)
+
+      patton.add_or_change_subscore(score, positive_criterion_1, 55)
+      expect(score.subscores.where(criterion: positive_criterion_1).first.value).to eq(55)
+      expect(score.subscores.where(criterion: positive_criterion_2).first.value).to eq(20)
+    end
+  end
+
+  describe "calculating remaining points" do
     it "should calculate the remaining points when a subscore is added and changed" do
       funny_criterion = create(:positive_criterion)
       smart_criterion = create(:positive_criterion)
@@ -180,6 +222,89 @@ RSpec.describe User do
       User.increase_user_points_total(patton, 200)
       expect(patton.user_points_total.amount).to eq(1200)
       expect(patton.remaining_points).to eq(1090)
+    end
+  end
+
+  describe "restricting adding or changing scores based on insufficient remaining points" do
+    it "should stop the user from changing an existing subscore's value when user has insufficient remaining points" do
+      funny_criterion = create(:positive_criterion)
+      smart_criterion = create(:positive_criterion)
+
+      patton = create(:pattonoswalt)
+      patton.initialize_points_balance
+
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      expect(patton.user_points_total.amount).to eq(1000)
+      expect(patton.remaining_points).to eq(1000)
+
+      patton.add_or_change_subscore(score, smart_criterion, 400)
+      patton.add_or_change_subscore(score, funny_criterion, 500)
+      expect(score.subscores.where(criterion: smart_criterion).first.value).to eq(400)
+      expect(score.subscores.where(criterion: funny_criterion).first.value).to eq(500)
+      expect(patton.remaining_points).to eq(100)
+
+      # user already used 900 points, only has 100 remaining, can't change subscore for smart criterion from 400 to 501
+      # because that would cause remaining points to be -1, less than zero
+      expect{
+        patton.add_or_change_subscore(score, smart_criterion, 501)
+      }.to raise_error(InsufficientPointsError)
+
+      # user can change smart criterion subscore to increase it to 500, resulting in remaining points being zero
+      expect(score.subscores.length).to eq(2)
+      expect(score.subscores.where(criterion: smart_criterion).first.value).to eq(400)
+      expect(score.subscores.where(criterion: funny_criterion).first.value).to eq(500)
+      expect(patton.remaining_points).to eq(100)
+      patton.add_or_change_subscore(score, smart_criterion, 450)
+      expect(score.subscores.where(criterion: smart_criterion).first.value).to eq(450)
+      expect(score.subscores.where(criterion: funny_criterion).first.value).to eq(500)
+      expect(patton.remaining_points).to eq(50)
+    end
+
+    it "should stop the user from adding a new subscore when user has insufficient remaining points" do
+      funny_criterion = create(:positive_criterion)
+      smart_criterion = create(:positive_criterion)
+
+      patton = create(:pattonoswalt)
+      patton.initialize_points_balance
+
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      expect(patton.user_points_total.amount).to eq(1000)
+      expect(patton.remaining_points).to eq(1000)
+
+      patton.add_or_change_subscore(score, smart_criterion, 950)
+      expect(patton.remaining_points).to eq(50)
+
+      # user already used 950 points, only has 50 remaining, can't add subscore of 51, insufficient points
+      expect{
+        patton.add_or_change_subscore(score, funny_criterion, 51)
+      }.to raise_error(InsufficientPointsError) # you're done, funny man
+    end
+
+    it "should not stop the user from adding a new subscore after increasing the user's points total" do
+      # TODO maybe this spec should be organized in another location?  more describes increasing points total, not raising error?
+      funny_criterion = create(:positive_criterion)
+      smart_criterion = create(:positive_criterion)
+
+      patton = create(:pattonoswalt)
+      patton.initialize_points_balance
+
+      score = patton.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      expect(patton.user_points_total.amount).to eq(1000)
+      expect(patton.remaining_points).to eq(1000)
+
+      patton.add_or_change_subscore(score, smart_criterion, 950)
+      expect(patton.remaining_points).to eq(50)
+
+      # user already used 950 points, only has 50 remaining, can't add subscore of 51, insufficient points
+      expect{
+        patton.add_or_change_subscore(score, funny_criterion, 51)
+      }.to raise_error(InsufficientPointsError)
+
+      # increasing user points total by 1 should now allow the user to add a subscore of 51
+      # without raising an error for insufficient points
+      User.increase_user_points_total(patton, 1)
+      expect(patton.remaining_points).to eq(51)
+      patton.add_or_change_subscore(score, funny_criterion, 51)
     end
   end
 end

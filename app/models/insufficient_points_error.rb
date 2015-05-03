@@ -1,0 +1,2 @@
+class InsufficientPointsError < StandardError
+end

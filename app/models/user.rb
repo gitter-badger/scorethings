@@ -30,23 +30,42 @@ class User
     user.user_points_total.amount += increase_amount
   end
 
-  def add_or_change_subscore(score, criterion, value)
+  def add_or_change_subscore(score, criterion, new_value)
     if score.user != self
-      raise AccessDeniedError, "cannot add subscore to score, user does not own score"
+      raise AccessDeniedError, "cannot add or change subscore, user does not own score"
     end
     if criterion.nil?
-      raise ArgumentError, "cannot add subscore to score, criterion is nil"
+      raise ArgumentError, "cannot add or change subscore, criterion is nil"
+    end
+    if new_value.nil?
+      raise ArgumentError, "cannot add or change subscore to score, new value is nil"
     end
 
-    score.add_or_change_subscore(criterion, value)
+    existing_subscore = score.subscores.where(criterion: criterion).first
+    if !existing_subscore.nil?
+      potential_remaining_points = self.remaining_points(
+        new_updated_value: new_value,
+        existing_subscore_id: existing_subscore._id
+      )
+    else
+      potential_remaining_points = self.remaining_points(new_updated_value: new_value)
+    end
+
+    if potential_remaining_points < 0
+      raise InsufficientPointsError, "cannot change subscore value to #{new_value} because " +
+                                       "the user's remaining points would become #{potential_remaining_points}, and it can't be less than zero"
+    end
+    score.add_or_change_subscore(criterion, new_value)
   end
 
-  def remaining_points
+  def remaining_points(input = {})
     total_used = 0
+    new_updated_value = input[:new_updated_value]
+    existing_subscore_id = input[:existing_subscore_id]
     self.scores.each do |score|
-      total_used += score.calculate_total_score
+      total_used += score.calculate_total_score(input)
     end
-    self.user_points_total.amount - total_used
+    self.user_points_total.amount - (total_used + ((!new_updated_value.nil? && existing_subscore_id.nil?) ? new_updated_value : 0))
   end
 
   def self.create_with_omniauth(auth)

@@ -7,8 +7,12 @@ class Subscore
   field :criterion, type: Criterion
   embedded_in :score, inverse_of: :subscores
 
-  def get_score_calculation
+  def get_score_calculation(new_updated_value = nil)
     # if criterion type is -1 (a negative criterion), then calculation will be -value
-    value * criterion.type
+    if !new_updated_value.nil?
+      new_updated_value * criterion.type
+    else
+      value * criterion.type
+    end
   end
 end

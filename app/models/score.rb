@@ -4,11 +4,17 @@ class Score
   belongs_to :user
   embeds_one :thing
 
-  def calculate_total_score
+  def calculate_total_score(input = {})
     total_score = 0
+    new_updated_value = input[:new_updated_value]
+    existing_subscore_id = input[:existing_subscore_id]
 
     self.subscores.each do |subscore|
-      total_score += subscore.get_score_calculation
+      if !existing_subscore_id.nil? && (subscore._id == existing_subscore_id)
+        total_score += subscore.get_score_calculation(new_updated_value)
+      else
+        total_score += subscore.get_score_calculation
+      end
     end
     return total_score
   end
@@ -17,7 +23,6 @@ class Score
     self.subscores.each do |subscore|
       if subscore.criterion == criterion
         # if the score already has a value for this criterion, overwrite it
-        puts "\n\n\nsetting new subscore value:  #{new_subscore_value}"
         subscore.value = new_subscore_value
         return
       end
