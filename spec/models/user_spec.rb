@@ -14,9 +14,7 @@ RSpec.describe User do
       OmniAuth.config.mock_auth[:twitter] = {
           provider: 'twitter',
           uid: '2121',
-          info: OmniAuth::AuthHash::InfoHash.new({
-              nickname: 'alpha'
-          })
+          info: OmniAuth::AuthHash::InfoHash.new(nickname: 'alpha')
       }
       auth = OmniAuth.config.mock_auth[:twitter]
       user = User.create_with_omniauth(auth)
