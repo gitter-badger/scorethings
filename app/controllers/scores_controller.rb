@@ -18,6 +18,19 @@ class ScoresController < ApplicationController
                  score: score,
                  status: :created
              }, status: :created
+    elsif !thing_input[:twitter_hashtag].nil?
+      score = @current_user.create_score(thing_type: 'TWITTER_HASHTAG', thing_value: thing_input[:twitter_hashtag])
+      render json: {
+                 score: score,
+                 status: :created
+             }, status: :created
+    else
+      # thing input wasn't a twitter hashtag or handle
+      return render json: {
+                        error: "the only accepted POST data are thing_input['twitter_handle'] and thing_input['twitter_hashtag']",
+                        status: :bad_request
+                    }, status: :bad_request
+
     end
   end
 end
