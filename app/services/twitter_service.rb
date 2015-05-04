@@ -10,4 +10,9 @@ class TwitterService
   def get_lists
     $twitter.lists(@twitter_uid.to_i)
   end
+
+  def get_twitter_account_from_handle(twitter_handle)
+    # TODO implement me
+    {}
+  end
 end

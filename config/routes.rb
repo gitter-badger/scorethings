@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   root 'dashboard#index'
 
   match '/twitter/lists' => 'twitter#lists', via: :get, as: :twitter_lists
+
+  match '/scores' => 'scores#create', via: :post, as: :create_score
 end
