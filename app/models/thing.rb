@@ -3,5 +3,7 @@ class Thing
   embedded_in :score
   field :value, type: String
   field :type, type: String
-  validates_inclusion_of :type, in: ['twitter_handle', 'twitter_hashtag']
+  # TODO rename type to external_identifier_type
+  # TODO rename value to external_identifier_value
+  validates_inclusion_of :type, in: ['TWITTER_UID', 'TWITTER_HASHTAG']
 end

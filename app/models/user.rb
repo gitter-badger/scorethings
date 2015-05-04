@@ -7,6 +7,7 @@ class User
 
   has_many :scores
   embeds_one :user_points_total
+  has_many :score_lists
 
   INITIAL_POINTS_TOTAL = 1000
 
@@ -93,6 +94,17 @@ class User
         twitter_uid: self.twitter_uid
     }
     AuthToken.encode(payload)
+  end
+
+  def create_or_find_score_for_things(attrs)
+    score = self.scores.where({'thing.type' => attrs[:thing_type], 'thing.value' => attrs[:thing_value]}).first
+    if score.nil?
+      score = self.create_score(thing_type: attrs[:thing_type], thing_value: attrs[:thing_value])
+    end
+    if score.nil?
+      raise "could not create or find score for thing #{attrs}"
+    end
+    score
   end
 end
 

@@ -3,6 +3,7 @@ class Score
   embeds_many :subscores
   belongs_to :user
   embeds_one :thing
+  has_and_belongs_to_many :score_lists
 
   def calculate_total_score(input = {})
     total_score = 0

@@ -35,13 +35,13 @@ RSpec.describe User do
 
       expect(user.scores.length).to eq(0)
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'josswhedon')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
 
       expect(score).to_not be_nil
       expect(score.user).to eq(user)
       expect(score.thing).to_not be_nil
-      expect(score.thing.type).to eq('twitter_handle')
-      expect(score.thing.value).to eq('josswhedon')
+      expect(score.thing.type).to eq('TWITTER_UID')
+      expect(score.thing.value).to eq('99999')
       expect(score.calculate_total_score).to eq(0)
 
       expect(user.scores.length).to eq(1)
@@ -52,12 +52,12 @@ RSpec.describe User do
 
       expect(user.scores.length).to eq(0)
 
-      score = user.create_score(thing_type: 'twitter_hashtag', thing_value: 'stelladoro')
+      score = user.create_score(thing_type: 'TWITTER_HASHTAG', thing_value: 'stelladoro')
 
       expect(score).to_not be_nil
       expect(score.user).to eq(user)
       expect(score.thing).to_not be_nil
-      expect(score.thing.type).to eq('twitter_hashtag')
+      expect(score.thing.type).to eq('TWITTER_HASHTAG')
       expect(score.thing.value).to eq('stelladoro')
       expect(score.calculate_total_score).to eq(0)
 
@@ -67,7 +67,7 @@ RSpec.describe User do
     it "should not create an empty score for an unsupported subject type" do
       user = build(:user_alpha)
       expect{
-        user.create_score(thing_type: 'twitter_whatever', thing_value: 'whatitdo')
+        user.create_score(thing_type: 'TWITTER_WHATEVER', thing_value: 'whatitdo')
       }.to raise_error(Mongoid::Errors::Validations)
     end
   end
@@ -77,7 +77,7 @@ RSpec.describe User do
       user = create(:user_alpha)
       user.initialize_points_balance
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       positive_criterion_1 = create(:positive_criterion)
       positive_criterion_2 = create(:positive_criterion)
 
@@ -92,7 +92,7 @@ RSpec.describe User do
     it "should not allow a subscore to be added without a criterion" do
       user = create(:user_alpha)
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       expect{
         user.add_or_change_subscore(score, nil, 65)
       }.to raise_error(ArgumentError)
@@ -103,7 +103,7 @@ RSpec.describe User do
       user_bravo = create(:user_bravo)
       negative_criterion = create(:negative_criterion)
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       expect{
         user_bravo.add_or_change_subscore(score, negative_criterion, 77)
       }.to raise_error(AccessDeniedError)
@@ -115,7 +115,7 @@ RSpec.describe User do
       user = create(:user_alpha)
       user.initialize_points_balance
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       positive_criterion = create(:positive_criterion)
 
       expect(score.subscores.length).to eq(0)
@@ -134,7 +134,7 @@ RSpec.describe User do
       user = create(:user_alpha)
       user.initialize_points_balance
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       positive_criterion_1 = create(:positive_criterion)
       positive_criterion_2 = create(:positive_criterion)
 
@@ -159,7 +159,7 @@ RSpec.describe User do
       user = create(:user_alpha)
       user.initialize_points_balance
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       expect(user.user_points_total.amount).to eq(1000)
       expect(user.remaining_points).to eq(1000)
 
@@ -180,8 +180,8 @@ RSpec.describe User do
       user = create(:user_alpha)
       user.initialize_points_balance
 
-      grant_score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
-      cbgirl_score = user.create_score(thing_type: 'twitter_handle', thing_value: 'cbgirl19')
+      grant_score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
+      cbgirl_score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '33333')
       expect(user.user_points_total.amount).to eq(1000)
       expect(user.remaining_points).to eq(1000)
 
@@ -207,7 +207,7 @@ RSpec.describe User do
 
       expect(user.user_points_total.amount).to eq(1000)
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       expect(user.user_points_total.amount).to eq(1000)
       expect(user.remaining_points).to eq(1000)
 
@@ -231,7 +231,7 @@ RSpec.describe User do
       user = create(:user_alpha)
       user.initialize_points_balance
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       expect(user.user_points_total.amount).to eq(1000)
       expect(user.remaining_points).to eq(1000)
 
@@ -265,7 +265,7 @@ RSpec.describe User do
       user = create(:user_alpha)
       user.initialize_points_balance
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       expect(user.user_points_total.amount).to eq(1000)
       expect(user.remaining_points).to eq(1000)
 
@@ -286,7 +286,7 @@ RSpec.describe User do
       user = create(:user_alpha)
       user.initialize_points_balance
 
-      score = user.create_score(thing_type: 'twitter_handle', thing_value: 'grantmorrison')
+      score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       expect(user.user_points_total.amount).to eq(1000)
       expect(user.remaining_points).to eq(1000)
 
@@ -303,6 +303,31 @@ RSpec.describe User do
       User.increase_user_points_total(user, 1)
       expect(user.remaining_points).to eq(51)
       user.add_or_change_subscore(score, funny_criterion, 51)
+    end
+  end
+
+  describe "creating or finding a score for a twitter account" do
+    it "should find a score of a twitter uid by the user" do
+      user = create(:user_alpha)
+
+      user.create_score(thing_type: 'TWITTER_HASHTAG', thing_value: 'SomeHashtag')
+      created_twitter_uid_score = user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
+      expect(user.scores.length).to eq(2)
+      found_score = user.create_or_find_score_for_things(thing_type: 'TWITTER_UID', thing_value: '99999')
+      expect(user.scores.length).to eq(2)
+      expect(found_score).to eq(created_twitter_uid_score)
+    end
+
+    it "should create a score of a twitter uid because it can't find a score by the user" do
+      user = create(:user_alpha)
+
+      user.create_score(thing_type: 'TWITTER_HASHTAG', thing_value: 'SomeHashtag')
+      user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
+      expect(user.scores.length).to eq(2)
+      created_score = user.create_or_find_score_for_things(thing_type: 'TWITTER_UID', thing_value: '11111')
+      expect(user.scores.length).to eq(3)
+      expect(created_score.thing.type).to eq('TWITTER_UID')
+      expect(created_score.thing.value).to eq('11111')
     end
   end
 end
