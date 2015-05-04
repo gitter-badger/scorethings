@@ -7,4 +7,6 @@ Rails.application.routes.draw do
   match '/twitter/lists' => 'twitter#lists', via: :get, as: :twitter_lists
 
   match '/scores' => 'scores#create', via: :post, as: :create_score
+
+  match '/scores/:id' => 'scores#show', via: :get, as: :show_score
 end

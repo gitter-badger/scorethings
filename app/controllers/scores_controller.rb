@@ -1,4 +1,6 @@
 class ScoresController < ApplicationController
+  skip_before_action :authenticate_request, only: [:show]
+
   def create
     thing_input = params.require(:thing_input).permit(:twitter_handle, :twitter_hashtag)
 
@@ -31,6 +33,21 @@ class ScoresController < ApplicationController
                         status: :bad_request
                     }, status: :bad_request
 
+    end
+  end
+
+  def show
+    score = Score.where(id: params[:id]).first
+    if score.nil?
+      return render json: {
+                        error: "unable to find score",
+                        status: :not_found
+                    }, status: :not_found
+    else
+      return render json: {
+                        score: score,
+                        status: :ok
+                    }, status: :ok
     end
   end
 end
