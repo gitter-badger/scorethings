@@ -318,7 +318,7 @@ RSpec.describe User do
       expect(found_score).to eq(created_twitter_uid_score)
     end
 
-    it "should create a score of a twitter uid because it can't find a score by the user" do
+    it "should create a score of a twitter uid because it can't find a score created by the user" do
       user = create(:user_alpha)
 
       user.create_score(thing_type: 'TWITTER_HASHTAG', thing_value: 'SomeHashtag')

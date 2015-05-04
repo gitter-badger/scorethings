@@ -19,7 +19,7 @@ RSpec.describe AuthTokenController do
       user = User.where(twitter_uid: '2121').first
       expect(user).to_not be_nil
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
       expect(assigns[:auth_token]).to eq(user.generate_auth_token)
       expect(response).to render_template(:authentication_success)
     end
@@ -34,16 +34,14 @@ RSpec.describe AuthTokenController do
       request.env['omniauth.auth'] = auth
       post :create
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
       expect(assigns[:auth_token]).to eq(user.generate_auth_token)
       expect(response).to render_template(:authentication_success)
     end
   end
 
-  xit "should not generate an authentication token when new user does not authenticate successfully" do
-    #TODO test for authentication failure
-    auth = OmniAuth.config.mock_auth[:twitter]
-    request.env['omniauth.auth'] = auth
+  it "should not generate an authentication token when new user does not authenticate successfully" do
+    OmniAuth.config.mock_auth[:twitter] = :invalid_credentials
 
     user = User.where(twitter_uid: '2121').first
     expect(user).to be_nil
@@ -51,7 +49,7 @@ RSpec.describe AuthTokenController do
     user = User.where(twitter_uid: '2121').first
     expect(user).to be_nil
 
-    expect(response.status).to eq(401)
+    expect(response).to have_http_status(:unauthorized)
     expect(response).to render_template(:authentication_failure)
   end
 end
