@@ -344,10 +344,10 @@ RSpec.describe User do
       # TODO should this instead be a raised app error?
       # or, assume the rails controller would not allow the attribute of system_provided ?
       user = create(:user_alpha)
-      criteria = user.create_criterion(name: "Alpha's Idea of Funny", definition: "Make me laugh, with the ha ha's.", system_provided: true)
-      expect(criteria).to_not be_nil
-      expect(criteria.user).to eq(user)
-      expect(criteria.system_provided).to eq(false)
+      criterion = user.create_criterion(name: "Alpha's Idea of Funny", definition: "Make me laugh, with the ha ha's.", system_provided: true)
+      expect(criterion).to_not be_nil
+      expect(criterion.user).to eq(user)
+      expect(criterion.system_provided).to eq(false)
     end
   end
 end
