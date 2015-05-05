@@ -12,6 +12,13 @@ class Criterion
   validates_presence_of :name, :sign, :system_provided
 
   def add_level(level_number, name)
+    if level_number < self.criterion_levels.length
+      self.criterion_levels.each do |criterion_level|
+        if criterion_level.level_number >= level_number
+          criterion_level.level_number = criterion_level.level_number + 1
+        end
+      end
+    end
     self.criterion_levels << CriterionLevel.new(level_number: level_number, name: name)
     determine_level_ranges
   end
