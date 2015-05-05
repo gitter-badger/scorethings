@@ -75,10 +75,6 @@ group :development, :test do
   gem 'guard'
   gem 'guard-spork'
   gem 'childprocess'
-end
-
-# copied from https://gist.github.com/JanDintel/6077548
-group :test do
   gem 'rspec-mocks'
   gem 'mongoid-rspec', '~> 2.1.0'
   gem 'factory_girl_rails'

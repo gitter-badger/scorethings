@@ -32,5 +32,6 @@ class Score
     subscore.criterion = criterion
     subscore.value = new_subscore_value
     subscore.score = self
+    subscore
   end
 end

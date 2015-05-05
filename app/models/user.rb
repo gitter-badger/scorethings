@@ -66,7 +66,7 @@ class User
     self.scores.each do |score|
       total_used += score.calculate_total_score(input)
     end
-    self.user_points_total.amount - (total_used + ((!new_updated_value.nil? && existing_subscore_id.nil?) ? new_updated_value : 0))
+    self.user_points_total.amount - (total_used + ((!new_updated_value.nil? && existing_subscore_id.nil?) ? new_updated_value.to_i : 0))
   end
 
   def self.create_with_omniauth(auth)
