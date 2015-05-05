@@ -330,4 +330,24 @@ RSpec.describe User do
       expect(created_score.thing.value).to eq('11111')
     end
   end
+
+  describe "creating a criterion" do
+    it "should be able to create a non system provided criterion with levels" do
+      user = create(:user_alpha)
+      criteria = user.create_criterion(name: "Alpha's Idea of Funny", definition: "Make me laugh, with the ha ha's.")
+      expect(criteria).to_not be_nil
+      expect(criteria.user).to eq(user)
+      expect(criteria.system_provided).to eq(false)
+    end
+
+    it "should be not be able to create a criterion and say it is system provided" do
+      # TODO should this instead be a raised app error?
+      # or, assume the rails controller would not allow the attribute of system_provided ?
+      user = create(:user_alpha)
+      criteria = user.create_criterion(name: "Alpha's Idea of Funny", definition: "Make me laugh, with the ha ha's.", system_provided: true)
+      expect(criteria).to_not be_nil
+      expect(criteria.user).to eq(user)
+      expect(criteria.system_provided).to eq(false)
+    end
+  end
 end

@@ -1,13 +1,17 @@
 class User
   include Mongoid::Document
   # TODO change fields because only twitter will be used for auth provider
-  field :twitter_uid, type: String # this is the uid from the provider (ex: twitter:298239)
+  field :twitter_uid, type: String # this is the uid from the provider (ex: 298239)
+  # TODO get rid of twitter handle in User model, can be changed in twitter
+  # just use twitter user id (uid)
+  # I know nothing about twitter's work.  How I got to write an app on anything is totally amazing.
   field :twitter_handle, type: String
   field :join_date, type: Time
 
   has_many :scores
   embeds_one :user_points_total
   has_many :score_lists
+  has_many :criteria # uses ActiveSupport::Inflector to understand criteria is plural criterion
 
   INITIAL_POINTS_TOTAL = 1000
 
@@ -105,6 +109,13 @@ class User
       raise "could not create or find score for thing #{attrs}"
     end
     score
+  end
+
+  def create_criterion(attrs)
+    criterion = Criterion.new(attrs)
+    criterion.system_provided = false
+    self.criteria << criterion
+    criterion
   end
 end
 
