@@ -4,6 +4,7 @@ RSpec.describe ScoresController do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   before do
     @user = create(:user_alpha)
+    @user.initialize_points_balance
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
   end

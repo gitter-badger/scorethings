@@ -16,6 +16,11 @@ class User
   INITIAL_POINTS_TOTAL = 1000
 
   def create_score(attrs)
+    default_criterion = self.criteria.where(is_user_default: true).first
+    if default_criterion.nil?
+      default_criterion = Criterion.create!(is_user_default: true, name: 'Default Criterion')
+      self.criteria << default_criterion
+    end
     score = Score.create!(
         thing: Thing.new(
             type: attrs[:thing_type],
@@ -23,6 +28,7 @@ class User
         ),
         user: self)
     self.scores << score
+    self.add_or_change_subscore(score, default_criterion, 0)
     score
   end
 

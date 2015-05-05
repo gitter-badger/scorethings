@@ -3,16 +3,6 @@ require 'rails_helper'
 RSpec.describe Criterion do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
 
-  describe "criterion validation" do
-    it "the name is validated to be unique" do
-      criterion = create(:positive_criterion)
-
-      expect{
-        create(:positive_criterion, {name: criterion.name})
-      }.to raise_error(Mongoid::Errors::Validations)
-    end
-  end
-
   describe "criterion with criterion levels" do
     describe "getting a criterion level for a points value" do
       it "should get a level when there are all 10 levels" do
