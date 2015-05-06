@@ -3,11 +3,14 @@ class CriteriaController < ApplicationController
   skip_before_action :authenticate_request, only: [:index]
 
   def index
-    criteria = Criterion.all
+    if params[:system_provided]
+      criteria = Criterion.where(system_provided: true)
+    else
+      criteria = Criterion.all
+    end
     return render json: {
                       criteria: criteria,
                       status: :ok
                   }, status: :ok
   end
 end
-
