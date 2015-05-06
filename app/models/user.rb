@@ -2,9 +2,7 @@ class User
   include Mongoid::Document
   # TODO change fields because only twitter will be used for auth provider
   field :twitter_uid, type: String # this is the uid from the provider (ex: 298239)
-  # TODO get rid of twitter handle in User model, can be changed in twitter
-  # just use twitter user id (uid)
-  # I know nothing about twitter's work.  How I got to write an app on anything is totally amazing.
+  # TODO update twitter handle, as it may be changed in twitter
   field :twitter_handle, type: String
   field :join_date, type: Time
 
@@ -12,6 +10,8 @@ class User
   embeds_one :user_points_total
   has_many :score_lists
   has_many :criteria # uses ActiveSupport::Inflector to understand criteria is plural criterion
+
+  validates_presence_of :twitter_uid
 
   INITIAL_POINTS_TOTAL = 1000
 

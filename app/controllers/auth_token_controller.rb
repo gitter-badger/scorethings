@@ -7,7 +7,7 @@ class AuthTokenController < ApplicationController
       return render status: :unauthorized, template: 'auth_token/authentication_failure'
     end
 
-    user = User.where(twitterUid: auth['uid']).first || User.create_with_omniauth(auth)
+    user = User.where(twitter_uid: auth['uid']).first || User.create_with_omniauth(auth)
 
     if user
       @auth_token = user.generate_auth_token
