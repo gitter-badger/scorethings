@@ -5,6 +5,8 @@ class CriteriaController < ApplicationController
   def index
     if params[:system_provided]
       criteria = Criterion.where(system_provided: true)
+    elsif params[:user_id]
+      criteria = Criterion.where(system_provided: false, user: params[:user_id])
     else
       criteria = Criterion.all
     end

@@ -35,5 +35,22 @@ RSpec.describe CriteriaController do
       expect(response).to have_http_status(:ok)
       expect(response.body).to eq(expected_response_body)
     end
+
+    it "should get all Criteria created by a user" do
+      user = create(:user_alpha)
+      other_user = create(:user_bravo)
+      create(:positive_criterion, {system_provided: false, user: user})
+      criteria_of_other_user = create(:positive_criterion, {system_provided: false, user: other_user})
+      create(:positive_criterion, {system_provided: true})
+
+      expected_response_body = {
+          criteria: [criteria_of_other_user],
+          status: :ok
+      }.to_json
+
+      get :index, {user_id: other_user._id}, accept: :json
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to eq(expected_response_body)
+    end
   end
 end
