@@ -2,7 +2,8 @@ angular.module('app')
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
             when('/', {
-                templateUrl: 'main/index.html'
+                templateUrl: 'main/index.html',
+                controller: 'DashboardCtrl'
             }).
             when('/about', {
                 templateUrl: 'main/about.html'

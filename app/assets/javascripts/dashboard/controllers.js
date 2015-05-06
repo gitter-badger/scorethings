@@ -4,11 +4,14 @@ angular.module('app')
             $scope.currentUser = currentUser;
         });
 
-        $scope.getLists = function() {
-            twitter.getLists(
-                function success(lists) {
-                    notifier.success('succeeded in getting lists');
-                    $scope.lists = lists;
+        $scope.twitterHandle = '';
+
+        $scope.searchTwitterHandle = function() {
+            twitter.searchTwitterHandle(
+                $scope.twitterHandle,
+                function success(response) {
+                    notifier.success('succeeded in twitter accounts');
+                    $scope.accounts = response.results;
                 },
                 function error(response) {
                     console.log('error twitter lists');

@@ -1,8 +1,16 @@
 angular.module('app').factory('twitter', ['$http', function($http) {
     return {
-       getLists: function(successFn, errorFn) {
-           var url = '/twitter/lists.json';
-           $http.get(url)
+        searchTwitterHandle: function(twitterHandle, successFn, errorFn) {
+            if(!twitterHandle) {
+                console.log('twitterHandle required');
+                return;
+            }
+           $http.get('/things/search',
+               {
+                   params: {
+                       twitter_handle: twitterHandle
+                   }
+               })
                .success(function(data) {
                    console.log(data);
                    return successFn(data);
