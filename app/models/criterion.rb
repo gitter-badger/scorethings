@@ -11,7 +11,17 @@ class Criterion
 
   validates_presence_of :name, :sign, :system_provided
 
-  def add_level(level_number, name)
+  MAX_CRITERION_LEVELS = 10
+
+  def add_level(name, level_number=nil)
+    if level_number.nil?
+      level_number = self.criterion_levels.length + 1
+    end
+
+    if level_number > MAX_CRITERION_LEVELS
+      raise TooManyCriterionLevelsError, "could not add criterion level, only #{MAX_CRITERION_LEVELS} are allowed"
+    end
+
     if level_number < self.criterion_levels.length
       self.criterion_levels.each do |criterion_level|
         if criterion_level.level_number >= level_number

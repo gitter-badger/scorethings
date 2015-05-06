@@ -1,0 +1,2 @@
+class TooManyCriterionLevelsError < StandardError
+end
