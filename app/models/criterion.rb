@@ -4,7 +4,7 @@ class Criterion
   field :sign, type: Integer, default: 1
   field :definition, type: String, default: 'no criterion definition provided'
   field :system_provided, type: Boolean, default: false
-  field :is_user_default, type: Boolean, default: false
+  field :is_general, type: Boolean, default: false
   belongs_to :user
 
   embeds_many :criterion_levels, order: :level_number.asc

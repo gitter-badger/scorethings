@@ -2,7 +2,7 @@ class ThingsController < ApplicationController
   def search
     if params[:twitter_handle]
       twitter_service = TwitterService.new(twitter_uid: @current_user.twitter_uid)
-      twitter_user_search_results = twitter_service.search_for_twitter_accounts(twitter_handle: params[:twitter_handle])
+      twitter_user_search_results = twitter_service.search_for_twitter_accounts(params[:twitter_handle])
       return render json: {
                         results: twitter_user_search_results,
                         status: :ok

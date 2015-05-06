@@ -16,10 +16,15 @@ class User
   INITIAL_POINTS_TOTAL = 1000
 
   def create_score(attrs)
-    default_criterion = self.criteria.where(is_user_default: true).first
-    if default_criterion.nil?
-      default_criterion = Criterion.create!(is_user_default: true, name: 'Default Criterion')
-      self.criteria << default_criterion
+    # find or create a general criterion so that when the score is created, it's not just empty with no subscores
+    # (want it to be less confusing for user)
+    general_criterion = Criterion.where(user: self, is_general: true).first
+    if general_criterion.nil?
+      general_criterion = Criterion.create!(
+          is_general: true,
+          name: 'General',
+          user: self,
+          definition: 'A general criterion, not really a specific standard.')
     end
     score = Score.create!(
         thing: Thing.new(
@@ -28,7 +33,10 @@ class User
         ),
         user: self)
     self.scores << score
-    self.add_or_change_subscore(score, default_criterion, 0)
+
+    # put general criterion in subscores of new score
+    initial_general_criterion_score = 0
+    self.add_or_change_subscore(score, general_criterion, initial_general_criterion_score)
     score
   end
 

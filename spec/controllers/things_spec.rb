@@ -5,7 +5,7 @@ RSpec.describe ThingsController do
 
   describe "GET lists" do
     it "should search for a twitter account with a twitter handle" do
-      allow_any_instance_of(TwitterService).to receive(:search_for_twitter_accounts).and_return([])
+      allow_any_instance_of(TwitterService).to receive(:search_for_twitter_accounts).with('SomeTwitterUser').and_return([])
       user = create(:user_alpha)
       auth_token = user.generate_auth_token.to_s
 

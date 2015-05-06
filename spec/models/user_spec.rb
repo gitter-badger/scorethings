@@ -35,7 +35,29 @@ RSpec.describe User do
 
   describe "creating scores" do
 
-    it "should create a score with a single, default subscore for a subject that is a twitter handle" do
+    describe "creating a user's general criterion when creating a score" do
+      it "should create a user's general criterion when a score is created" do
+        expect(@user.criteria.length).to eq(0)
+
+        @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
+        expect(@user.criteria.length).to eq(1)
+        expect(@user.criteria.first.is_general).to eq(true)
+      end
+
+      it "should not create another general criterion the second time a score is created" do
+        expect(@user.criteria.length).to eq(0)
+
+        @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
+        expect(@user.criteria.length).to eq(1)
+        expect(@user.criteria.first.is_general).to eq(true)
+
+        @user.create_score(thing_type: 'TWITTER_UID', thing_value: '10101')
+        expect(@user.criteria.length).to eq(1)
+        expect(@user.criteria.first.is_general).to eq(true)
+      end
+    end
+
+    it "should create a score with a single, general criterion subscore for a subject that is a twitter handle" do
       expect(@user.scores.length).to eq(0)
 
       score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
@@ -46,11 +68,12 @@ RSpec.describe User do
       expect(score.thing.type).to eq('TWITTER_UID')
       expect(score.thing.value).to eq('99999')
       expect(score.calculate_total_score).to eq(0)
+      expect(score.subscores.length).to eq(1)
 
       expect(@user.scores.length).to eq(1)
     end
 
-    it "should create a score with a single, default subscore for a subject that is a twitter hashtag" do
+    it "should create a score with a single, general criterion subscore for a subject that is a twitter hashtag" do
       expect(@user.scores.length).to eq(0)
 
       score = @user.create_score(thing_type: 'TWITTER_HASHTAG', thing_value: 'stelladoro')
