@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   root 'dashboard#index'
 
-  match '/twitter/lists' => 'twitter#lists', via: :get, as: :twitter_lists
+  match '/things/search' => 'things#search', via: :get, as: :things_search
 
   match '/scores' => 'scores#create', via: :post, as: :create_score
 

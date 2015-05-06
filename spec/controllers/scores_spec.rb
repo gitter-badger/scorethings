@@ -14,7 +14,7 @@ RSpec.describe ScoresController do
       @request.env['HTTP_AUTHORIZATION'] = ""
       post_data = {
           thing_input: {
-              twitter_handle: 'pattonoswalt'
+              twitter_uid: '2121'
           }
       }
 
@@ -23,20 +23,20 @@ RSpec.describe ScoresController do
       expect(response).to have_http_status(:unauthorized)
     end
 
-    it "should create a new score for a twitter account when given a twitter handle" do
+    it "should create a new score for a twitter account when given a twitter user id" do
       twitter_account = { uid: '2121' }
-      allow_any_instance_of(TwitterService).to receive(:get_twitter_account_from_handle).with('pattonoswalt').and_return(twitter_account)
+      allow_any_instance_of(TwitterService).to receive(:get_twitter_account_from_uid).with('2121').and_return(twitter_account)
 
       post_data = {
           thing_input: {
-              twitter_handle: 'pattonoswalt'
+              twitter_uid: '2121'
           }
       }
       post :create, post_data
       expect(response).to have_http_status(:created)
     end
 
-    it "should create a new score for a twitter hashtag when given a twitter handle" do
+    it "should create a new score for a twitter hashtag when given a twitter hashtag" do
       post_data = {
           thing_input: {
               twitter_hashtag: 'MayThe4thBeWithYou'

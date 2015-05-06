@@ -11,8 +11,13 @@ class TwitterService
     $twitter.lists(@twitter_uid.to_i)
   end
 
-  def get_twitter_account_from_handle(twitter_handle)
-    # TODO implement me
-    {}
+  def search_for_twitter_accounts(attrs)
+    if attrs[:twitter_handle]
+      $twitter.user_search(attrs[:twitter_handle])
+    end
+  end
+
+  def get_twitter_account_from_uid(twitter_uid)
+
   end
 end
