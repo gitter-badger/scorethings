@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ScoresController do
+RSpec.describe Api::V1::ScoresController do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   before do
     @user = create(:user_alpha)

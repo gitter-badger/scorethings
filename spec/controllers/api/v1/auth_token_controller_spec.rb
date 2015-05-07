@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AuthTokenController do
+RSpec.describe Api::V1::AuthTokenController do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
 
   describe "POST create" do

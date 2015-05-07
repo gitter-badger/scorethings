@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ThingsController do
+RSpec.describe Api::V1::ThingsController do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
 
   describe "GET lists" do

@@ -5,7 +5,7 @@ angular.module('app').factory('twitter', ['$http', function($http) {
                 console.log('twitterHandle required');
                 return;
             }
-           $http.get('/things/search',
+           $http.get('/api/v1/things/search',
                {
                    params: {
                        twitter_handle: twitterHandle

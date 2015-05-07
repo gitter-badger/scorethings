@@ -1,5 +1,6 @@
 angular.module('app', ['ngRoute', 'LocalStorageModule', 'angular-jwt', 'templates', 'ui.bootstrap'])
-    .config(['$httpProvider', 'localStorageServiceProvider', function($httpProvider, localStorageServiceProvider) {
+    .config(['$httpProvider', 'localStorageServiceProvider', '$locationProvider', function($httpProvider, localStorageServiceProvider,  $locationProvider) {
+        //$locationProvider.html5Mode(true);
         localStorageServiceProvider.setPrefix('scorethings');
         return $httpProvider.interceptors.push('AuthInterceptor');
     }])
