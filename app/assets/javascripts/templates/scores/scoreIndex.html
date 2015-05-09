@@ -1,6 +1,11 @@
 <h2>This is the score index</h2>
 <ul>
     <li ng-repeat="score in scores">
-        <a ng-href="/scores/{{score.id}}">{{score.thing.value}}</a>
+        <twitter-hashtag-score
+                ng-show="score.thing.type == 'TWITTER_HASHTAG'"
+                score="score">
+        </twitter-hashtag-score>
+        <a ng-show="score.thing.type != 'TWITTER_HASHTAG'"
+           ng-href="/scores/{{score.id}}">{{score.thing.value}}</a>
     </li>
 </ul>
