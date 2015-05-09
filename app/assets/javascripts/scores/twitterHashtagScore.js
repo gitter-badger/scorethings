@@ -7,9 +7,6 @@ angular.module('app').directive('twitterHashtagScore', function() {
         },
         templateUrl: 'scores/twitterHashtagScore.html',
         link: function($scope, element, attrs) {
-            $scope.doSomething = function() {
-                console.log('something');
-            };
         }
 
     };

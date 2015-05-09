@@ -17,10 +17,6 @@ angular.module('app').directive('twitterUserScore', ['twitter', function(twitter
             }, function errorUserInfo(response) {
                 console.log(response);
             });
-
-            $scope.doSomething = function() {
-                console.log('something');
-            };
         }
 
     };

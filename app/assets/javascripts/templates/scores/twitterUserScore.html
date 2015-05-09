@@ -1,5 +1,4 @@
-<div>
-    <h2>Twitter User @{{userInfo.screen_name}}</h2>
+<a ng-href="/scores/{{score.id}}">
+    @{{userInfo.screen_name}}
     <img ng-src="{{userInfo.profile_image_url}}">
-    <button class="btn btn-primary btn-md" ng-click="doSomething()">Do Something!</button>
-</div>
+</a>

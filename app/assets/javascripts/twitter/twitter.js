@@ -4,7 +4,7 @@ angular.module('app').factory('twitter', ['$http', function($http) {
             if(!twitterHandle) {
                 return errorFn('twitter username is required');
             }
-           $http.get('/api/v1/twitter/handle_search', {params: {twitter_handle: twitterHandle}})
+           $http.get('/api/v1/twitter/handle_search', {params: {twitter_handle: twitterHandle, cache: true}})
                .success(function(data) {
                    return successFn(data);
                })
@@ -18,7 +18,7 @@ angular.module('app').factory('twitter', ['$http', function($http) {
             if(!twitterUid) {
                 return errorFn('twitter uid is required');
             }
-            $http.get('/api/v1/twitter/user_info', {params: {twitter_uid: twitterUid}})
+            $http.get('/api/v1/twitter/user_info', {params: {twitter_uid: twitterUid}, cache: true})
                 .success(function(data) {
                     return successFn(data);
                 })
