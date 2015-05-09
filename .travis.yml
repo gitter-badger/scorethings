@@ -5,4 +5,5 @@ services:
   - mongodb
 script:
   - bundle exec rspec spec/
+  - bundle exec ./node_modules/bower/bin/bower install
   - bundle exec rake karma:start
