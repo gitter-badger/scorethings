@@ -13,7 +13,7 @@ describe('twitter', function() {
 
     describe('searching for twitter accounts by handle', function() {
         it('should search for twitter accounts by handle', function() {
-            var expectedTwitterAPIGET = '/api/v1/things/search?twitter_handle=pattonoswalt';
+            var expectedTwitterAPIGET = '/api/v1/twitter/handle_search?cache=true&twitter_handle=pattonoswalt';
             var fixtureData = readJSON('./fixtures/twitterSearchResultsEmpty.json');
             $httpBackend.expectGET(expectedTwitterAPIGET).respond(fixtureData);
             twitter.searchTwitterHandles('pattonoswalt',

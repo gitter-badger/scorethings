@@ -3,3 +3,6 @@ rvm:
   - 2.2.1
 services:
   - mongodb
+script:
+  - bundle exec rspec spec/
+  - bundle exec rake karma:start
