@@ -17,4 +17,4 @@
 /tmp
 *.swp
 /.idea
-# /vendor/assets/components
+/vendor/assets/components

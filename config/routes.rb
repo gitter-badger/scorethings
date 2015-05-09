@@ -10,7 +10,8 @@ Rails.application.routes.draw do
       match '/auth/failure' => 'auth_token#failure', via: :get
 
 
-      match '/things/search' => 'things#search', via: :get, as: :things_search
+      match '/twitter/handle_search' => 'twitter#handle_search', via: :get, as: :twitter_handle_search
+      match '/twitter/user_info' => 'twitter#user_info', via: :get, as: :twitter_user_info
 
       match '/scores' => 'scores#create', via: :post, as: :create_score
 

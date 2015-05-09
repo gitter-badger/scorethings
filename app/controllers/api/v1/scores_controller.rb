@@ -17,7 +17,7 @@ module Api
                      }, status: :bad_request
           end
 
-          score = @current_user.create_score(thing_type: 'TWITTER_UID', thing_value: twitter_account[:uid])
+          score = @current_user.create_score(thing_type: 'TWITTER_UID', thing_value: twitter_account[:id])
           return render json: {
                      score: score,
                      status: :created

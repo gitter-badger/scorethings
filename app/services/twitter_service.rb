@@ -16,6 +16,10 @@ class TwitterService
   end
 
   def get_twitter_account_from_uid(twitter_uid)
-    $twitter.user(twitter_uid)
+    begin
+      $twitter.user(twitter_uid)
+    rescue Twitter::Error::NotFound
+      nil
+    end
   end
 end

@@ -16,7 +16,7 @@ RSpec.describe Api::V1::ScoresController do
           score: {
               thing: {
                   type: 'TWITTER_UID',
-                  value: '2121'
+                  value: 2121
               }
           }
       }
@@ -27,18 +27,22 @@ RSpec.describe Api::V1::ScoresController do
     end
 
     it "should create a new score for a twitter account when given a twitter user id" do
-      allow_any_instance_of(TwitterService).to receive(:get_twitter_account_from_uid).with('2121').and_return({ uid: '2121' })
+      allow_any_instance_of(TwitterService).to receive(:get_twitter_account_from_uid).with('2121').and_return({ id: '2121' })
 
       post_data = {
           score: {
               thing: {
                   type: 'TWITTER_UID',
-                  value: '2121'
+                  value: 2121
               }
           }
       }
+      expect(Score.all.length).to eq(0)
       post :create, post_data
       expect(response).to have_http_status(:created)
+      expect(Score.all.length).to eq(1)
+      expect(Score.first.thing.type).to eq('TWITTER_UID')
+      expect(Score.first.thing.value).to eq('2121')
     end
 
     it "should create a new score for a twitter hashtag when given a twitter hashtag" do

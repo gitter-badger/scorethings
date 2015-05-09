@@ -5,7 +5,9 @@
                 ng-show="score.thing.type == 'TWITTER_HASHTAG'"
                 score="score">
         </twitter-hashtag-score>
-        <a ng-show="score.thing.type != 'TWITTER_HASHTAG'"
-           ng-href="/scores/{{score.id}}">{{score.thing.value}}</a>
+        <twitter-user-score
+                ng-show="score.thing.type == 'TWITTER_UID'"
+                score="score">
+        </twitter-user-score>
     </li>
 </ul>
