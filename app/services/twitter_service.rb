@@ -16,6 +16,6 @@ class TwitterService
   end
 
   def get_twitter_account_from_uid(twitter_uid)
-
+    $twitter.user(twitter_uid)
   end
 end

@@ -5,6 +5,16 @@ class Score
   embeds_one :thing
   has_and_belongs_to_many :score_lists
 
+  def to_builder
+    Jbuilder.new do |score|
+      score.user self.user.to_builder
+      score.thing self.thing.to_builder
+      score.subscores score.subscores do |subscore|
+        subscore.to_builder
+      end
+    end
+  end
+
   def calculate_total_score(input = {})
     total_score = 0
     new_updated_value = input[:new_updated_value]
@@ -28,10 +38,6 @@ class Score
         return
       end
     end
-    subscore = Subscore.new
-    subscore.criterion = criterion
-    subscore.value = new_subscore_value
-    subscore.score = self
-    subscore
+   self.subscores.create!(criterion: criterion, value: new_subscore_value)
   end
 end

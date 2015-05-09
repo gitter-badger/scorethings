@@ -17,7 +17,7 @@ RSpec.describe Score do
     it "should overwrite an existing subscore if adding a new one with the same criterion" do
       # in this case, a value for "Funny" already has been entered, adding "Funny" with a new value overwrites the old one
       # it does not result in 2 values for the same criterion
-      score = build(:twitter_uid_score)
+      score = create(:twitter_uid_score)
       positive_criterion = create(:positive_criterion)
       positive_criterion_2 = create(:positive_criterion)
 
@@ -49,7 +49,8 @@ RSpec.describe Score do
         score.add_or_change_subscore(criterion, valid_value)
       end
 
-      score = build(:twitter_uid_score)
+
+      score = create(:twitter_uid_score)
       positive_criterion = create(:positive_criterion)
       negative_criterion = create(:negative_criterion)
 

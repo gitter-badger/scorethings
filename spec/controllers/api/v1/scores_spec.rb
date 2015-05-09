@@ -13,8 +13,11 @@ RSpec.describe Api::V1::ScoresController do
     it "should not allow creating score if user is not authenticated" do
       @request.env['HTTP_AUTHORIZATION'] = ""
       post_data = {
-          thing_input: {
-              twitter_uid: '2121'
+          score: {
+              thing: {
+                  type: 'TWITTER_UID',
+                  value: '2121'
+              }
           }
       }
 
@@ -24,12 +27,14 @@ RSpec.describe Api::V1::ScoresController do
     end
 
     it "should create a new score for a twitter account when given a twitter user id" do
-      twitter_account = { uid: '2121' }
-      allow_any_instance_of(TwitterService).to receive(:get_twitter_account_from_uid).with('2121').and_return(twitter_account)
+      allow_any_instance_of(TwitterService).to receive(:get_twitter_account_from_uid).with('2121').and_return({ uid: '2121' })
 
       post_data = {
-          thing_input: {
-              twitter_uid: '2121'
+          score: {
+              thing: {
+                  type: 'TWITTER_UID',
+                  value: '2121'
+              }
           }
       }
       post :create, post_data
@@ -38,8 +43,11 @@ RSpec.describe Api::V1::ScoresController do
 
     it "should create a new score for a twitter hashtag when given a twitter hashtag" do
       post_data = {
-          thing_input: {
-              twitter_hashtag: 'MayThe4thBeWithYou'
+          score: {
+              thing: {
+                  type: 'TWITTER_HASHTAG',
+                  value: 'MayThe4thBeWithYou'
+              }
           }
       }
       post :create, post_data
@@ -48,8 +56,11 @@ RSpec.describe Api::V1::ScoresController do
 
     it "should say the request was bad if there isn't a twitter uid or hashtag in the thing input" do
       post_data = {
-          thing_input: {
-              github_handle: 'manuisfunny'
+          score: {
+              thing: {
+                  type: 'SOME_OAUTH_UID',
+                  value: 'manuisfunny'
+              }
           }
       }
       post :create, post_data

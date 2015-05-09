@@ -2,8 +2,7 @@ angular.module('app')
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
             when('/', {
-                templateUrl: 'main/index.html',
-                controller: 'MainCtrl',
+                templateUrl: 'main/home.html',
                 redirectTo: function(current, path, search){
                     // FIXME quick fix copy from, needs better solution
                     // http://omarriott.com/aux/angularjs-html5-routing-rails/
@@ -21,6 +20,18 @@ angular.module('app')
             }).
             when('/about', {
                 templateUrl: 'main/about.html'
+            }).
+            when('/scores/new', {
+                templateUrl: 'scores/newScore.html',
+                controller: 'NewScoreCtrl'
+            }).
+            when('/scores/:scoreId', {
+                templateUrl: 'scores/showScore.html',
+                controller: 'ShowScoreCtrl'
+            }).
+            when('/scores', {
+                templateUrl: 'scores/scoreIndex.html',
+                controller: 'ScoreIndexCtrl'
             }).
             otherwise({
                 redirectTo: '/'

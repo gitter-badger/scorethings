@@ -1,0 +1,16 @@
+<h2>Score A Thing</h2>
+<form ng-submit="handleThingInputValue(thingInputValue)">
+    <div class="input-group">
+        <input type="text" class="form-control"
+               ng-model="thingInputValue"
+               placeholder="@SomeTwitterHandle  or  #SomeTwitterHashtag">
+        <span class="input-group-btn">
+            <button class="btn btn-primary" type="submit">Score Thing</button>
+        </span>
+    </div>
+</form>
+<ul>
+    <li ng-repeat="twitterUser in twitterUsers">
+        <a ng-click="selectTwitterUserToCreateScore(twitterUser)">@{{twitterUser.screen_name}}</a>
+    </li>
+</ul>

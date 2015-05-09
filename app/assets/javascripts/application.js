@@ -10,17 +10,22 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
-//= require angular
-//= require angular-route
-//= require angular-local-storage
-//= require angular-jwt
-//= require bootstrap
+//= require jquery/dist/jquery.min.js
+//= require angular/angular.min.js
+//= require angular-resource/angular-resource.min.js
+//= require angular-route/angular-route.min.js
+//= require angular-local-storage/dist/angular-local-storage.min
+//= require angular-jwt/dist/angular-jwt.min
 //= require angular-rails-templates.js
-//= require toastr
-//= require angular-ui-bootstrap
-//= require angular-ui-bootstrap-tpls
+//= require bootstrap/dist/js/bootstrap.min
+//= require toastr/toastr.min.js
+//= require angular-bootstrap/ui-bootstrap.min
+//= require angular-bootstrap/ui-bootstrap-tpls.min
+//= require spin.js/spin
+//= require angular-spinner/angular-spinner.min.js
+//= require restangular/dist/restangular.min
+//= require lodash
+
 // AngularJS templates location in app/assets/javascript/templates
 //= require_tree ./templates
 //= require app

@@ -37,7 +37,6 @@ gem 'puma'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-twitter'
-gem 'rails_12factor'
 gem 'jwt'
 gem 'angular-rails-templates', '~> 0.1.4'
 gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
@@ -47,14 +46,9 @@ gem 'angular-ui-bootstrap-rails'
 
 gem 'twitter'
 
-source "https://rails-assets.org" do
-  gem 'rails-assets-angular'
-  gem 'rails-assets-angular-jwt'
-  gem 'rails-assets-angular-local-storage'
-  gem 'rails-assets-angular-resource'
-  gem 'rails-assets-angular-route'
-  gem 'rails-assets-bootstrap'
-  gem 'rails-assets-toastr'
+group :production, :staging do
+  gem 'heroku_rails_deflate'
+  gem 'rails_12factor'
 end
 
 group :development, :test do

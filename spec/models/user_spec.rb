@@ -108,8 +108,8 @@ RSpec.describe User do
       @user.add_or_change_subscore(score, positive_criterion_1, 65)
       @user.add_or_change_subscore(score, positive_criterion_2, 52)
       expect(score.subscores.length).to eq(3)
-
-      # total calculation functionality is tested in score_spec
+      score.reload
+      expect(score.subscores.length).to eq(3)
     end
 
     it "should not allow a subscore to be added without a criterion" do
@@ -143,9 +143,9 @@ RSpec.describe User do
       expect(@user.remaining_points).to eq(950)
       expect(score.subscores.length).to eq(2)
 
-      @user.add_or_change_subscore(score, positive_criterion, 150)
+      @user.add_or_change_subscore(score, positive_criterion, 20)
       expect(@user.user_points_total.amount).to eq(1000)
-      expect(@user.remaining_points).to eq(850)
+      expect(@user.remaining_points).to eq(980)
       expect(score.subscores.length).to eq(2)
     end
 
@@ -239,7 +239,7 @@ RSpec.describe User do
   end
 
   describe "restricting adding or changing scores based on insufficient remaining points" do
-    it "should stop the user from changing an existing subscore's value when user has insufficient remaining points" do
+    it "should stop the user from CHANGING an existing subscore's value when user has insufficient remaining points" do
       funny_criterion = create(:positive_criterion)
       smart_criterion = create(:positive_criterion)
 
@@ -249,32 +249,27 @@ RSpec.describe User do
       expect(@user.user_points_total.amount).to eq(1000)
       expect(@user.remaining_points).to eq(1000)
 
-      @user.add_or_change_subscore(score, smart_criterion, 400)
-      @user.add_or_change_subscore(score, funny_criterion, 500)
-      expect(score.subscores.where(criterion: smart_criterion).first.value).to eq(400)
-      expect(score.subscores.where(criterion: funny_criterion).first.value).to eq(500)
-      expect(@user.remaining_points).to eq(100)
+      # use 990 points on subscore points
+      create_list(:positive_criterion, 10).each do |criterion|
+        @user.add_or_change_subscore(score, criterion, 99)
+      end
+      expect(@user.remaining_points).to eq(10)
+      @user.add_or_change_subscore(score, funny_criterion, 9)
+      expect(@user.remaining_points).to eq(1)
 
-      # user already used 900 points, only has 100 remaining, can't change subscore for smart criterion from 400 to 501
+      # user already used 999 points, only has 1 remaining, can't change subscore for funny criterion from 400 to 501
       # because that would cause remaining points to be -1, less than zero
       expect{
-        @user.add_or_change_subscore(score, smart_criterion, 501)
+        @user.add_or_change_subscore(score, funny_criterion, 11)
       }.to raise_error(InsufficientPointsError)
 
       # user can change smart criterion subscore to increase it to 500, resulting in remaining points being zero
-      expect(score.subscores.length).to eq(3)
-      expect(score.subscores.where(criterion: smart_criterion).first.value).to eq(400)
-      expect(score.subscores.where(criterion: funny_criterion).first.value).to eq(500)
-      expect(@user.remaining_points).to eq(100)
-      @user.add_or_change_subscore(score, smart_criterion, 450)
-      expect(score.subscores.where(criterion: smart_criterion).first.value).to eq(450)
-      expect(score.subscores.where(criterion: funny_criterion).first.value).to eq(500)
-      expect(@user.remaining_points).to eq(50)
+      @user.add_or_change_subscore(score, funny_criterion, 10)
+      expect(@user.remaining_points).to eq(0)
     end
 
-    it "should stop the user from adding a new subscore when user has insufficient remaining points" do
+    it "should stop the user from ADDING a new subscore when user has insufficient remaining points" do
       funny_criterion = create(:positive_criterion)
-      smart_criterion = create(:positive_criterion)
 
       @user.initialize_points_balance
 
@@ -282,7 +277,9 @@ RSpec.describe User do
       expect(@user.user_points_total.amount).to eq(1000)
       expect(@user.remaining_points).to eq(1000)
 
-      @user.add_or_change_subscore(score, smart_criterion, 950)
+      create_list(:positive_criterion, 10).each do |criterion|
+        @user.add_or_change_subscore(score, criterion, 95)
+      end
       expect(@user.remaining_points).to eq(50)
 
       # user already used 950 points, only has 50 remaining, can't add subscore of 51, insufficient points
@@ -294,7 +291,6 @@ RSpec.describe User do
     it "should not stop the user from adding a new subscore after increasing the user's points total" do
       # TODO maybe this spec should be organized in another location?  more describes increasing points total, not raising error?
       funny_criterion = create(:positive_criterion)
-      smart_criterion = create(:positive_criterion)
 
       @user.initialize_points_balance
 
@@ -302,7 +298,9 @@ RSpec.describe User do
       expect(@user.user_points_total.amount).to eq(1000)
       expect(@user.remaining_points).to eq(1000)
 
-      @user.add_or_change_subscore(score, smart_criterion, 950)
+      create_list(:positive_criterion, 10).each do |criterion|
+        @user.add_or_change_subscore(score, criterion, 95)
+      end
       expect(@user.remaining_points).to eq(50)
 
       # user already used 950 points, only has 50 remaining, can't add subscore of 51, insufficient points

@@ -11,8 +11,10 @@
  * file per style scope.
  *
  *= require_tree .
- *= require bootstrap.min
- *= require toastr
+ *= require bootswatch/cyborg/bootstrap.min
+ *= require toastr/toastr.min.css
+ *= require bootstrap-social/bootstrap-social.css
+ *= require font-awesome/css/font-awesome.min
  *= require_self
  */
 header nav ul {

@@ -11,6 +11,7 @@ Bundler.require(*Rails.groups)
 
 module Scorething
   class Application < Rails::Application
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
     config.generators do |g|
     end
   end

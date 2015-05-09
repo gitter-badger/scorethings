@@ -13,6 +13,12 @@ class Criterion
 
   MAX_CRITERION_LEVELS = 10
 
+  def to_builder
+    Jbuilder.new do |criterion|
+      criterion.(self, :name, :definition, :sign)
+    end
+  end
+
   def add_level(name, level_number=nil)
     if level_number.nil?
       level_number = self.criterion_levels.length + 1
@@ -79,11 +85,6 @@ class Criterion
       levels_in_order[level-1].level_number = level
       levels_in_order[level-1].floor = floor
       levels_in_order[level-1].ceiling = ceiling
-      puts "level: #{level}, floor: #{floor}, ceiling: #{ceiling}"
-    end
-
-    self.criterion_levels.order(:level_number.asc).each do |cl|
-      puts "level: #{cl.level_number}\tfloor: #{cl.floor}\tceiling: #{cl.ceiling}"
     end
   end
 

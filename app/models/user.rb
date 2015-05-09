@@ -15,6 +15,14 @@ class User
 
   INITIAL_POINTS_TOTAL = 1000
 
+  def to_builder
+    Jbuilder.new do |user|
+      user.twitter_handle self.twitter_handle
+      user.twitter_uid self.twitter_uid
+      user.id self._id.to_s
+    end
+  end
+
   def create_score(attrs)
     # find or create a general criterion so that when the score is created, it's not just empty with no subscores
     # (want it to be less confusing for user)
