@@ -18,3 +18,4 @@
 *.swp
 /.idea
 /vendor/assets/components
+/node_modules

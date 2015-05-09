@@ -4,6 +4,7 @@ rvm:
 services:
   - mongodb
 script:
-  - bundle exec rspec spec/
+  - npm install
   - bundle exec ./node_modules/bower/bin/bower install
+  - bundle exec rspec spec/
   - bundle exec rake karma:start
