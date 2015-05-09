@@ -73,4 +73,6 @@ group :development, :test do
   gem 'mongoid-rspec', '~> 2.1.0'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
+
+  gem 'fakeweb', '~> 1.3'
 end
