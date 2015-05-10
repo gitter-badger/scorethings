@@ -37,4 +37,13 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.log_level = :info
+
+  # memcached with dalli
+  # https://github.com/mperham/dalli
+  config.cache_store = :dalli_store,
+      'localhost:11211',
+      {:failover => true,
+       :socket_timeout => 1.5,
+       :socket_failure_delay => 0.2
+      }
 end

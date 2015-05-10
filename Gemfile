@@ -45,6 +45,8 @@ gem 'mongoid-embedded-errors'
 gem 'angular-ui-bootstrap-rails'
 
 gem 'twitter'
+gem 'dalli'
+gem 'api_cache'
 
 group :production, :staging do
   gem 'heroku_rails_deflate'

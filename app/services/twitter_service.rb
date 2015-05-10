@@ -7,17 +7,17 @@ class TwitterService
     @twitter_uid = params[:twitter_uid]
   end
 
-  def get_lists
-    $twitter.lists(@twitter_uid.to_i)
-  end
-
   def search_for_twitter_accounts(twitter_handle)
-    $twitter.user_search(twitter_handle)
+    Rails.cache.fetch("twitter_handle_search_#{twitter_handle}", :expires_in => 2.hour) do
+      $twitter.user_search(twitter_handle)
+    end
   end
 
   def get_twitter_account_from_uid(twitter_uid)
     begin
-      $twitter.user(twitter_uid)
+      Rails.cache.fetch("twitter_user_info_#{twitter_uid}", :expires_in => 2.hour) do
+        $twitter.user(twitter_uid)
+      end
     rescue Twitter::Error::NotFound
       nil
     end
