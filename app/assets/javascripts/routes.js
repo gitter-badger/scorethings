@@ -19,6 +19,10 @@ angular.module('app')
                 templateUrl: 'scores/scoreIndex.html',
                 controller: 'ScoreIndexCtrl'
             }).
+            when('/account', {
+                templateUrl: 'users/account.html',
+                controller: 'AccountCtrl'
+            }).
             otherwise({
                 redirectTo: '/'
             });
