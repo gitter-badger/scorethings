@@ -1,4 +1,17 @@
-angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Score', 'usSpinnerService', 'twitter', 'notifier', function($scope, $location, Score, usSpinnerService, twitter, notifier) {
+angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Score', '$routeParams', 'usSpinnerService', 'twitter', 'notifier', function($scope, $location, Score, $routeParams, usSpinnerService, twitter, notifier) {
+    $scope.thingInputValue = null;
+
+
+    var twitterHandleQuery = $routeParams.handle;
+    if(twitterHandleQuery) {
+        $scope.thingInputValue = '@' + twitterHandleQuery;
+    } else {
+        var twitterHashtagQuery = $routeParams.hashtag;
+        if(twitterHashtagQuery) {
+            $scope.thingInputValue = '#' + twitterHashtagQuery;
+        }
+    }
+
     $scope.handleThingInputValue = function(thingInputValue) {
         if(!thingInputValue || thingInputValue < 1) {
             return notifier.error('could not create score, thing input is not known');
@@ -34,6 +47,7 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Score'
                 if (!score || !score._id) {
                     return notifier.error('could not go to see created score');
                 } else {
+                    $location.search('');
                     $location.path('/scores/' + score.id)
                 }
             })
