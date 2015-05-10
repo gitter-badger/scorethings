@@ -13,7 +13,6 @@
 //= require jquery/dist/jquery.min.js
 //= require angular/angular.min.js
 //= require angular-resource/angular-resource.min.js
-//= require angular-route/angular-route.min.js
 //= require angular-local-storage/dist/angular-local-storage.min
 //= require angular-jwt/dist/angular-jwt.min
 //= require angular-rails-templates.js
@@ -25,8 +24,9 @@
 //= require angular-spinner/angular-spinner.min.js
 //= require restangular/dist/restangular.min
 //= require lodash
+//= require angular-ui-router/release/angular-ui-router.min
 
-// AngularJS templates location in app/assets/javascript/templates
+// AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app
 //= require turbolinks

@@ -1,0 +1,7 @@
+<ul class="nav nav-pills nav-stacked col-sm-3">
+    <li ng-repeat="(state, title) in stateToNavbarTitles"
+        role="presentation"
+        ng-class="{'active': currentState.name == state}">
+        <a ui-sref="{{state}}">{{title}}</a>
+    </li>
+</ul>

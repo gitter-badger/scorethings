@@ -16,17 +16,21 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             '../../vendor/assets/components/angular/angular.js',
-            '../../vendor/assets/components/angular-route/angular-route.js',
             '../../vendor/assets/components/angular-mocks/angular-mocks.js',
             '../../vendor/assets/components/toastr/toastr.js',
             '../../vendor/assets/components/angular-local-storage/dist/angular-local-storage.js',
             '../../vendor/assets/components/angular-jwt/dist/angular-jwt.js',
             '../../vendor/assets/components/angular-bootstrap/ui-bootstrap.js',
+            '../../vendor/assets/components/angular-ui-router/release/angular-ui-router.js',
             '../../vendor/assets/components/angular-spinner/angular-spinner.js',
             '../../vendor/assets/components/restangular/dist/restangular.js',
             '../../vendor/assets/components/lodash/lodash.js',
             '../../vendor/assets/components/spin.js/spin.js',
             '../../vendor/assets/components/karma-read-json/karma-read-json.js',
+            // FIXME I don't undertand why I needed to add app.js, before the **/*.js was working,
+            // but when I actually did the ls **/*.js, it didn't show up
+            '../../app/assets/javascripts/app.js',
+            '../../app/assets/javascripts/states.js',
             '../../app/assets/javascripts/**/*.js',
             './unit/**/*.js',
             {
