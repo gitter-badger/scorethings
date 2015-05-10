@@ -19,9 +19,26 @@ angular.module('app')
                 templateUrl: 'scores/scoreIndex.html',
                 controller: 'ScoreIndexCtrl'
             }).
+            when('/about', {
+                templateUrl: 'about/main.html'
+            }).
+            when('/about/contribute', {
+                templateUrl: 'about/contribute.html'
+            }).
+            when('/about/connect', {
+                templateUrl: 'about/connect.html'
+            }).
             when('/account', {
-                templateUrl: 'users/account.html',
-                controller: 'AccountCtrl'
+                templateUrl: 'account/main.html'
+            }).
+            when('/account/scores', {
+                templateUrl: 'account/scores.html'
+            }).
+            when('/account/score_lists', {
+                templateUrl: 'account/score_lists.html'
+            }).
+            when('/account/criteria', {
+                templateUrl: 'account/criteria.html'
             }).
             otherwise({
                 redirectTo: '/'

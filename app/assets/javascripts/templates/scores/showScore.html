@@ -7,3 +7,9 @@
 <div ng-show="score && score.thing.type == 'TWITTER_HASHTAG'">
     <h3 id="twitterHashtag">Twitter Hashtag #{{score.thing.value}}</h3>
 </div>
+<div>
+    <h3>Subscores</h3>
+    <ul>
+        <li ng-repeat="subscore in score.subscores">{{subscore.criterion.name}}({{subscore.criterion.definition}}): {{subscore.value}}</li>
+    </ul>
+</div>
