@@ -29,5 +29,4 @@
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app
-//= require turbolinks
 //= require_tree .
