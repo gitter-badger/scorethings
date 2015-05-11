@@ -24,7 +24,7 @@ Rails.application.routes.draw do
 
       match '/users/current_user_info' => 'users#current_user_info', via: :get, as: :current_user_info
 
-      match '/criteria' => 'criteria#index', via: :get, as: :criteria_index
+      match '/criteria/system' => 'criteria#system', via: :get, as: :system_criteria
     end
   end
 

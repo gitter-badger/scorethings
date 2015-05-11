@@ -1,1 +1,1 @@
-Criterion.collection.drop
+Criterion.delete_all

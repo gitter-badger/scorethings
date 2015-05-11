@@ -19,6 +19,15 @@ class Criterion
     end
   end
 
+  def self.create_system_criterion(attrs, levels)
+    attrs[:system_provided] = true
+    criterion = Criterion.create(attrs)
+    levels.each_with_index do |level, index|
+      criterion.add_level(level, index+1)
+    end
+    criterion
+  end
+
   def add_level(name, level_number=nil)
     if level_number.nil?
       level_number = self.criterion_levels.length + 1
@@ -37,6 +46,7 @@ class Criterion
     end
     self.criterion_levels << CriterionLevel.new(level_number: level_number, name: name)
     determine_level_ranges
+    self.save
   end
 
   def remove_level(level_number)
