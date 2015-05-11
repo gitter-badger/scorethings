@@ -48,10 +48,6 @@ module Api
                         }, status: :not_found
         end
       end
-
-      def index
-        @scores = Score.all
-      end
-    end
+   end
   end
 end

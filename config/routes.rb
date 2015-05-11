@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       match '/scores/:score_id/subscores' => 'subscores#create', via: :post, as: :create_subscore
       match '/scores/:score_id/subscores/:id' => 'subscores#update', via: :put, as: :update_subscore
 
+      match '/users/current_user_info' => 'users#current_user_info', via: :get, as: :current_user_info
+
       match '/criteria' => 'criteria#index', via: :get, as: :criteria_index
     end
   end

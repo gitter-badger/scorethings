@@ -1,5 +1,5 @@
-angular.module('app').controller('ShowScoreCtrl', ['$scope', '$routeParams', 'Restangular', 'twitter', function($scope, $routeParams, Restangular, twitter) {
-    var scoreId = $routeParams.scoreId;
+angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Restangular', 'twitter', function($scope, $stateParams, Restangular, twitter) {
+    var scoreId = $stateParams.scoreId;
     Restangular.one('scores', scoreId).get().then(function(data) {
         $scope.score =  data.score;
         if($scope.score.thing.type != 'TWITTER_UID') return;

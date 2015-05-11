@@ -4,6 +4,14 @@ class ScoreList
   belongs_to :user
   has_and_belongs_to_many :scores
 
+  def to_builder
+    Jbuilder.new do |score_list|
+      score_list.name self.name
+      score_list.scores self.scores
+      score_list.id self._id.to_s
+    end
+  end
+
   def self.build_from_twitter_list(user, name, twitter_list_members)
     if user.nil? || twitter_list_members.nil?
       # TODO come up with better error(?)

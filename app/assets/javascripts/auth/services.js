@@ -24,6 +24,9 @@ angular.module('app')
             getTwitterHandle: function() {
                 return this.getAttr('twitter_handle');
             },
+            getUserId: function() {
+                return this.getAttr('user_id');
+            },
             clear: function() {
                 localStorageService.remove(this.tokenName);
                 identity.twitterHandle = this.getTwitterHandle();

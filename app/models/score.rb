@@ -15,6 +15,14 @@ class Score
     end
   end
 
+  def low_detail_to_builder
+    Jbuilder.new do |score|
+      score.thing self.thing.to_builder
+      score.total_score self.calculate_total_score
+      score.cool "this is cool"
+    end
+  end
+
   def calculate_total_score(input = {})
     total_score = 0
     new_updated_value = input[:new_updated_value]

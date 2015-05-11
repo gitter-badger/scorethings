@@ -30,7 +30,6 @@ module.exports = function(config) {
             // FIXME I don't undertand why I needed to add app.js, before the **/*.js was working,
             // but when I actually did the ls **/*.js, it didn't show up
             '../../app/assets/javascripts/app.js',
-            '../../app/assets/javascripts/states.js',
             '../../app/assets/javascripts/**/*.js',
             './unit/**/*.js',
             {

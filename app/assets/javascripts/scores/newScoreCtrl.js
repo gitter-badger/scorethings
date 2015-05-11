@@ -1,16 +1,5 @@
-angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Score', '$routeParams', 'usSpinnerService', 'twitter', 'notifier', function($scope, $location, Score, $routeParams, usSpinnerService, twitter, notifier) {
+angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Score', 'usSpinnerService', 'twitter', 'notifier', function($scope, $location, Score, usSpinnerService, twitter, notifier) {
     $scope.thingInputValue = null;
-
-
-    var twitterHandleQuery = $routeParams.handle;
-    if(twitterHandleQuery) {
-        $scope.thingInputValue = '@' + twitterHandleQuery;
-    } else {
-        var twitterHashtagQuery = $routeParams.hashtag;
-        if(twitterHashtagQuery) {
-            $scope.thingInputValue = '#' + twitterHashtagQuery;
-        }
-    }
 
     $scope.handleThingInputValue = function(thingInputValue) {
         if(!thingInputValue || thingInputValue < 1) {
