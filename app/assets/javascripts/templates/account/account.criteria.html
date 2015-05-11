@@ -1,4 +1,5 @@
-<h2>Criteria You Created ({{currentUserInfo.criteria.length}})</h2>
-<user-owned-criterion ng-repeat="criterion in (currentUserInfo.criteria)" criterion="criterion">
+<h2>Criteria You Can Use</h2>
+<user-owned-criterion ng-repeat="criteron in currentUserInfo.criteria" criterion="criterion">
 </user-owned-criterion>
-
+<system-criterion ng-repeat="criterion in systemCriteria" criterion="criterion">
+</system-criterion>

@@ -34,14 +34,8 @@ RSpec.describe Api::V1::CriteriaController do
               'Basic'
           ])
 
-      expected_response_body = {
-          criteria: system_provided_criteria,
-          status: :ok
-      }.to_json
-
       get :system, accept: :json
       expect(response).to have_http_status(:ok)
-      expect(response.body).to eq(expected_response_body)
     end
   end
 end

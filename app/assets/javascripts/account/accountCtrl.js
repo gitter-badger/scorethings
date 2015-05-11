@@ -1,9 +1,13 @@
-angular.module('app').controller('AccountCtrl', ['identity', '$scope', 'Restangular', function(identity, $scope, Restangular) {
+angular.module('app').controller('AccountCtrl', ['identity', '$scope', 'Restangular', 'SystemCriteria', function(identity, $scope, Restangular, SystemCriteria) {
     $scope.currentUserInfo = {
         scores: [],
         criteria: [],
         scoreLists: []
     };
+
+    SystemCriteria.getList().then(function(systemCriteria) {
+        $scope.systemCriteria = systemCriteria;
+    });
 
     $scope.identity = identity;
     $scope.stateToNavbarTitle = {

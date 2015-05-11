@@ -2,14 +2,10 @@ module Api
   module V1
     class CriteriaController < ApplicationController
       # TODO allow unauthenticated read?
-      skip_before_action :authenticate_request, only: [:system]
+      skip_before_action :authenticate_request, :current_user, only: [:system]
 
       def system
-        criteria = Criterion.where(system_provided: true)
-        return render json: {
-                          criteria: criteria,
-                          status: :ok
-                      }, status: :ok
+        @system_criteria = Criterion.where(system_provided: true)
       end
     end
   end

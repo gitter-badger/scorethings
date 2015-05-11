@@ -8,6 +8,9 @@ angular.module('app', ['restangular', 'ui.router', 'templates', 'LocalStorageMod
         });
         return $httpProvider.interceptors.push('AuthInterceptor');
     }])
+    .factory('SystemCriteria', ['Restangular', function(Restangular) {
+        return Restangular.service('criteria/system');
+    }])
     .run(['identity', 'AuthToken', function(identity, AuthToken) {
         identity.twitterHandle = AuthToken.getTwitterHandle();
     }]);

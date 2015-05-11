@@ -144,4 +144,27 @@ RSpec.describe Criterion do
       end
     end
   end
+
+  describe "creating a system criterion" do
+    it "should create a system criterion with levels" do
+      expect(Criterion.all.first).to be_nil
+      Criterion.create_system_criterion(
+          {name: 'Important',
+           definition: 'of much or great significance or consequence'},
+          [
+              'Not Important',
+              'Not Very Important',
+              'Almost Important',
+              'Important',
+              'Very Important',
+              'One of the Most Important Things Ever'
+          ])
+
+      criterion = Criterion.all.first
+      expect(criterion).to_not be_nil
+
+      expect(criterion.name).to eq('Important')
+      expect(criterion.criterion_levels.length).to eq(6)
+    end
+  end
 end
