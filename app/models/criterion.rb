@@ -56,6 +56,14 @@ class Criterion
     return last_criterion_level
   end
 
+  def self.create_general_criterion(user)
+    Criterion.create!(
+        is_general: true,
+        name: 'General',
+        user: user,
+        definition: 'A general criterion, not really a specific standard.')
+  end
+
   private
   def determine_level_ranges
     # FIXME I know this looks bad, but I'm not smart enough to come up with a better solution right now

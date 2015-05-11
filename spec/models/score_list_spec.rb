@@ -4,7 +4,6 @@ RSpec.describe ScoreList do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   before do
     @user = create(:user_alpha)
-    @user.initialize_points_balance
   end
 
   describe "creating a score list from a twitter member list" do

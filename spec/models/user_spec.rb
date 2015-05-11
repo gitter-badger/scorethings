@@ -4,7 +4,6 @@ RSpec.describe User do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   before do
     @user = build(:user_alpha)
-    @user.initialize_points_balance
   end
 
   describe "creating a new user with oauth" do
@@ -27,9 +26,6 @@ RSpec.describe User do
       expect(user.twitter_uid).to eq('2121')
       expect(user.twitter_handle).to eq('alpha')
       expect(user.scores.length).to eq(0)
-      expect(user.user_points_total).to_not be_nil
-      expect(user.user_points_total.amount).to eq(1000)
-      expect(user.remaining_points).to eq(1000)
     end
   end
 
@@ -98,7 +94,6 @@ RSpec.describe User do
 
   describe "adding subscores to a score" do
     it "should add two subscores to a score" do
-      @user.initialize_points_balance
 
       score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       positive_criterion_1 = create(:positive_criterion)
@@ -132,25 +127,19 @@ RSpec.describe User do
 
   describe "changing an existing subscore value" do
     it "should change the value of a subscore in a score with one subscore" do
-      @user.initialize_points_balance
 
       score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       positive_criterion = create(:positive_criterion)
 
       expect(score.subscores.length).to eq(1)
       @user.add_or_change_subscore(score, positive_criterion, 50)
-      expect(@user.user_points_total.amount).to eq(1000)
-      expect(@user.remaining_points).to eq(950)
       expect(score.subscores.length).to eq(2)
 
       @user.add_or_change_subscore(score, positive_criterion, 20)
-      expect(@user.user_points_total.amount).to eq(1000)
-      expect(@user.remaining_points).to eq(980)
       expect(score.subscores.length).to eq(2)
     end
 
     it "should change the value of a subscore in a score with two subscores" do
-      @user.initialize_points_balance
 
       score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
       positive_criterion_1 = create(:positive_criterion)
@@ -166,153 +155,6 @@ RSpec.describe User do
       @user.add_or_change_subscore(score, positive_criterion_1, 55)
       expect(score.subscores.where(criterion: positive_criterion_1).first.value).to eq(55)
       expect(score.subscores.where(criterion: positive_criterion_2).first.value).to eq(20)
-    end
-  end
-
-  describe "calculating remaining points" do
-    it "should calculate the remaining points when a subscore is added and changed" do
-      funny_criterion = create(:positive_criterion)
-      smart_criterion = create(:positive_criterion)
-
-      @user.initialize_points_balance
-
-      score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
-      expect(@user.user_points_total.amount).to eq(1000)
-      expect(@user.remaining_points).to eq(1000)
-
-      @user.add_or_change_subscore(score, funny_criterion, 40)
-      expect(@user.remaining_points).to eq(960)
-
-      @user.add_or_change_subscore(score, smart_criterion, 30)
-      expect(@user.remaining_points).to eq(930)
-
-      @user.add_or_change_subscore(score, funny_criterion, 38)
-      expect(@user.remaining_points).to eq(932)
-    end
-
-    it "should calculate the remaining points when the user has more than one score" do
-      funny_criterion = create(:positive_criterion)
-      smart_criterion = create(:positive_criterion)
-
-      @user.initialize_points_balance
-
-      grant_score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
-      cbgirl_score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '33333')
-      expect(@user.user_points_total.amount).to eq(1000)
-      expect(@user.remaining_points).to eq(1000)
-
-      @user.add_or_change_subscore(grant_score, funny_criterion, 40)
-      expect(@user.remaining_points).to eq(960)
-
-      @user.add_or_change_subscore(cbgirl_score, smart_criterion, 30)
-      expect(@user.remaining_points).to eq(930)
-
-      @user.add_or_change_subscore(grant_score, funny_criterion, 38)
-      expect(@user.remaining_points).to eq(932)
-
-      @user.add_or_change_subscore(cbgirl_score, funny_criterion, 80)
-      expect(@user.remaining_points).to eq(852)
-    end
-
-    it "should calculate the remaining points after the user points total amount has changed" do
-      funny_criterion = create(:positive_criterion)
-      smart_criterion = create(:positive_criterion)
-
-      @user.initialize_points_balance
-
-      expect(@user.user_points_total.amount).to eq(1000)
-
-      score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
-      expect(@user.user_points_total.amount).to eq(1000)
-      expect(@user.remaining_points).to eq(1000)
-
-      @user.add_or_change_subscore(score, funny_criterion, 40)
-      @user.add_or_change_subscore(score, smart_criterion, 70)
-      expect(@user.user_points_total.amount).to eq(1000)
-      expect(@user.remaining_points).to eq(890)
-
-      # increase the user's points total, should increase change remaining points calculation
-      User.increase_user_points_total(@user, 200)
-      expect(@user.user_points_total.amount).to eq(1200)
-      expect(@user.remaining_points).to eq(1090)
-    end
-  end
-
-  describe "restricting adding or changing scores based on insufficient remaining points" do
-    it "should stop the user from CHANGING an existing subscore's value when user has insufficient remaining points" do
-      funny_criterion = create(:positive_criterion)
-      smart_criterion = create(:positive_criterion)
-
-      @user.initialize_points_balance
-
-      score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
-      expect(@user.user_points_total.amount).to eq(1000)
-      expect(@user.remaining_points).to eq(1000)
-
-      # use 990 points on subscore points
-      create_list(:positive_criterion, 10).each do |criterion|
-        @user.add_or_change_subscore(score, criterion, 99)
-      end
-      expect(@user.remaining_points).to eq(10)
-      @user.add_or_change_subscore(score, funny_criterion, 9)
-      expect(@user.remaining_points).to eq(1)
-
-      # user already used 999 points, only has 1 remaining, can't change subscore for funny criterion from 400 to 501
-      # because that would cause remaining points to be -1, less than zero
-      expect{
-        @user.add_or_change_subscore(score, funny_criterion, 11)
-      }.to raise_error(InsufficientPointsError)
-
-      # user can change smart criterion subscore to increase it to 500, resulting in remaining points being zero
-      @user.add_or_change_subscore(score, funny_criterion, 10)
-      expect(@user.remaining_points).to eq(0)
-    end
-
-    it "should stop the user from ADDING a new subscore when user has insufficient remaining points" do
-      funny_criterion = create(:positive_criterion)
-
-      @user.initialize_points_balance
-
-      score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
-      expect(@user.user_points_total.amount).to eq(1000)
-      expect(@user.remaining_points).to eq(1000)
-
-      create_list(:positive_criterion, 10).each do |criterion|
-        @user.add_or_change_subscore(score, criterion, 95)
-      end
-      expect(@user.remaining_points).to eq(50)
-
-      # user already used 950 points, only has 50 remaining, can't add subscore of 51, insufficient points
-      expect{
-        @user.add_or_change_subscore(score, funny_criterion, 51)
-      }.to raise_error(InsufficientPointsError) # you're done, funny man
-    end
-
-    it "should not stop the user from adding a new subscore after increasing the user's points total" do
-      # TODO maybe this spec should be organized in another location?  more describes increasing points total, not raising error?
-      funny_criterion = create(:positive_criterion)
-
-      @user.initialize_points_balance
-
-      score = @user.create_score(thing_type: 'TWITTER_UID', thing_value: '99999')
-      expect(@user.user_points_total.amount).to eq(1000)
-      expect(@user.remaining_points).to eq(1000)
-
-      create_list(:positive_criterion, 10).each do |criterion|
-        @user.add_or_change_subscore(score, criterion, 95)
-      end
-      expect(@user.remaining_points).to eq(50)
-
-      # user already used 950 points, only has 50 remaining, can't add subscore of 51, insufficient points
-      expect{
-        @user.add_or_change_subscore(score, funny_criterion, 51)
-      }.to raise_error(InsufficientPointsError)
-
-      # increasing user points total by 1 should now allow the user to add a subscore of 51
-      # without raising an error for insufficient points
-      User.increase_user_points_total(@user, 1)
-      expect(@user.remaining_points).to eq(51)
-      @user.add_or_change_subscore(score, funny_criterion, 51)
     end
   end
 

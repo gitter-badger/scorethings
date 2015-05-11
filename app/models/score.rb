@@ -19,21 +19,14 @@ class Score
     Jbuilder.new do |score|
       score.thing self.thing.to_builder
       score.total_score self.calculate_total_score
-      score.cool "this is cool"
     end
   end
 
-  def calculate_total_score(input = {})
+  def calculate_total_score
     total_score = 0
-    new_updated_value = input[:new_updated_value]
-    existing_subscore_id = input[:existing_subscore_id]
 
     self.subscores.each do |subscore|
-      if !existing_subscore_id.nil? && (subscore._id == existing_subscore_id)
-        total_score += subscore.get_score_calculation(new_updated_value)
-      else
-        total_score += subscore.get_score_calculation
-      end
+      total_score += subscore.get_score_calculation
     end
     return total_score
   end

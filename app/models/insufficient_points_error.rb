@@ -1,2 +1,0 @@
-class InsufficientPointsError < StandardError
-end

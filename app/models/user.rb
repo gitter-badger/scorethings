@@ -7,13 +7,10 @@ class User
   field :join_date, type: Time
 
   has_many :scores
-  embeds_one :user_points_total
   has_many :score_lists
   has_many :criteria # uses ActiveSupport::Inflector to understand criteria is plural criterion
 
   validates_presence_of :twitter_uid
-
-  INITIAL_POINTS_TOTAL = 1000
 
   def to_builder
     Jbuilder.new do |user|
@@ -28,11 +25,7 @@ class User
     # (want it to be less confusing for user)
     general_criterion = Criterion.where(user: self, is_general: true).first
     if general_criterion.nil?
-      general_criterion = Criterion.create!(
-          is_general: true,
-          name: 'General',
-          user: self,
-          definition: 'A general criterion, not really a specific standard.')
+      general_criterion = Criterion.create_general_criterion(self)
     end
     score = Score.create!(
         thing: Thing.new(
@@ -43,18 +36,8 @@ class User
     self.scores << score
 
     # put general criterion in subscores of new score
-    initial_general_criterion_score = 0
-    self.add_or_change_subscore(score, general_criterion, initial_general_criterion_score)
+    self.add_or_change_subscore(score, general_criterion, 0)
     score
-  end
-
-  def initialize_points_balance
-    # this initializes the user's points_balance to an initial amount
-    self.user_points_total = UserPointsTotal.new(last_modified: Time.now, amount: INITIAL_POINTS_TOTAL)
-  end
-
-  def self.increase_user_points_total(user, increase_amount)
-    user.user_points_total.amount += increase_amount
   end
 
   def add_or_change_subscore(score, criterion, new_value)
@@ -67,32 +50,7 @@ class User
     if new_value.nil?
       raise ArgumentError, "cannot add or change subscore to score, new value is nil"
     end
-
-    existing_subscore = score.subscores.where(criterion: criterion).first
-    if !existing_subscore.nil?
-      potential_remaining_points = self.remaining_points(
-        new_updated_value: new_value,
-        existing_subscore_id: existing_subscore._id
-      )
-    else
-      potential_remaining_points = self.remaining_points(new_updated_value: new_value)
-    end
-
-    if potential_remaining_points < 0
-      raise InsufficientPointsError, "cannot change subscore value to #{new_value} because " +
-                                       "the user's remaining points would become #{potential_remaining_points}, and it can't be less than zero"
-    end
     score.add_or_change_subscore(criterion, new_value)
-  end
-
-  def remaining_points(input = {})
-    total_used = 0
-    new_updated_value = input[:new_updated_value]
-    existing_subscore_id = input[:existing_subscore_id]
-    self.scores.each do |score|
-      total_used += score.calculate_total_score(input)
-    end
-    self.user_points_total.amount - (total_used + ((!new_updated_value.nil? && existing_subscore_id.nil?) ? new_updated_value.to_i : 0))
   end
 
   def self.create_with_omniauth(auth)
@@ -108,8 +66,6 @@ class User
       end
 
       user.twitter_handle = auth_info[:nickname]
-
-      user.initialize_points_balance
     end
   end
 
