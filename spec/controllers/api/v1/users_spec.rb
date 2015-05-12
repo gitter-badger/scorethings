@@ -20,4 +20,13 @@ RSpec.describe Api::V1::UsersController do
       expect(response).to have_http_status(:unauthorized)
     end
   end
+
+  describe "GET criteria" do
+    it "should show the criteria that belongs to a user" do
+      create_list(:positive_criterion, 2, user: @user)
+
+      get :criteria, {id: @user._id.to_s}
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end

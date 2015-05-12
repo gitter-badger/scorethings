@@ -24,7 +24,10 @@ Rails.application.routes.draw do
 
       match '/users/current_user_info' => 'users#current_user_info', via: :get, as: :current_user_info
 
+      match '/users/:id/criteria' => 'users#criteria', via: :get, as: :user_criteria
+
       match '/criteria/system' => 'criteria#system', via: :get, as: :system_criteria
+      match '/criteria' => 'criteria#create', via: :post, as: :create_criteria
     end
   end
 

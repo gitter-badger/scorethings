@@ -1,10 +1,11 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <a ng-href="#/criterion/{{criterion.id}}">{{criterion.name}} ({{criterion.sign | criterionSign}})</a>
+            <a ui-sref="account.criteria.detail({criteriaId: criterion.id})">{{criterion.name}} ({{criterion.sign | criterionSign}})</a>
         </h3>
     </div>
     <div class="panel-body">
         Definition: {{criterion.definition}}
+        # of Levels: {{criterion.num_of_levels}}
     </div>
 </div>

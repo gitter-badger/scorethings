@@ -2,7 +2,7 @@ angular.module('app').directive('userOwnedCriterion', [function() {
     return {
         restrict: 'E',
         replace: true,
-        criterion: {
+        scope: {
             criterion: '='
         },
         templateUrl: 'criteria/userOwnedCriterion.html',

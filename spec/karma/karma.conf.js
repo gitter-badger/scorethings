@@ -26,6 +26,7 @@ module.exports = function(config) {
             '../../vendor/assets/components/restangular/dist/restangular.js',
             '../../vendor/assets/components/lodash/lodash.js',
             '../../vendor/assets/components/spin.js/spin.js',
+            '../../vendor/assets/components/angular-breadcrumb/dist/angular-breadcrumb.min.js',
             '../../vendor/assets/components/karma-read-json/karma-read-json.js',
             // FIXME I don't undertand why I needed to add app.js, before the **/*.js was working,
             // but when I actually did the ls **/*.js, it didn't show up

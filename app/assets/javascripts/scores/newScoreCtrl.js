@@ -20,7 +20,7 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Score'
         }
     };
 
-    function createScore(type, value, successMsg) {
+    function createScore(type, value) {
         usSpinnerService.spin('spinner-1');
         Score.post({
             score: {

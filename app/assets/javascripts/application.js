@@ -25,6 +25,7 @@
 //= require restangular/dist/restangular.min
 //= require lodash
 //= require angular-ui-router/release/angular-ui-router.min
+//= require angular-breadcrumb/dist/angular-breadcrumb.min
 
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates

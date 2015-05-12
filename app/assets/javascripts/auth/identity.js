@@ -1,5 +1,6 @@
 angular.module('app').factory('identity', function() {
     return {
-        twitterHandle: undefined
+        twitterHandle: undefined,
+        userId: undefined
     };
 });

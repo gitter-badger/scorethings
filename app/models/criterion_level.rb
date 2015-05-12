@@ -1,5 +1,6 @@
 class CriterionLevel
   include Mongoid::Document
+  include Mongoid::Timestamps
   field :name, type: String
   field :level_number, type: Integer
   field :ceiling, type: Integer

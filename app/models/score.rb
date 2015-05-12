@@ -1,5 +1,6 @@
 class Score
   include Mongoid::Document
+  include Mongoid::Timestamps
   embeds_many :subscores
   belongs_to :user
   embeds_one :thing

@@ -1,10 +1,10 @@
 class User
   include Mongoid::Document
+  include Mongoid::Timestamps
   # TODO change fields because only twitter will be used for auth provider
   field :twitter_uid, type: String # this is the uid from the provider (ex: 298239)
   # TODO update twitter handle, as it may be changed in twitter
   field :twitter_handle, type: String
-  field :join_date, type: Time
 
   has_many :scores
   has_many :score_lists

@@ -9,6 +9,7 @@ angular.module('app')
             set: function(token) {
                 localStorageService.set(this.tokenName, token);
                 identity.twitterHandle = this.getTwitterHandle();
+                identity.userId = this.getUserId();
             },
             isSet: function() {
                 return !!this.get();
@@ -33,7 +34,7 @@ angular.module('app')
             }
         };
     }])
-    .factory('AuthInterceptor', ['$q', '$injector', 'notifier', function($q, $injector, notifier) {
+    .factory('AuthInterceptor', ['$q', '$injector', 'notifier', 'authService', function($q, $injector, notifier, authService) {
         return {
             request: function(config) {
                 // called on every outgoing HTTP request
@@ -46,9 +47,18 @@ angular.module('app')
                 return config || $q.when(config);
             },
             responseError: function(response) {
-                // TODO handle error response
-                notifier.error('Error executing last action');
-                return $q.reject(response);
+                if(response.status == 401) {
+                    notifier.error(response.statusText)
+                    if(!authService.isLoggedIn()) {
+                        notifier.error('You need to login to do that.');
+                    } else {
+                        notifier.error(response.statusText)
+                    }
+                    return $q.reject(response);
+                } else {
+                    notifier.error('Error executing last action');
+                    return $q.reject(response);
+                }
             }
         };
     }])

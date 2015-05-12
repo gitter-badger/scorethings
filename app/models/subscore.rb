@@ -1,5 +1,6 @@
 class Subscore
   include Mongoid::Document
+  include Mongoid::Timestamps
   field :value, type: Integer
   belongs_to :criterion
   embedded_in :score

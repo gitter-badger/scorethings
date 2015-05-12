@@ -11,7 +11,7 @@
  * file per style scope.
  *
  *= require_tree .
- *= require bootswatch/cyborg/bootstrap.min
+ *= require bootswatch/readable/bootstrap.min
  *= require toastr/toastr.min.css
  *= require bootstrap-social/bootstrap-social.css
  *= require font-awesome/css/font-awesome.min
@@ -36,4 +36,11 @@ header nav ul li {
 #flash_alert {
     background-color: #FCC;
     border: solid 1px #C66;
+}
+
+/* coped from http://stackoverflow.com/a/18896948/4694250 for pointer with ng-click */
+[ng-click],
+[data-ng-click],
+[x-ng-click] {
+    cursor: pointer;
 }

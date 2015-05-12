@@ -7,6 +7,12 @@ module Api
       def system
         @system_criteria = Criterion.where(system_provided: true)
       end
+
+      def create
+        criterion = params.require(:criterion).permit(:name, :definition, :sign)
+        @criterion = @current_user.create_criterion(criterion)
+        render template: '/api/v1/criteria/create.jbuilder', status: :created, format: [:json]
+      end
     end
   end
 end
