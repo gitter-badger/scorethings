@@ -4,6 +4,7 @@ module Api
       skip_before_action :authenticate_request, only: [:show]
 
       def create
+        # FIXME refactor all of this into a thing or score service method
         score = params.require(:score).permit(:thing => [:type, :value])
         thing = score[:thing]
 
@@ -17,14 +18,14 @@ module Api
                      }, status: :bad_request
           end
 
-          score = @current_user.create_score(thing_type: 'TWITTER_UID', thing_value: twitter_account[:id])
+          score = @current_user.score_thing(type: 'TWITTER_UID', value: twitter_account[:id])
           return render json: {
                      score: score,
                      status: :created
                  }, status: :created
 
         elsif thing[:type] == 'TWITTER_HASHTAG'
-          score = @current_user.create_score(thing_type: 'TWITTER_HASHTAG', thing_value: thing[:value])
+          score = @current_user.score_thing(type: 'TWITTER_HASHTAG', value: thing[:value])
           render json: {
                      score: score,
                      status: :created

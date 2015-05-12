@@ -13,21 +13,12 @@ Rails.application.routes.draw do
       match '/twitter/handle_search' => 'twitter#handle_search', via: :get, as: :twitter_handle_search
       match '/twitter/user_info' => 'twitter#user_info', via: :get, as: :twitter_user_info
 
-      match '/scores' => 'scores#create', via: :post, as: :create_score
+      post '/scores' => 'scores#create'
+      get '/scores' => 'scores#index'
+      get '/scores/:id' => 'scores#show'
+      post '/scores/:id/score_categories' => 'score_categories#create'
 
-      match '/scores' => 'scores#index', via: :get, as: :score_index
-
-      match '/scores/:id' => 'scores#show', via: :get, as: :show_score
-
-      match '/scores/:score_id/subscores' => 'subscores#create', via: :post, as: :create_subscore
-      match '/scores/:score_id/subscores/:id' => 'subscores#update', via: :put, as: :update_subscore
-
-      match '/users/current_user_info' => 'users#current_user_info', via: :get, as: :current_user_info
-
-      match '/users/:id/criteria' => 'users#criteria', via: :get, as: :user_criteria
-
-      match '/criteria/system' => 'criteria#system', via: :get, as: :system_criteria
-      match '/criteria' => 'criteria#create', via: :post, as: :create_criteria
+      get '/categories' => 'categories#index'
     end
   end
 

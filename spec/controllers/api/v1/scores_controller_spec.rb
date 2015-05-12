@@ -72,7 +72,7 @@ RSpec.describe Api::V1::ScoresController do
   end
 
   describe "GET show" do
-    it "should show the score" do
+   it "should show the score" do
       score = create(:twitter_hashtag_score)
 
       get :show, {id: score._id}

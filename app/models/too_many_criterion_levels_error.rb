@@ -1,2 +1,0 @@
-class TooManyCriterionLevelsError < StandardError
-end

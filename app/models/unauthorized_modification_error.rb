@@ -1,0 +1,2 @@
+class UnauthorizedModificationError < StandardError
+end

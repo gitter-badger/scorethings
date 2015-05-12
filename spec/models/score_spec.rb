@@ -1,74 +1,71 @@
 require 'rails_helper'
 
 RSpec.describe Score do
-  # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
-  describe "creating scores" do
-    it "should calculate the total score of all subscores it has" do
-      score = build(:twitter_uid_score)
-      expect(score).to_not be_nil
-      score.subscores << build(:positive_subscore, value: 40)
-      score.subscores << build(:positive_subscore, value: 54)
-      score.subscores << build(:negative_subscore, value: 30)
+  describe "calculate points from score categories" do
+    it "should calculate the points using the average of all subscores it has" do
+      score = Score.create(thing: build(:twitter_uid_thing))
+      score.add_score_category(build(:score_category, points: 40))
+      score.add_score_category(build(:score_category, points: 54))
+      score.add_score_category(build(:score_category, points: 30))
 
-      # 40 + 54 + (-30) = 64
-      expect(score.calculate_total_score).to eq(64)
+      # (40 + 54 + 30) / 3 = 41.3333 = 41
+      expect(score.score_categories.length).to eq(3)
+      expect(score.points).to eq(41)
     end
 
-    it "should overwrite an existing subscore if adding a new one with the same criterion" do
-      # in this case, a value for "Funny" already has been entered, adding "Funny" with a new value overwrites the old one
-      # it does not result in 2 values for the same criterion
-      score = create(:twitter_uid_score)
-      positive_criterion = create(:positive_criterion)
-      positive_criterion_2 = create(:positive_criterion)
+    it "should calculate the rounded average" do
+      score = Score.create(thing: build(:twitter_uid_thing))
+      score.add_score_category(build(:score_category, points: 40))
+      score.add_score_category(build(:score_category, points: 57))
 
-      expect(score.subscores.length).to eq(0)
-      # add value once
-      score.add_or_change_subscore(positive_criterion, 65)
-      score.add_or_change_subscore(positive_criterion_2, 83)
-      expect(score.subscores.length).to eq(2)
-      expect(score.subscores.first.value).to eq(65)
-      expect(score.subscores.second.value).to eq(83)
-
-      expect(score.calculate_total_score).to eq(148)
-
-      # add value again with same criterion
-      score.add_or_change_subscore(positive_criterion, 52)
-      expect(score.subscores.length).to eq(2) # not 3 values, still 2, first value is now the 52 just passed in
-      expect(score.subscores.first.value).to eq(52)
-      expect(score.subscores.second.value).to eq(83)
-      expect(score.calculate_total_score).to eq(135)
+      # (40 + 54 + 30) / 3 = 48.5 -> 49
+      expect(score.points).to eq(49)
     end
 
-    it "should validate subscore values" do
-      def check_score_invalid_with_invalid_subscore_value(score, criterion, invalid_value)
-        valid_value = 20
-        score.add_or_change_subscore(criterion, valid_value)
-        expect(score.valid?).to be true
-        score.add_or_change_subscore(criterion, invalid_value)
-        expect(score.valid?).to be false
-        score.add_or_change_subscore(criterion, valid_value)
-      end
+   it "should change the score points, deleting all previous score categories" do
+      score = Score.create(thing: build(:twitter_uid_thing))
+      score.add_score_category(build(:score_category, points: 40))
+      score.add_score_category(build(:score_category, points: 54))
+      score.add_score_category(build(:score_category, points: 30))
 
+      # (40 + 54 + 30) / 3 = 41.3333 = 41
+      expect(score.score_categories.length).to eq(3)
+      expect(score.points).to eq(41)
+      expect(score.valid?).to be true
 
-      score = create(:twitter_uid_score)
-      positive_criterion = create(:positive_criterion)
-      negative_criterion = create(:negative_criterion)
+      # points = 45, no more score categories, just use points
+      score.change_points(45)
+      expect(score.score_categories.length).to eq(0)
+      expect(score.points).to eq(45)
+   end
+  end
 
-      # value must be present
-      check_score_invalid_with_invalid_subscore_value(score, positive_criterion, nil)
+  describe "restrict adding score categories" do
+    it "should not allow redundant score categories, two with same category" do
+      score = Score.create(thing: build(:twitter_uid_thing))
+      category = create(:category)
+      other_category = create(:category)
 
-      # value must be >= 0
-      check_score_invalid_with_invalid_subscore_value(score, positive_criterion, -5)
+      score.add_score_category(build(:score_category, points: 21, category: category))
+      expect(score.score_categories.length).to eq(1)
 
-      # value must be >= 0 (even for negative criterion)
-      check_score_invalid_with_invalid_subscore_value(score, negative_criterion, -5)
+      expect {
+        score.add_score_category(build(:score_category, points: 40, category: category))
+      }.to raise_error(ScoreCategoryRedundancyError)
+      expect(score.score_categories.length).to eq(1)
 
-      # value must be <= 100
-      check_score_invalid_with_invalid_subscore_value(score, positive_criterion, 120)
-
-      # value must be integer
-      check_score_invalid_with_invalid_subscore_value(score, positive_criterion, 45.5)
+      score.add_score_category(build(:score_category, points: 40, category: other_category))
+      expect(score.score_categories.length).to eq(2)
     end
+  end
 
+  describe "validates points" do
+    it "should only allow points between 1 and 100" do
+      score = Score.create(thing: build(:twitter_uid_thing))
+      score.change_points(45)
+      expect(score.valid?).to be true
+      score.change_points(101)
+      expect(score.valid?).to be false
+    end
   end
 end

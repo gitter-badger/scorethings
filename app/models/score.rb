@@ -1,45 +1,47 @@
 class Score
   include Mongoid::Document
   include Mongoid::Timestamps
-  embeds_many :subscores
+
+  field :points, type: Integer, default: 0
+
   belongs_to :user
   embeds_one :thing
-  has_and_belongs_to_many :score_lists
+  embeds_many :score_categories
+
+  validates_numericality_of :points, greater_than_or_equal_to: 0, less_than_or_equal_to: 100
 
   def to_builder
     Jbuilder.new do |score|
       score.user self.user.to_builder
       score.thing self.thing.to_builder
-      score.subscores score.subscores do |subscore|
-        subscore.to_builder
+      score.points self.points
+    end
+  end
+
+  def add_score_category(score_category)
+    self.score_categories.each do |existing_score_category|
+      if existing_score_category.category == score_category.category
+        raise ScoreCategoryRedundancyError
       end
     end
+    self.score_categories << score_category
+    self.recalculate_points
   end
 
-  def low_detail_to_builder
-    Jbuilder.new do |score|
-      score.thing self.thing.to_builder
-      score.total_score self.calculate_total_score
+  def change_points(new_points)
+    unless new_points == self.points
+      self.points = new_points
+      self.score_categories.delete_all
     end
   end
 
-  def calculate_total_score
-    total_score = 0
-
-    self.subscores.each do |subscore|
-      total_score += subscore.get_score_calculation
-    end
-    return total_score
-  end
-  
-  def add_or_change_subscore(criterion, new_subscore_value)
-    self.subscores.each do |subscore|
-      if subscore.criterion == criterion
-        # if the score already has a value for this criterion, overwrite it
-        subscore.value = new_subscore_value
-        return
+  def recalculate_points
+    unless self.score_categories.length == 0
+      total_points = 0
+      self.score_categories.each do |score_category|
+        total_points += score_category.points
       end
+      self.points = (total_points / self.score_categories.length.to_f).round
     end
-   self.subscores.create!(criterion: criterion, value: new_subscore_value)
   end
 end

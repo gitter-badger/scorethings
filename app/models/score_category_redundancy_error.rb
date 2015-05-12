@@ -1,0 +1,2 @@
+class ScoreCategoryRedundancyError < StandardError
+end
