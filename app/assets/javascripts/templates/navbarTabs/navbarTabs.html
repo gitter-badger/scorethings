@@ -1,9 +1,0 @@
-<ul class="nav nav-pills nav-stacked col-sm-3">
-    <li ng-repeat="navbarState in navbarStates"
-        role="presentation"
-        ng-class="{'active': currentState.name == navbarState.state, 'disabled': (navbarState.requiresLogin && !isLoggedIn())}">
-        <!-- FIXME figure out how to actually disable ui route state link -->
-        <a ng-class="{'disabled': (navbarState.requiresLogin && !isLoggedIn())}"
-            ui-sref="{{navbarState.state}}">{{navbarState.title}}</a>
-    </li>
-</ul>

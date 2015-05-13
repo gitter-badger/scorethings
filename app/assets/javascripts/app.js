@@ -1,4 +1,4 @@
-angular.module('app', ['restangular', 'ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'angularSpinner', 'ncy-angular-breadcrumb'])
+angular.module('app', ['restangular', 'ngRoute', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'angularSpinner'])
     .config(['$httpProvider', 'localStorageServiceProvider', '$locationProvider', 'RestangularProvider', function($httpProvider, localStorageServiceProvider,  $locationProvider, RestangularProvider) {
         localStorageServiceProvider.setPrefix('scorethings');
 
@@ -8,8 +8,8 @@ angular.module('app', ['restangular', 'ui.router', 'templates', 'LocalStorageMod
         });
         return $httpProvider.interceptors.push('AuthInterceptor');
     }])
-    .factory('SystemCriteria', ['Restangular', function(Restangular) {
-        return Restangular.service('criteria/system');
+    .factory('Categories', ['Restangular', function(Restangular) {
+        return Restangular.service('categories');
     }])
     .run(['identity', 'AuthToken', function(identity, AuthToken) {
         identity.twitterHandle = AuthToken.getTwitterHandle();

@@ -1,11 +1,11 @@
-angular.module('app').directive('userOwnedScore', [function() {
+angular.module('app').directive('categoryPanel', [function() {
     return {
         restrict: 'E',
         replace: true,
         scope: {
             score: '='
         },
-        templateUrl: 'scores/userOwnedScore.html',
+        templateUrl: 'scores/scorePanel.html',
         link: function($scope, element, attrs) {
         }
     };

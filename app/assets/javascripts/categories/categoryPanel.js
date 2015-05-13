@@ -1,11 +1,11 @@
-angular.module('app').directive('systemCriterion', [function() {
+angular.module('app').directive('categoryPanel', [function() {
     return {
         restrict: 'E',
         replace: true,
         scope: {
-            criterion: '='
+            category: '='
         },
-        templateUrl: 'criteria/systemCriterion.html',
+        templateUrl: 'categories/categoryPanel.html',
         link: function($scope, element, attrs) {
         }
     };
