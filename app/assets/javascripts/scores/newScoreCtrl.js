@@ -1,6 +1,8 @@
 angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Score', 'usSpinnerService', 'twitter', 'notifier', function($scope, $location, Score, usSpinnerService, twitter, notifier) {
     $scope.thingInputValue = null;
 
+    $scope.thingSource = 'TWITTER';
+
     $scope.handleThingInputValue = function(thingInputValue) {
         if(!thingInputValue || thingInputValue < 1) {
             return notifier.error('could not create score, thing input is not known');

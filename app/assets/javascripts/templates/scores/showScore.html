@@ -1,1 +1,18 @@
-Score: {{score}}
+<h2>Score for {{score.thing.value}}</h2>
+by {{score.user.twitter_uid}}
+<div>
+    <h3>Category:</h3>
+    {{score.category.name}}: {{score.category.description}}
+</div>
+<div>
+    <h3>Points:</h3>
+    {{score.points}}
+</div>
+<div>
+    <h3>Date Created:</h3>
+    {{score.created_at | date}}
+</div>
+<div>
+    <h3>Date Updated:</h3>
+    {{score.updated_at | date}}
+</div>
