@@ -1,4 +1,4 @@
-class Category
+class ScoreCategory
   include Mongoid::Document
   include Mongoid::Timestamps
   field :name, type: String

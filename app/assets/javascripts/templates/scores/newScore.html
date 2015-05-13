@@ -1,52 +1,46 @@
 <div>
     <h2>Score A Thing</h2>
-    <ul class="nav nav-tabs">
-        <li role="presentation" ng-class="{'active': thingSource == 'TWITTER'}">
-            <a ng-click="thingSource = 'TWITTER'">Twitter Things</a>
-        </li>
-        <li role="presentation" ng-class="{'active': thingSource == 'YOUTUBE'}">
-            <a ng-click="thingSource = 'YOUTUBE'">YouTube Things</a>
-        </li>
-    </ul>
-    <div ng-show="thingSource == 'YOUTUBE'">
-        <h1>YouTube Things</h1>
+    <tabset justified="true">
+        <tab active="true" select="setThingTypeToTwitterAccount()" heading="Twitter Account">
+        </tab>
+        <tab active="active.YOUTUBE_VIDEO" select="setThingTypeToYouTubeVideo()" heading="YouTube Video">
+        </tab>
+        <tab active="active.HASHTAG" select="setThingTypeToHashtag()" heading="Any Hashtag">
+        </tab>
+    </tabset>
+    <br>
+    <div class="row">
+        <div class="col-xs-12">
+            <form ng-submit="scoreThing()">
+                <div class="input-group">
+                    <span ng-show="prefix" class="input-group-btn">
+                        <button class="btn btn-default">{{prefix}}</button>
+                    </span>
+                    <input type="text" class="form-control"
+                           ng-model="thing.value"
+                           placeholder="{{placeholder}}">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit">Score It</button>
+                    </span>
+                </div>
+            </form>
+        </div>
     </div>
-    <div ng-show="thingSource == 'TWITTER'">
+
+    <div style="padding: 1em" class="container-fluid">
         <div class="row">
-            <div class="col-xs-12">
-                <form ng-submit="handleThingInputValue(thingInputValue)">
-                    <div class="input-group">
-                        <input type="text" class="form-control"
-                               id="thingInputValue"
-                               ng-model="thingInputValue"
-                               placeholder="@SomeTwitterHandle  or  #SomeTwitterHashtag">
-            <span class="input-group-btn">
-                <button class="btn btn-primary" id="createScore" type="submit">Score It!</button>
-            </span>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div style="padding: 1em" class="container-fluid">
-            <div class="row">
-                <div style="text-align: center">
-                    OR
-                </div>
-            </div>
-        </div>
-        <div style="padding: 1em" class="container-fluid">
-            <div class="row">
-                <div style="text-align: center">
-                    <a class="btn btn-primary btn-lg" href="#/account/thing_suggestions">
-                        Find Things With Your Twitter Account
-                    </a>
-                </div>
+            <div style="text-align: center">
+                OR
             </div>
         </div>
     </div>
-    <ul>
-        <li ng-repeat="twitterUser in twitterUsers">
-            <a ng-click="selectTwitterUserToCreateScore(twitterUser)">@{{twitterUser.screen_name}}</a>
-        </li>
-    </ul>
+    <div style="padding: 1em" class="container-fluid">
+        <div class="row">
+            <div style="text-align: center">
+                <a class="btn btn-primary" href="#/account/thing_suggestions">
+                    Find Things With Your Twitter Account
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

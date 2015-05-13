@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::CategoriesController do
+RSpec.describe Api::V1::ScoreCategoriesController do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   before do
     @user = create(:user_alpha)
@@ -12,7 +12,7 @@ RSpec.describe Api::V1::CategoriesController do
     it "should get all categories even without authorization" do
       @request.env['HTTP_AUTHORIZATION'] = ""
 
-      create_list(:category, 5)
+      create_list(:score_category, 5)
 
       get :index, accept: :json
       expect(response).to have_http_status(:ok)

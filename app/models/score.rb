@@ -5,7 +5,7 @@ class Score
   field :points, type: Integer, default: 0
 
   belongs_to :user
-  belongs_to :category
+  belongs_to :score_category
   embeds_one :thing
 
   validates_numericality_of :points, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, only_integer: true

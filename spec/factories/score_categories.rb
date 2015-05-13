@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  sequence(:category_name) { |n| "Category #{n}" }
+  sequence(:category_name) { |n| "ScoreCategory #{n}" }
 
-  factory :category, class: Category do |c|
+  factory :score_category, class: ScoreCategory do |c|
     c.name { FactoryGirl.generate(:category_name) }
     c.description 'It do what it do'
   end

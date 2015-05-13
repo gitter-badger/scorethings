@@ -1,1 +1,0 @@
-Category.delete_all

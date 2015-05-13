@@ -4,17 +4,17 @@ module Api
       skip_before_action :authenticate_request, only: [:show]
 
       def create
-        score = params.require(:score).permit(:points, :category_id, {:thing => [:type, :value]})
-        category = nil
-        category_id = score[:category_id]
-        if category_id.nil?
-          category = Category.where(general: true).first
+        score = params.require(:score).permit(:points, :score_category_id, {:thing => [:type, :value]})
+        score_category = nil
+        score_category_id = score[:score_category_id]
+        if score_category_id.nil?
+          score_category = ScoreCategory.where(general: true).first
         else
           begin
-            category = Category.find(category_id)
+            score_category = ScoreCategory.find(score_category_id)
           rescue Mongoid::Errors::DocumentNotFound
             return render json: {
-                              error: "could not find category with id #{category_id}",
+                              error: "could not find category with id #{score_category_id}",
                               status: :not_found
                           }, status: :not_found
           end
@@ -33,7 +33,7 @@ module Api
         end
 
         begin
-          @score = @current_user.score_thing(thing, category)
+          @score = @current_user.score_thing(thing, score_category)
           render template: '/api/v1/scores/create.jbuilder', status: :created, formats: [:json]
         rescue Mongoid::Errors::Validations => error
           return render json: {
@@ -53,7 +53,7 @@ module Api
         end
 
         begin
-          score_params = params.require(:score).permit(:points, :category_id)
+          score_params = params.require(:score).permit(:points, :score_category_id)
           @current_user.change_score(@score, score_params)
         rescue UnauthorizedModificationError
           return render json: {

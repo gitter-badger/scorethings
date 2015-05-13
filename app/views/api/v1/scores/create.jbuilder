@@ -6,5 +6,5 @@ json.score do
   json.created_at @score.created_at
   json.updated_at @score.updated_at
 
-  json.category @score.category.to_builder
+  json.category @score.score_category.to_builder
 end

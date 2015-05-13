@@ -1,7 +1,7 @@
 angular.module('app').controller('ScoreCategoriesIndexCtrl', ['$scope', '$http', 'notifier', function($scope, $http, notifier) {
     $scope.scoreCategories = [];
 
-    $http.get('/api/v1/categories', null, {cached: true}).then(
+    $http.get('/api/v1/score_categories', null, {cached: true}).then(
         function(response) {
             if(response.errors) {
                 notifier.error('failed to get categories');

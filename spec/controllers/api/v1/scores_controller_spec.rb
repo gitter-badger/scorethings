@@ -4,10 +4,10 @@ RSpec.describe Api::V1::ScoresController do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   before do
     @user = create(:user_alpha)
-    @category = create(:category)
+    @score_category = create(:score_category)
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
-    @general_category = create(:category, general: true)
+    @general_category = create(:score_category, general: true)
   end
 
   describe "POST create" do
@@ -20,7 +20,7 @@ RSpec.describe Api::V1::ScoresController do
                   type: 'TWITTER_UID',
                   value: 2121
               },
-              category_id: @category._id,
+              score_category_id: @score_category._id,
               points: 21
           }
       }
@@ -39,7 +39,7 @@ RSpec.describe Api::V1::ScoresController do
                   type: 'TWITTER_UID',
                   value: 2121
               },
-              category_id: @category._id,
+              score_category_id: @score_category._id,
               points: 21
           }
       }
@@ -51,7 +51,7 @@ RSpec.describe Api::V1::ScoresController do
       expect(Score.first.thing.value).to eq('2121')
     end
 
-    it "should create a new score with a general category if a category_id is not provided" do
+    it "should create a new score with a general category if a score_category_id is not provided" do
       allow_any_instance_of(TwitterService).to receive(:get_twitter_account_from_uid).with('2121').and_return({ id: '2121' })
 
       post_data = {
@@ -60,7 +60,7 @@ RSpec.describe Api::V1::ScoresController do
                   type: 'TWITTER_UID',
                   value: 2121
               },
-              category_id: nil,
+              score_category_id: nil,
               points: 21
           }
       }
@@ -70,8 +70,8 @@ RSpec.describe Api::V1::ScoresController do
       expect(Score.all.length).to eq(1)
       expect(Score.first.thing.type).to eq('TWITTER_UID')
       expect(Score.first.thing.value).to eq('2121')
-      expect(Score.first.category).to_not be_nil
-      expect(Score.first.category.general).to be true
+      expect(Score.first.score_category).to_not be_nil
+      expect(Score.first.score_category.general).to be true
     end
 
     it "should create a new score for a twitter hashtag when given a twitter hashtag" do
@@ -81,7 +81,7 @@ RSpec.describe Api::V1::ScoresController do
                   type: 'TWITTER_HASHTAG',
                   value: 'MayThe4thBeWithYou'
               },
-              category_id: @category._id,
+              score_category_id: @score_category._id,
               points: 21
           }
       }
@@ -96,7 +96,7 @@ RSpec.describe Api::V1::ScoresController do
                   type: 'SOME_OAUTH_UID',
                   value: 'manuisfunny'
               },
-              category_id: @category._id,
+              score_category_id: @score_category._id,
               points: 21
           }
       }
@@ -107,7 +107,7 @@ RSpec.describe Api::V1::ScoresController do
 
   describe "read/update/delete score" do
     before do
-      @score = @user.score_thing(build(:twitter_hashtag_thing), create(:category))
+      @score = @user.score_thing(build(:twitter_hashtag_thing), create(:score_category))
     end
 
     describe "PUT score" do
@@ -121,7 +121,7 @@ RSpec.describe Api::V1::ScoresController do
 
       it "should not allow other users to change the score" do
         other_user = create(:user_bravo)
-        other_user_score = other_user.score_thing(build(:twitter_hashtag_thing), create(:category))
+        other_user_score = other_user.score_thing(build(:twitter_hashtag_thing), create(:score_category))
         put :update, {id: other_user_score._id, score: {points: 55}}
         expect(response).to have_http_status(:forbidden)
       end
@@ -138,7 +138,7 @@ RSpec.describe Api::V1::ScoresController do
 
       it "should not allow other users to delete the score" do
         other_user = create(:user_bravo)
-        other_user_score = other_user.score_thing(build(:twitter_hashtag_thing), create(:category))
+        other_user_score = other_user.score_thing(build(:twitter_hashtag_thing), create(:score_category))
         expect(Score.where(id: other_user_score._id).first.nil?).to be false
         delete :destroy, {id: other_user_score._id}
         expect(response).to have_http_status(:forbidden)

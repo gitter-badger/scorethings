@@ -16,8 +16,8 @@ class User
     end
   end
 
-  def score_thing(thing, category)
-    score = Score.create!(thing: thing, user: self, category: category)
+  def score_thing(thing, score_category)
+    score = Score.create!(thing: thing, user: self, score_category: score_category)
     self.scores << score
     score
   end

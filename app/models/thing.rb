@@ -3,6 +3,9 @@ class Thing
 
   field :value, type: String
   field :type, type: String
+  field :external_id, type: String
+
+  validates_presence_of :value
 
   embedded_in :score
 

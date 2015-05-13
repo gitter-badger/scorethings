@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
       get '/users/:id/scores' => 'users#scores'
 
-      get '/categories' => 'categories#index'
+      get '/score_categories' => 'score_categories#index'
     end
   end
 
