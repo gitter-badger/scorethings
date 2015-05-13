@@ -26,37 +26,23 @@ RSpec.describe User do
   describe "scoring things" do
     before do
       @thing = build(:twitter_hashtag_thing)
+      @category = create(:category)
     end
 
-    it "should score a thing" do
+    it "should allow the user to score a thing" do
       expect(@user.scores.length).to eq(0)
-      score = @user.score_thing(@thing)
+      score = @user.score_thing(@thing, @category)
       expect(@user.scores.length).to eq(1)
       expect(@user.scores.first).to eq(score)
       expect(score.thing).to eq(@thing)
     end
 
-    it "should add a score category" do
-      score = @user.score_thing(@thing)
-      category = create(:category)
-      expect(score.score_categories.length).to eq(0)
-      score_category = @user.add_score_category(score, category, 75)
-
-      expect(score_category.category).to eq(category)
-      expect(score.score_categories.length).to eq(1)
-      expect(score.score_categories.first).to eq(score_category)
-    end
-
     it "should not allow adding a score category to a score that it doesn't own" do
-      score = @user.score_thing(@thing)
-      category = create(:category)
-      expect(score.score_categories.length).to eq(0)
-
       other_user = create(:user_bravo)
+      score = @user.score_thing(@thing, @category)
       expect {
-        other_user.add_score_category(score, category, 75)
+        other_user.change_score(score, {points: 75})
       }.to raise_error(UnauthorizedModificationError)
     end
-
   end
 end

@@ -3,7 +3,7 @@ module Api
     class TwitterController < ApplicationController
       def handle_search
         if params[:twitter_handle]
-          twitter_service = TwitterService.new(twitter_uid: @current_user.twitter_uid)
+          twitter_service = TwitterService.new
           twitter_user_search_results = twitter_service.search_for_twitter_accounts(params[:twitter_handle])
           return render json: {
                             results: twitter_user_search_results,
@@ -21,7 +21,7 @@ module Api
       def user_info
         twitter_uid = params.require(:twitter_uid)
         twitter_uid = twitter_uid.to_i
-        twitter_service = TwitterService.new(twitter_uid: @current_user.twitter_uid)
+        twitter_service = TwitterService.new
         twitter_account = twitter_service.get_twitter_account_from_uid(twitter_uid)
         if twitter_account.nil?
           return render json: {

@@ -1,16 +1,12 @@
 class TwitterService
-  def initialize(params)
-    if params[:twitter_uid].nil?
-      raise "could not use TwitterService, twitter uid is nil"
-    end
-
-    @twitter_uid = params[:twitter_uid]
-  end
-
   def search_for_twitter_accounts(twitter_handle)
     Rails.cache.fetch("twitter_handle_search_#{twitter_handle}", :expires_in => 2.hour) do
       $twitter.user_search(twitter_handle)
     end
+  end
+
+  def account_exists(twitter_uid)
+    !get_twitter_account_from_uid(twitter_uid).nil?
   end
 
   def get_twitter_account_from_uid(twitter_uid)

@@ -4,6 +4,7 @@ RSpec.describe Api::V1::ScoresController do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   before do
     @user = create(:user_alpha)
+    @category = create(:category)
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
   end
@@ -16,7 +17,9 @@ RSpec.describe Api::V1::ScoresController do
               thing: {
                   type: 'TWITTER_UID',
                   value: 2121
-              }
+              },
+              category_id: @category._id,
+              points: 21
           }
       }
 
@@ -33,7 +36,9 @@ RSpec.describe Api::V1::ScoresController do
               thing: {
                   type: 'TWITTER_UID',
                   value: 2121
-              }
+              },
+              category_id: @category._id,
+              points: 21
           }
       }
       expect(Score.all.length).to eq(0)
@@ -50,7 +55,9 @@ RSpec.describe Api::V1::ScoresController do
               thing: {
                   type: 'TWITTER_HASHTAG',
                   value: 'MayThe4thBeWithYou'
-              }
+              },
+              category_id: @category._id,
+              points: 21
           }
       }
       post :create, post_data
@@ -63,7 +70,9 @@ RSpec.describe Api::V1::ScoresController do
               thing: {
                   type: 'SOME_OAUTH_UID',
                   value: 'manuisfunny'
-              }
+              },
+              category_id: @category._id,
+              points: 21
           }
       }
       post :create, post_data
@@ -71,28 +80,48 @@ RSpec.describe Api::V1::ScoresController do
     end
   end
 
-  describe "GET show" do
-   it "should show the score" do
-      score = create(:twitter_hashtag_score)
-
-      get :show, {id: score._id}
-
-      expect(response).to have_http_status(:ok)
+  describe "read/update/delete score" do
+    before do
+      @score = @user.score_thing(build(:twitter_hashtag_thing), create(:category))
     end
 
-    it "should say the score can't be found if it doesn't exist" do
-      get :show, {id: 'saodfks'}
-      expect(response).to have_http_status(:not_found)
+    describe "PUT score" do
+      it "should change the points of a score" do
+        put :update, {id: @score._id, score: {points: 94}}
+        expect(response).to have_http_status(:ok)
+
+        @score.reload
+        expect(@score.points).to eq(94)
+      end
+
+      # TODO write spec for not allowing update if not owner user
     end
 
-    it "should allow the score to be viewed without request authorization" do
-      @request.env['HTTP_AUTHORIZATION'] = ""
+    describe "DELETE score" do
+      it "should delete the score" do
+        expect(Score.where(id: @score._id).first.nil?).to be false
+        delete :delete, {id: @score._id}
+        expect(response).to have_http_status(:ok)
 
-      score = create(:twitter_hashtag_score)
+        expect(Score.where(id: @score._id).first.nil?).to be true
+      end
 
-      get :show, {id: score._id}
+      # TODO write spec for not allowing delete if not owner user
+    end
 
-      expect(response).to have_http_status(:ok)
+    describe "GET score" do
+      it "should say the score can't be found if it doesn't exist" do
+        get :show, {id: 'saodfks'}
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "should allow the score to be viewed without request authorization" do
+        @request.env['HTTP_AUTHORIZATION'] = ""
+        get :show, {id: @score._id}
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
+
+
 end

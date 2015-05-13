@@ -4,39 +4,73 @@ module Api
       skip_before_action :authenticate_request, only: [:show]
 
       def create
-        # FIXME refactor all of this into a thing or score service method
-        score = params.require(:score).permit(:thing => [:type, :value])
+        score = params.require(:score).permit(:points, :category_id, {:thing => [:type, :value]})
+        category = nil
+        category_id = score[:category_id]
+        begin
+          category = Category.find(category_id)
+        rescue Mongoid::Errors::DocumentNotFound
+          return render json: {
+                            error: "could not find category with id #{category_id}",
+                            status: :not_found
+                        }, status: :not_found
+        end
+
         thing = score[:thing]
 
-        twitter_service = TwitterService.new(twitter_uid: @current_user.twitter_uid)
-        if thing[:type] == 'TWITTER_UID'
-          twitter_account = twitter_service.get_twitter_account_from_uid(thing[:value])
-          if twitter_account.nil?
-            return render json: {
-                         error: "could not find twitter account for twitter user id '#{thing_input[:twitter_uid]}'",
-                         status: :bad_request
-                     }, status: :bad_request
-          end
-
-          score = @current_user.score_thing(type: 'TWITTER_UID', value: twitter_account[:id])
+        begin
+          thing_validator = ThingValidator.new
+          thing_validator.check_validity(thing)
+        rescue InvalidThingError => error
           return render json: {
-                     score: score,
-                     status: :created
-                 }, status: :created
-
-        elsif thing[:type] == 'TWITTER_HASHTAG'
-          score = @current_user.score_thing(type: 'TWITTER_HASHTAG', value: thing[:value])
-          render json: {
-                     score: score,
-                     status: :created
-                 }, status: :created
-
-        else
-          # thing input wasn't a twitter hashtag or handle
-          return render json: {
-                            error: "failed to create score given the thing type: (#{thing[:type]})",
+                            error: "thing was invalid: #{error}",
                             status: :bad_request
                         }, status: :bad_request
+        end
+
+        begin
+          @score = @current_user.score_thing(thing, category)
+
+          render template: '/api/v1/scores/create.jbuilder', status: :created, formats: [:json]
+
+        rescue Mongoid::Errors::Validations => error
+          return render json: {
+                            error: "invalid: #{error}",
+                            status: :bad_request
+                        }, status: :bad_request
+        end
+      end
+
+      def update
+        @score = Score.where(id: params[:id]).first
+        if @score.nil?
+          return render json: {
+                            error: "failed to score for id: #{params[:id]}",
+                            status: :not_found
+                        }, status: :not_found
+        end
+        score_params = params.require(:score).permit(:points, :category_id)
+        @current_user.change_score(@score, score_params)
+      end
+
+      def delete
+        @score = Score.where(id: params[:id]).first
+        if @score.nil?
+          return render json: {
+                            error: "failed to score for id: #{params[:id]}",
+                            status: :not_found
+                        }, status: :not_found
+        end
+        begin
+          @current_user.delete_score(@score)
+          return render json: {
+                            status: :ok
+                        }, status: :ok
+        rescue UnauthorizedModificationError
+          return render json: {
+                            error: "failed to delete score for id: #{params[:id]}",
+                            status: :forbidden
+                        }, status: :forbidden
         end
       end
 

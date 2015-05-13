@@ -13,10 +13,12 @@ Rails.application.routes.draw do
       match '/twitter/handle_search' => 'twitter#handle_search', via: :get, as: :twitter_handle_search
       match '/twitter/user_info' => 'twitter#user_info', via: :get, as: :twitter_user_info
 
+      # TODO just use rails route resources now
       post '/scores' => 'scores#create'
       get '/scores' => 'scores#index'
       get '/scores/:id' => 'scores#show'
-      post '/scores/:id/score_categories' => 'score_categories#create'
+      put '/scores/:id' => 'scores#update'
+      delete '/scores/:id' => 'scores#delete'
 
       get '/categories' => 'categories#index'
     end

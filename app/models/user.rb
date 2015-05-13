@@ -16,22 +16,26 @@ class User
     end
   end
 
-  def score_thing(thing)
-    score = Score.create!(thing: thing, user: self)
+  def score_thing(thing, category)
+    score = Score.create!(thing: thing, user: self, category: category)
     self.scores << score
     score
   end
 
-  def add_score_category(score, category, points)
-    if score.user != self
+  # TODO common logic between delete and change score
+  def delete_score(score)
+    if self != score.user
       raise UnauthorizedModificationError
     end
-    score_category = ScoreCategory.new(category: category, points: points)
-    score.add_score_category(score_category)
-    score.save
-    score_category
+    score.destroy
   end
 
+  def change_score(score, update_attrs)
+    if self != score.user
+      raise UnauthorizedModificationError
+    end
+    score.update_attributes(update_attrs)
+  end
 
   def self.create_with_omniauth(auth)
     # copied from
