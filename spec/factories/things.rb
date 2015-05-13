@@ -11,4 +11,9 @@ FactoryGirl.define do
     t.type 'TWITTER_HASHTAG'
     t.value { FactoryGirl.generate(:twitter_hashtag_value) }
   end
+
+  factory :thing, class: Thing do |t|
+    t.type 'TWITTER_HASHTAG'
+    t.value { FactoryGirl.generate(:twitter_hashtag_value) }
+  end
 end

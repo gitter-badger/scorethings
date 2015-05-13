@@ -7,10 +7,12 @@ RSpec.describe Api::V1::ScoresController do
     @category = create(:category)
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
+    @general_category = create(:category, general: true)
   end
 
   describe "POST create" do
     it "should not allow creating score if user is not authenticated" do
+      allow_any_instance_of(TwitterService).to receive(:get_twitter_account_from_uid).with('2121').and_return({ id: '2121' })
       @request.env['HTTP_AUTHORIZATION'] = ""
       post_data = {
           score: {
@@ -47,6 +49,29 @@ RSpec.describe Api::V1::ScoresController do
       expect(Score.all.length).to eq(1)
       expect(Score.first.thing.type).to eq('TWITTER_UID')
       expect(Score.first.thing.value).to eq('2121')
+    end
+
+    it "should create a new score with a general category if a category_id is not provided" do
+      allow_any_instance_of(TwitterService).to receive(:get_twitter_account_from_uid).with('2121').and_return({ id: '2121' })
+
+      post_data = {
+          score: {
+              thing: {
+                  type: 'TWITTER_UID',
+                  value: 2121
+              },
+              category_id: nil,
+              points: 21
+          }
+      }
+      expect(Score.all.length).to eq(0)
+      post :create, post_data
+      expect(response).to have_http_status(:created)
+      expect(Score.all.length).to eq(1)
+      expect(Score.first.thing.type).to eq('TWITTER_UID')
+      expect(Score.first.thing.value).to eq('2121')
+      expect(Score.first.category).to_not be_nil
+      expect(Score.first.category.general).to be true
     end
 
     it "should create a new score for a twitter hashtag when given a twitter hashtag" do

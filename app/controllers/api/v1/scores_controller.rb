@@ -7,13 +7,17 @@ module Api
         score = params.require(:score).permit(:points, :category_id, {:thing => [:type, :value]})
         category = nil
         category_id = score[:category_id]
-        begin
-          category = Category.find(category_id)
-        rescue Mongoid::Errors::DocumentNotFound
-          return render json: {
-                            error: "could not find category with id #{category_id}",
-                            status: :not_found
-                        }, status: :not_found
+        if category_id.nil?
+          category = Category.where(general: true).first
+        else
+          begin
+            category = Category.find(category_id)
+          rescue Mongoid::Errors::DocumentNotFound
+            return render json: {
+                              error: "could not find category with id #{category_id}",
+                              status: :not_found
+                          }, status: :not_found
+          end
         end
 
         thing = score[:thing]
@@ -30,9 +34,7 @@ module Api
 
         begin
           @score = @current_user.score_thing(thing, category)
-
           render template: '/api/v1/scores/create.jbuilder', status: :created, formats: [:json]
-
         rescue Mongoid::Errors::Validations => error
           return render json: {
                             error: "invalid: #{error}",

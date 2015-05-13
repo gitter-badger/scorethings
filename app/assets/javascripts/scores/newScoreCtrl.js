@@ -31,15 +31,16 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Score'
             }
         }).then(
             function (response) {
+                console.log(response);
                 usSpinnerService.stop('spinner-1');
                 var score = response.score;
-                if (!score || !score._id) {
-                    return notifier.error('could not go to see created score');
-                } else {
-                    $location.search('');
-                    $location.path('/scores/' + score.id)
-                }
-            })
+                $location.search('');
+                $location.path('/scores/' + score.id)
+            },
+            function error(response) {
+                console.log(response);
+                usSpinnerService.stop('spinner-1');
+            });
     };
 
     function successfulTwitterHandleSearch(response) {

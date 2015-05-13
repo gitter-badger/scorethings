@@ -1,15 +1,35 @@
 <h2>Score A Thing</h2>
-<form ng-submit="handleThingInputValue(thingInputValue)">
-    <div class="input-group">
-        <input type="text" class="form-control"
-               id="thingInputValue"
-               ng-model="thingInputValue"
-               placeholder="@SomeTwitterHandle  or  #SomeTwitterHashtag">
+<div class="row">
+    <div class="col-xs-12">
+        <form ng-submit="handleThingInputValue(thingInputValue)">
+            <div class="input-group">
+                <input type="text" class="form-control"
+                       id="thingInputValue"
+                       ng-model="thingInputValue"
+                       placeholder="@SomeTwitterHandle  or  #SomeTwitterHashtag">
         <span class="input-group-btn">
-            <button class="btn btn-primary" id="createScore" type="submit">Score Thing</button>
+            <button class="btn btn-primary" id="createScore" type="submit">Score It!</button>
         </span>
+            </div>
+        </form>
     </div>
-</form>
+</div>
+<div style="padding: 1em" class="container-fluid">
+    <div class="row">
+        <div style="text-align: center">
+            OR
+        </div>
+    </div>
+</div>
+<div style="padding: 1em" class="container-fluid">
+    <div class="row">
+        <div style="text-align: center">
+            <a class="btn btn-primary btn-lg" href="#/account/thing_suggestions">
+                Find Things With Your Twitter Account
+            </a>
+        </div>
+    </div>
+</div>
 <ul>
     <li ng-repeat="twitterUser in twitterUsers">
         <a ng-click="selectTwitterUserToCreateScore(twitterUser)">@{{twitterUser.screen_name}}</a>

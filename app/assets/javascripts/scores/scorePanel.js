@@ -1,4 +1,4 @@
-angular.module('app').directive('categoryPanel', [function() {
+angular.module('app').directive('scorePanel', [function() {
     return {
         restrict: 'E',
         replace: true,

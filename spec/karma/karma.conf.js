@@ -21,7 +21,6 @@ module.exports = function(config) {
             '../../vendor/assets/components/angular-local-storage/dist/angular-local-storage.js',
             '../../vendor/assets/components/angular-jwt/dist/angular-jwt.js',
             '../../vendor/assets/components/angular-bootstrap/ui-bootstrap.js',
-            '../../vendor/assets/components/angular-ui-router/release/angular-ui-router.js',
             '../../vendor/assets/components/angular-spinner/angular-spinner.js',
             '../../vendor/assets/components/restangular/dist/restangular.js',
             '../../vendor/assets/components/lodash/lodash.js',

@@ -13,9 +13,9 @@ Rails.application.routes.draw do
       match '/twitter/handle_search' => 'twitter#handle_search', via: :get, as: :twitter_handle_search
       match '/twitter/user_info' => 'twitter#user_info', via: :get, as: :twitter_user_info
 
-      # TODO just use rails route resources now
-
       resources :scores, except: [:edit, :new]
+
+      get '/users/:id/scores' => 'users#scores'
 
       get '/categories' => 'categories#index'
     end

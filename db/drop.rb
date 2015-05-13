@@ -1,1 +1,1 @@
-Criterion.delete_all
+Category.delete_all

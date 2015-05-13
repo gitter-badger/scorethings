@@ -12,16 +12,10 @@ RSpec.describe Api::V1::CategoriesController do
     it "should get all categories even without authorization" do
       @request.env['HTTP_AUTHORIZATION'] = ""
 
-      categories = create_list(:category, 5)
-
-      expected_response = {
-          categories: categories,
-          status: :ok
-      }.to_json
+      create_list(:category, 5)
 
       get :index, accept: :json
       expect(response).to have_http_status(:ok)
-      expect(response.body).to eq(expected_response)
     end
   end
 end
