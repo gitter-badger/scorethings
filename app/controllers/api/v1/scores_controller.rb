@@ -49,11 +49,19 @@ module Api
                             status: :not_found
                         }, status: :not_found
         end
-        score_params = params.require(:score).permit(:points, :category_id)
-        @current_user.change_score(@score, score_params)
+
+        begin
+          score_params = params.require(:score).permit(:points, :category_id)
+          @current_user.change_score(@score, score_params)
+        rescue UnauthorizedModificationError
+          return render json: {
+                            error: "failed to change score for id: #{params[:id]}",
+                            status: :forbidden
+                        }, status: :forbidden
+        end
       end
 
-      def delete
+      def destroy
         @score = Score.where(id: params[:id]).first
         if @score.nil?
           return render json: {

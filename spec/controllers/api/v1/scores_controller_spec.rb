@@ -94,18 +94,32 @@ RSpec.describe Api::V1::ScoresController do
         expect(@score.points).to eq(94)
       end
 
-      # TODO write spec for not allowing update if not owner user
+      it "should not allow other users to change the score" do
+        other_user = create(:user_bravo)
+        other_user_score = other_user.score_thing(build(:twitter_hashtag_thing), create(:category))
+        put :update, {id: other_user_score._id, score: {points: 55}}
+        expect(response).to have_http_status(:forbidden)
+      end
     end
 
     describe "DELETE score" do
       it "should delete the score" do
         expect(Score.where(id: @score._id).first.nil?).to be false
-        delete :delete, {id: @score._id}
+        delete :destroy, {id: @score._id}
         expect(response).to have_http_status(:ok)
 
         expect(Score.where(id: @score._id).first.nil?).to be true
       end
 
+      it "should not allow other users to delete the score" do
+        other_user = create(:user_bravo)
+        other_user_score = other_user.score_thing(build(:twitter_hashtag_thing), create(:category))
+        expect(Score.where(id: other_user_score._id).first.nil?).to be false
+        delete :destroy, {id: other_user_score._id}
+        expect(response).to have_http_status(:forbidden)
+
+        expect(Score.where(id: other_user_score._id).first.nil?).to be false
+      end
       # TODO write spec for not allowing delete if not owner user
     end
 
