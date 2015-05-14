@@ -1,42 +1,36 @@
-angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Score', 'usSpinnerService', 'twitter', 'notifier', function($scope, $location, Score, usSpinnerService, twitter, notifier) {
-    $scope.thing = {};
+angular.module('app').controller('NewScoreCtrl', ['youtubeVideoUrlPattern', '$scope', '$location', 'Score', 'usSpinnerService', 'twitter', 'notifier', '$http', function(youtubeVideoUrlPattern, $scope, $location, Score, usSpinnerService, twitter, notifier, $http) {
+    $scope.scoreCategoriesMap = {};
 
-    $scope.placeholder = '';
+    $scope.newScore = {
 
-    $scope.active = {
-        TWITTER_UID: true
     };
 
-    function switchThingType(type, placeholder, prefix) {
-        $scope.thing = {
-            value: '',
-            type: type
-        };
-        $scope.placeholder = placeholder;
-        $scope.prefix = prefix;
-        $scope.activateTab(type);
-    }
+    $http.get('/api/v1/score_categories', null, {cached: true})
+        .then(function(response) {
+            if(response.errors) {
+                notifier.error('failed to get score categories');
+                console.log(response.errors);
+                return;
+            } else if(!response.data || !response.data.score_categories) {
+                notifier.error('score category data was not formatted correctly');
+                console.log(response);
+                return;
+            }
 
-    $scope.activateTab = function(tab) {
-        // copied from https://github.com/angular-ui/bootstrap/issues/611#issuecomment-70339233
-        $scope.active = {}; //reset
-        $scope.active[tab] = true;
-    };
+            $scope.scoreCategoriesMap = {};
 
-    $scope.setThingTypeToTwitterAccount = function() {
-        switchThingType('TWITTER_UID', 'Example:   stevedildarian', '@');
-    };
-    $scope.setThingTypeToYouTubeVideo = function() {
-        switchThingType('YOUTUBE_VIDEO', 'Example:   https://www.youtube.com/watch?v=zFMRn-TZVGg');
-    };
-    $scope.setThingTypeToHashtag = function() {
-        switchThingType('HASHTAG', 'Example:   stuballs', '#');
-    };
+            var scoreCategories = response.data.score_categories;
 
-    // Default to twitter account
-    $scope.setThingTypeToTwitterAccount();
+            angular.forEach(scoreCategories, function(scoreCategory) {
+                if(scoreCategory.general) {
+                    $scope.newScore.score_category_id = scoreCategory.id;
+                }
+                $scope.scoreCategoriesMap[scoreCategory.id] = scoreCategory;
+            });
+        });
 
     $scope.scoreThing = function() {
-        console.log($scope.thing);
+        console.log('scoring something');
     };
+
 }]);

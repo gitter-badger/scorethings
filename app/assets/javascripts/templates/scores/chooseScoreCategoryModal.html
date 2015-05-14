@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <h3 class="modal-title">Choose a Score Category</h3>
+</div>
+<div class="modal-body">
+    <div ng-repeat="(scoreCategoryId, scoreCategory) in scoreCategoriesMap"
+             ng-click="chooseScoreCategory(scoreCategory)"
+            ng-class="{'disabled': scoreCategory.id == chosenScoreCategory.id}"
+            class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{scoreCategory.name}}</h3>
+        </div>
+        <div class="panel-body">
+            {{scoreCategory.description}}
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

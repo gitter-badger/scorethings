@@ -1,31 +1,31 @@
 <div>
     <h2>Score A Thing</h2>
-    <tabset justified="true">
-        <tab active="true" select="setThingTypeToTwitterAccount()" heading="Twitter Account">
+    <tabset justified="true" class="col-xs-12">
+        <tab heading="Twitter Account">
+            <score-input-form example-placeholder="'Example:  stevedildarian'"
+              score="newScore"
+              score-categories-map="scoreCategoriesMap"
+              prefix="'@'">
+            </score-input-form>
         </tab>
-        <tab active="active.YOUTUBE_VIDEO" select="setThingTypeToYouTubeVideo()" heading="YouTube Video">
+        <tab heading="YouTube Video" ng-controller="YoutubeThingInputCtrl">
+            <score-input-form example-placeholder="'Example:  https://www.youtube.com/watch?v=zFMRn-TZVGg'"
+                score="newScore"
+                score-categories-map="scoreCategoriesMap">
+            </score-input-form>
+            <!--
+            <you-tube-metadata-display ng-show="youtubeMetadata" metadata="youtubeMetadata">
+            </you-tube-metadata-display>
+            -->
         </tab>
-        <tab active="active.HASHTAG" select="setThingTypeToHashtag()" heading="Any Hashtag">
+        <tab heading="Any Hashtag">
+            <score-input-form example-placeholder="'Example:  Lumia540 or stuballs'"
+                score="newScore"
+                score-categories-map="scoreCategoriesMap"
+                prefix="'#'">
+            </score-input-form>
         </tab>
     </tabset>
-    <br>
-    <div class="row">
-        <div class="col-xs-12">
-            <form ng-submit="scoreThing()">
-                <div class="input-group">
-                    <span ng-show="prefix" class="input-group-btn">
-                        <button class="btn btn-default">{{prefix}}</button>
-                    </span>
-                    <input type="text" class="form-control"
-                           ng-model="thing.value"
-                           placeholder="{{placeholder}}">
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit">Score It</button>
-                    </span>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <div style="padding: 1em" class="container-fluid">
         <div class="row">
@@ -38,7 +38,7 @@
         <div class="row">
             <div style="text-align: center">
                 <a class="btn btn-primary" href="#/account/thing_suggestions">
-                    Find Things With Your Twitter Account
+                    Find Suggestions For Things To Score
                 </a>
             </div>
         </div>

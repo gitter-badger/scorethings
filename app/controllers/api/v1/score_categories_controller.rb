@@ -5,9 +5,9 @@ module Api
       skip_before_action :authenticate_request, :current_user, only: [:index]
 
       def index
-        categories = ScoreCategory.all
+        score_categories = ScoreCategory.all
         render json: {
-                   categories: categories,
+                   score_categories: score_categories,
                    status: :ok
                }, status: :ok
       end
