@@ -25,7 +25,7 @@ RSpec.describe User do
 
   describe "scoring things" do
     before do
-      @thing = build(:twitter_hashtag_thing)
+      @thing = build(:twitter_account_thing)
       @score_category = create(:score_category)
     end
 

@@ -10,9 +10,14 @@ require "rails/test_unit/railtie"
 Bundler.require(*Rails.groups)
 
 module Scorething
+  module ThingTypes
+    # Thing types
+    TWITTER_ACCOUNT = 'TWITTER_ACCOUNT'
+    YOUTUBE_VIDEO = 'YOUTUBE_VIDEO'
+    HASHTAG = 'HASHTAG'
+  end
+
   class Application < Rails::Application
     config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
-    config.generators do |g|
-    end
   end
 end

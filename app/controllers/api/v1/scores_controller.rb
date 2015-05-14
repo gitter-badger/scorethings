@@ -4,7 +4,8 @@ module Api
       skip_before_action :authenticate_request, only: [:show]
 
       def create
-        score = params.require(:score).permit(:points, :score_category_id, {:thing => [:type, :value]})
+        score = params.require(:score).permit(:points, :score_category_id,
+                                              {:thing => [:type, :display_value, :external_id]})
         score_category = nil
         score_category_id = score[:score_category_id]
         if score_category_id.nil?
@@ -20,14 +21,21 @@ module Api
           end
         end
 
-        thing = score[:thing]
 
-        begin
-          thing_validator = ThingValidator.new
-          thing_validator.check_validity(thing)
-        rescue InvalidThingError => error
+        thing_params = score[:thing]
+
+        if thing_params[:type] == Scorething::ThingTypes::TWITTER_ACCOUNT
+          twitter_service = TwitterService.new
+          thing = twitter_service.get_twitter_account_thing_from_params(thing_params)
+        else
+          thing = Thing.new(thing_params)
+        end
+
+        if thing.nil? || !thing.valid?
+          # TODO this handles invalidation and twitter account not found,
+          # refactor to seperate and give more detailed error messages
           return render json: {
-                            error: "thing was invalid: #{error}",
+                            error: "failed to determine thing from params",
                             status: :bad_request
                         }, status: :bad_request
         end

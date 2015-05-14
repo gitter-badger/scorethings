@@ -1,2 +1,0 @@
-class InvalidThingError < StandardError
-end
