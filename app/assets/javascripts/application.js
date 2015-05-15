@@ -25,7 +25,9 @@
 //= require angular-spinner/angular-spinner.min.js
 //= require restangular/dist/restangular.min
 //= require lodash
-
+//= require typeahead.js/dist/bloodhound
+//= require typeahead.js/dist/typeahead.bundle
+//= require angular-typeahead/angular-typeahead.min
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app

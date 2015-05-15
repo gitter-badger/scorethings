@@ -10,6 +10,6 @@ angular.module('app').controller('ScoreCategoriesIndexCtrl', ['$scope', '$http',
             }
 
             var data = response.data;
-            $scope.scoreCategories = data.categories;
+            $scope.scoreCategories = data.score_categories;
         });
 }]);

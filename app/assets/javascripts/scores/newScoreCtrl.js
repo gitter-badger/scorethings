@@ -1,36 +1,97 @@
-angular.module('app').controller('NewScoreCtrl', ['youtubeVideoUrlPattern', '$scope', '$location', 'Score', 'usSpinnerService', 'twitter', 'notifier', '$http', function(youtubeVideoUrlPattern, $scope, $location, Score, usSpinnerService, twitter, notifier, $http) {
+angular.module('app').controller('NewScoreCtrl', ['$scope', 'youtubeVideoUrlPattern', '$modal', '$location', 'Score', 'usSpinnerService', 'twitter', 'notifier', 'scoreCategories', function($scope, youtubeVideoUrlPattern, $modal, $location, Score, usSpinnerService, twitter, notifier, scoreCategories) {
+
+    scoreCategories.getAll().then(
+        function success(results) {
+            console.log('success');
+            console.log(results);
+            $scope.scoreCategoriesMap = results.scoreCategoriesMap;
+            $scope.generalScoreCategory = results.generalScoreCategory;
+            $scope.score.score_category_id = $scope.generalScoreCategory.id;
+        },
+        function error(errorMsg) {
+            notifier.error(errorMsg);
+        });
+    $scope.setTab = function(thingType) {
+        $scope.thingType = thingType;
+        $scope.thingInputValue = '';
+    };
+
+    $scope.score = {};
+
+    $scope.setTab('TWITTER_ACCOUNT');
+
+    $scope.prefix = {
+        TWITTER_ACCOUNT: '@',
+        HASHTAG: '#'
+    };
+
+    $scope.examplePlaceholder = {
+        TWITTER_ACCOUNT: 'pattonoswalt',
+        YOUTUBE_VIDEO: 'Example:  https://www.youtube.com/watch?v=B66feInucFY',
+        HASHTAG: 'SomethingSomethingCats'
+    };
+
     $scope.scoreCategoriesMap = {};
 
-    $scope.newScore = {
+    var numbers = new Bloodhound({
+        datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.num); },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: '/api/v1/autocomplete/search?thing_type=' + $scope.thingType + '&query=%QUERY',
+        wildcard: '%QUERY'
+    });
 
+    // initialize the bloodhound suggestion engine
+    numbers.initialize();
+
+    $scope.numbersDataset = {
+        displayKey: 'num',
+        source: numbers.ttAdapter()
     };
 
-    $http.get('/api/v1/score_categories', null, {cached: true})
-        .then(function(response) {
-            if(response.errors) {
-                notifier.error('failed to get score categories');
-                console.log(response.errors);
-                return;
-            } else if(!response.data || !response.data.score_categories) {
-                notifier.error('score category data was not formatted correctly');
-                console.log(response);
-                return;
-            }
+    $scope.exampleOptions = {
+        highlight: true
+    };
 
-            $scope.scoreCategoriesMap = {};
 
-            var scoreCategories = response.data.score_categories;
+    $scope.$watch('score.score_category_id', function(scoreCategoryId) {
+        if(!scoreCategoryId) {
+            return;
+        }
+        $scope.chosenScoreCategory =  $scope.scoreCategoriesMap[scoreCategoryId];
+    });
 
-            angular.forEach(scoreCategories, function(scoreCategory) {
-                if(scoreCategory.general) {
-                    $scope.newScore.score_category_id = scoreCategory.id;
+    $scope.chooseScoreCategory = function() {
+        $modal.open({
+            templateUrl: 'scores/chooseScoreCategoryModal.html',
+            size: 'md',
+            controller: function($scope, $modalInstance, scoreCategoriesMap, chosenScoreCategory) {
+                $scope.scoreCategoriesMap = scoreCategoriesMap;
+                $scope.chosenScoreCategory = chosenScoreCategory;
+
+                $scope.chooseScoreCategory = function(scoreCategory) {
+                    $modalInstance.close(scoreCategory);
+                };
+                $scope.cancel = function() {
+                    $modalInstance.dismiss('now dismissed');
+                };
+            },
+            resolve: {
+                scoreCategoriesMap: function() {
+                    return $scope.scoreCategoriesMap;
+                },
+                chosenScoreCategory: function() {
+                    return $scope.chosenScoreCategory;
                 }
-                $scope.scoreCategoriesMap[scoreCategory.id] = scoreCategory;
+            }
+        })
+            .result.then(
+            function closed(chosenScoreCategory) {
+                // user clicked a score category, so put that id in the score
+                $scope.score.score_category_id = chosenScoreCategory.id;
+            },
+            function dismissed(result) {
             });
-        });
-
-    $scope.scoreThing = function() {
-        console.log('scoring something');
     };
+
 
 }]);

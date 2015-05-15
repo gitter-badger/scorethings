@@ -18,6 +18,8 @@ Rails.application.routes.draw do
       get '/users/:id/scores' => 'users#scores'
 
       get '/score_categories' => 'score_categories#index'
+
+      get '/autocomplete/search' => 'autocomplete#search'
     end
   end
 
