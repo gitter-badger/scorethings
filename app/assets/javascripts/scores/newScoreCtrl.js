@@ -42,14 +42,19 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', 'youtubeVideoUrlPatt
 
 
     $scope.scoreThing = function() {
-        $scope.thingInputValue = 'manu';
+        usSpinnerService.spin('spinner-1');
         if($scope.score.thing.type == 'TWITTER_ACCOUNT') {
             Restangular.one('thing_preview').getList('twitter_account', {input: $scope.thingInputValue})
                 .then(function(thingPreviews) {
+                    usSpinnerService.stop('spinner-1');
                     $scope.thingPreviews = thingPreviews;
+                    console.log(thingPreviews);
+                }, function(response) {
+                    usSpinnerService.stop('spinner-1');
+                    console.log('error retrieving thing previews');
+                    console.log(response);
                 });
         }
-
     };
 
     $scope.$watch('score.score_category_id', function(scoreCategoryId) {

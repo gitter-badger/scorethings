@@ -45,7 +45,10 @@
             </div>
         </div>
         <div>
-            Thing Previews: ({{thingPreviews}})
+            Thing Previews: (rough draft)
+            <div ng-repeat="thingPreview in thingPreviews">
+                {{thingPreview.display_value}}
+            </div>
         </div>
     </form>
 </div>

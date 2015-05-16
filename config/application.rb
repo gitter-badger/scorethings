@@ -19,5 +19,7 @@ module Scorething
 
   class Application < Rails::Application
     config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
+    config.assets.enabled = true
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'components', 'font-awesome', 'fonts')
   end
 end
