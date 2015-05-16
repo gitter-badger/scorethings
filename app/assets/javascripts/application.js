@@ -28,6 +28,7 @@
 //= require typeahead.js/dist/bloodhound
 //= require typeahead.js/dist/typeahead.bundle
 //= require angular-typeahead/angular-typeahead.min
+//= require hogan/web/builds/3.0.2/hogan-3.0.2.min
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app

@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
       get '/score_categories' => 'score_categories#index'
 
-      get '/autocomplete/search' => 'autocomplete#search'
+      get '/thing_preview/twitter_account' => 'thing_preview#twitter_account'
     end
   end
 

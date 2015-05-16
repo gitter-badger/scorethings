@@ -77,7 +77,7 @@ RSpec.describe Api::V1::ScoresController do
         @twitter_account_thing = build(:twitter_account_thing)
       end
 
-      it "should create a new score for a twitter account when given just a display_value and not the external id" do
+      it "should not create a new score for a twitter account when given just a display_value and not the external id" do
         allow_any_instance_of(TwitterService).to receive(:get_twitter_account_thing_from_params).and_return(Thing.new(@twitter_account_thing.attributes))
 
         post_data = {
@@ -94,11 +94,8 @@ RSpec.describe Api::V1::ScoresController do
         }
         expect(Score.all.length).to eq(0)
         post :create, post_data
-        expect(response).to have_http_status(:created)
-        expect(Score.all.length).to eq(1)
-
-        # FIXME this code and poorly designed specs will hide bugs in the future, need to add specs for TwitterService
-        expect(Score.first.thing.external_id).to eq(@twitter_account_thing.external_id)
+        expect(response).to have_http_status(:bad_request)
+        expect(Score.all.length).to eq(0)
       end
 
       it "should not create a new score for a twitter account when given a twitter external_id that can't be found in twitter" do
@@ -178,7 +175,7 @@ RSpec.describe Api::V1::ScoresController do
 
   describe "read/update/delete score" do
     before do
-      @score = @user.score_thing(@hashtag_thing, create(:score_category))
+      @score = @user.create_score(Score.new(thing: @hashtag_thing, score_category: @score_category))
     end
 
     describe "PUT score" do
@@ -192,7 +189,7 @@ RSpec.describe Api::V1::ScoresController do
 
       it "should not allow other users to change the score" do
         other_user = create(:user_bravo)
-        other_user_score = other_user.score_thing(build(:hashtag_thing), create(:score_category))
+        other_user_score = other_user.create_score(Score.new(thing: @hashtag_thing, score_category: @score_category))
         put :update, {id: other_user_score._id, score: {points: 55}}
         expect(response).to have_http_status(:forbidden)
       end
@@ -209,7 +206,7 @@ RSpec.describe Api::V1::ScoresController do
 
       it "should not allow other users to delete the score" do
         other_user = create(:user_bravo)
-        other_user_score = other_user.score_thing(@twitter_account_thing, create(:score_category))
+        other_user_score = other_user.create_score(Score.new(thing: @twitter_account_thin, score_category: @score_category))
         expect(Score.where(id: other_user_score._id).first.nil?).to be false
         delete :destroy, {id: other_user_score._id}
         expect(response).to have_http_status(:forbidden)

@@ -29,12 +29,19 @@ class TwitterService
     end
   end
 
-  def get_twitter_account_thing_from_params(thing_params)
+  def get_twitter_account_thing_from_params(thing_input_params)
     twitter_account = nil
-    if !thing_params[:external_id].nil?
-      twitter_account = get_twitter_account_from_uid(thing_params[:external_id])
-    elsif !thing_params[:display_value].nil?
-      twitter_account = get_twitter_account_from_handle(thing_params[:display_value])
+    if !thing_input_params[:external_id].nil?
+      twitter_uid = thing_input_params[:external_id]
+      twitter_account = get_twitter_account_from_uid(twitter_uid)
+    elsif !thing_input_params[:display_value].nil?
+      twitter_handle = thing_input_params[:display_value]
+
+      if twitter_handle.length > 0 && twitter_handle[0] == '@'
+        twitter_handle[0] = ''
+      end
+
+      twitter_account = get_twitter_account_from_handle(twitter_handle)
     end
 
     if twitter_account.nil?

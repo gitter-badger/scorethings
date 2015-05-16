@@ -1,4 +1,9 @@
 /*
 copied from http://stackoverflow.com/a/22656437/4694250
 */
-.twitter-typeahead{ float:left; width:100%}
+.twitter-typeahead{
+    float:left;
+    width:100%;
+    margin: 0px;
+    padding: 0px;
+}

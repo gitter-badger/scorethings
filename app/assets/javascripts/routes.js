@@ -3,6 +3,9 @@ angular.module('app').config(['$routeProvider', function($routeProvider) {
             when('/', {
                 templateUrl: 'main/home.html'
             }).
+            when('/faq', {
+                templateUrl: 'faq/faq.html'
+            }).
             when('/score_categories', {
                 templateUrl: 'scoreCategories/scoreCategoryIndex.html',
                 controller: 'ScoreCategoriesIndexCtrl'

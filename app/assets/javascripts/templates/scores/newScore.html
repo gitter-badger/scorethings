@@ -2,52 +2,50 @@
     <h2>Score A Thing</h2>
     <div class="row">
         <tabset justified="true" class="col-xs-12">
-            <tab select="setTab('TWITTER_ACCOUNT')" heading="Any Twitter Account">
+            <tab select="setTab('TWITTER_ACCOUNT')" heading="Twitter Account">
             </tab>
-            <tab select="setTab('YOUTUBE_VIDEO')" heading="Any YouTube Video">
+            <tab select="setTab('TWITTER_TWEET')" heading="Twitter Tweet">
             </tab>
-            <tab select="setTab('HASHTAG')" heading="Any Hashtag">
+            <tab select="setTab('YOUTUBE_VIDEO')" heading="YouTube Video">
+            </tab>
+            <tab select="setTab('HASHTAG')" heading="Hashtag">
             </tab>
         </tabset>
     </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <form ng-submit="scoreThing()">
+    <form ng-submit="scoreThing()">
+        <div class="row">
+            <div class="col-xs-12">
                 <div class="input-group">
-                    <span ng-show="prefix[thingType]" class="input-group-btn">
-                        <button class="btn btn-default">{{prefix[thingType]}}</button>
+                    <span ng-show="prefix[score.thing.type]" class="input-group-btn">
+                        <button class="disabled btn btn-default">{{prefix[score.thing.type]}}</button>
                     </span>
                     <input type="text"
                            class="form-control"
-                           sf-typeahead
-                           options="exampleOptions" datasets="numbersDataset"
-                           placeholder="{{examplePlaceholder[thingType]}}"
+                           placeholder="{{placeholders[score.thing.type]}}"
                            ng-model="thingInputValue">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" ng-click="chooseScoreCategory()" type="button">{{chosenScoreCategory.name}}</button>
+                    <span class="hidden-sm hidden-xs input-group-btn">
+                        <button class="hidden-sm hidden-xs btn btn-default" ng-click="chooseScoreCategory()" type="button">
+                            {{chosenScoreCategory.name}}
+                            &nbsp;&nbsp;<i class="glyphicon glyphicon-edit"></i>
+                        </button>
                     </span>
-                    <span class="input-group-btn">
+                    <span class="hidden-sm hidden-xs input-group-btn">
                         <button class="btn btn-primary" type="submit">Score It</button>
                     </span>
                 </div>
-            </form>
-        </div>
-    </div>
-
-    <div style="padding: 1em" class="container-fluid">
-        <div class="row">
-            <div style="text-align: center">
-                OR
             </div>
         </div>
-    </div>
-    <div style="padding: 1em" class="container-fluid">
-        <div class="row">
-            <div style="text-align: center">
-                <a class="btn btn-primary" href="#/account/thing_suggestions">
-                    Find Suggestions For Things To Score
-                </a>
+        <div class="visible-sm visible-xs row">
+            <div class="col-xs-12">
+                <button class="col-xs-6 btn btn-default" ng-click="chooseScoreCategory()" type="button">
+                    {{chosenScoreCategory.name}}
+                    &nbsp;&nbsp;<i class="glyphicon glyphicon-edit"></i>
+                </button>
+                <button class="col-xs-6 btn btn-primary" type="submit">Score It</button>
             </div>
         </div>
-    </div>
+        <div>
+            Thing Previews: ({{thingPreviews}})
+        </div>
+    </form>
 </div>

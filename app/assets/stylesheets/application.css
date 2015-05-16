@@ -44,3 +44,7 @@ header nav ul li {
 [x-ng-click] {
     cursor: pointer;
 }
+
+body {
+    padding-top: 70px;
+}

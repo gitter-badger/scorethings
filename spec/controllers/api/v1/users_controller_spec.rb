@@ -10,8 +10,8 @@ RSpec.describe Api::V1::UsersController do
   describe "GET scores" do
     it "should get all scores created by a user" do
       (1..3).each do
-        @user.score_thing(build(:twitter_account_thing), create(:score_category))
-        @other_user.score_thing(build(:twitter_account_thing), create(:score_category))
+        @user.create_score(Score.new(thing: build(:twitter_account_thing), score_category: create(:score_category)))
+        @other_user.create_score(Score.new(thing: build(:twitter_account_thing), score_category: create(:score_category)))
       end
 
       get :scores, {id: @user._id.to_s}, accept: :json
