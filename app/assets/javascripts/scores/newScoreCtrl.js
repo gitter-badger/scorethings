@@ -1,4 +1,5 @@
 angular.module('app').controller('NewScoreCtrl', ['$scope', 'youtubeVideoUrlPattern', '$modal', '$location', 'Score', 'Restangular', 'usSpinnerService', 'twitter', 'notifier', 'scoreCategories', function($scope, youtubeVideoUrlPattern, $modal, $location, Score, Restangular, usSpinnerService, twitter, notifier, scoreCategories) {
+    $scope.thingInputValue = '';
 
     scoreCategories.getAll().then(
         function success(results) {
@@ -12,11 +13,13 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', 'youtubeVideoUrlPatt
     );
 
     $scope.setTab = function(thingType) {
+        $scope.thingInputValue = '';
         $scope.score.thing = {
-            display_value: '',
+            disalay_value: '',
             type: thingType,
             external_id: ''
         };
+        $scope.thingPreviews = [];
     };
 
     $scope.score = {};
@@ -41,7 +44,7 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', 'youtubeVideoUrlPatt
 
 
 
-    $scope.scoreThing = function() {
+    $scope.findThingToScore = function() {
         usSpinnerService.spin('spinner-1');
         if($scope.score.thing.type == 'TWITTER_ACCOUNT') {
             Restangular.one('thing_preview').getList('twitter_account', {input: $scope.thingInputValue})

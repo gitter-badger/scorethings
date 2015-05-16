@@ -12,7 +12,7 @@
             </tab>
         </tabset>
     </div>
-    <form ng-submit="scoreThing()">
+    <form ng-submit="findThingToScore()">
         <div class="row">
             <div class="col-xs-12">
                 <div class="input-group">
@@ -29,7 +29,7 @@
                         </button>
                     </span>
                     <span class="hidden-sm hidden-xs input-group-btn">
-                        <button class="btn btn-primary" type="submit">Score It</button>
+                        <button class="btn btn-primary" ng-disabled="!thingInputValue" type="submit">Find Thing To Score</button>
                     </span>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                 <button class="col-xs-6 btn btn-default" ng-click="chooseScoreCategory()" type="button">
                     {{chosenScoreCategory.name}}
                 </button>
-                <button class="col-xs-6 btn btn-primary" type="submit">Score It</button>
+                <button class="col-xs-6 btn btn-primary" ng-disabled="!thingInputValue" type="submit">Find Thing To Score</button>
             </div>
         </div>
         <div>
