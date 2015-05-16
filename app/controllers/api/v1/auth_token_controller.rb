@@ -1,7 +1,7 @@
 module Api
   module V1
     class AuthTokenController < ApplicationController
-      skip_before_action :authenticate_request
+      skip_before_action :authenticate_request, :current_user
 
       def create
         auth = request.env['omniauth.auth']
