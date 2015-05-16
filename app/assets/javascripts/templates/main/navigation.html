@@ -7,45 +7,54 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#/">scorethings</a>
+            <a nav-collapse class="navbar-brand" href="#/">scorethings</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav navbar-left">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Scores<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#/scores/new">Score A Thing</a></li>
-                        <li ng-show="isLoggedIn()"><a ng-href="#/users/{{identity.userId}}/scores">Scores You Created</a></li>
-                        <li class="disabled"><a href="#">Search All Scores</a></li>
+                        <li><a nav-collapse href="#/scores/new">Score A Thing</a></li>
+                        <li ng-show="isLoggedIn()"><a nav-collapse ng-href="#/users/{{identity.userId}}/scores">Scores You Created</a></li>
+                        <li class="disabled"><a nav-collapse href="#">Search All Scores</a></li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#/score_categories">Score Categories</a>
+                    <a nav-collapse href="#/score_categories">Score Categories</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#/faq">FAQs</a>
+                    <a nav-collapse href="#/faq">FAQs</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav">
                 <li class="disabled">
-                    <a class="btn btn-default btn-md" href="#">
-                        Random  <i class="fa fa-random"></i>
+                    <a nav-collapse class="btn btn-default btn-md" href="#">
+                        Random
                     </a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a ng-show="!isLoggedIn()" ng-click="loginWithTwitter()">Login With Twitter</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">About<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a nav-collapse href="#/about">About scorethings</a></li>
+                        <li><a nav-collapse href="#/about/donate">Donate</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a nav-collapse ng-show="!isLoggedIn()" ng-click="loginWithTwitter()">Login With Twitter</a></li>
                 <li ng-show="isLoggedIn()" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@{{identity.twitterHandle}} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#/account">Account</a></li>
-                        <li><a href="#/account/thing_suggestions">Thing Suggestions</a></li>
+                        <li><a nav-collapse href="#/account">Account</a></li>
+                        <li><a nav-collapse href="#/account/thing_suggestions">Thing Suggestions</a></li>
                         <li class="divider"></li>
-                        <li><a ng-click="logout()">Logout</a></li>
+                        <li><a nav-collapse ng-click="logout()">Logout</a></li>
                     </ul>
                 </li>
             </ul>

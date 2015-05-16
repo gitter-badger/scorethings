@@ -34,6 +34,12 @@ angular.module('app').config(['$routeProvider', function($routeProvider) {
                 templateUrl: 'users/main.html',
                 controller: 'UserMainCtrl'
             }).
+            when('/about', {
+                templateUrl: 'about/scorethings.html'
+            }).
+            when('/about/donate', {
+                templateUrl: 'about/aboutDonate.html'
+            }).
             otherwise({
                 redirectTo: '/'
             });
