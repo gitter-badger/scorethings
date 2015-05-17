@@ -15,8 +15,12 @@
  *= require toastr/toastr.min.css
  *= require bootstrap-social/bootstrap-social.css
  *= require font-awesome/css/font-awesome
+ *= require angular-ui-select/dist/select.min.css
+ *= require seiyria-bootstrap-slider/dist/css/bootstrap-slider.min
  *= require_self
  */
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css")
+
 header nav ul {
     list-style: none;
     margin: 0 0 2em;

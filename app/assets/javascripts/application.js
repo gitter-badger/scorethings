@@ -28,6 +28,9 @@
 //= require typeahead.js/dist/bloodhound
 //= require typeahead.js/dist/typeahead.bundle
 //= require angular-typeahead/angular-typeahead.min
+//= require angular-sanitize/angular-sanitize.min.js
+//= require seiyria-bootstrap-slider/dist/bootstrap-slider.min
+//= require angular-bootstrap-slider/slider
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app

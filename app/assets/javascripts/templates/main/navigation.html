@@ -15,7 +15,7 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Scores<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a nav-collapse href="#/scores/new">Score A Thing</a></li>
-                        <li ng-show="isLoggedIn()"><a nav-collapse ng-href="#/users/{{identity.userId}}/scores">Scores You Created</a></li>
+                        <li ng-show="isLoggedIn()"><a nav-collapse ng-href="#/users/{{identity.userId}}/scores">Scores By You</a></li>
                         <li class="disabled"><a nav-collapse href="#">Search All Scores</a></li>
                     </ul>
                 </li>
@@ -35,24 +35,24 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li><a nav-collapse ng-show="!isLoggedIn()" ng-click="loginWithTwitter()">Login With Twitter</a></li>
+                <li ng-show="isLoggedIn()" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@{{identity.twitterHandle}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a nav-collapse href="#/account">Your Account</a></li>
+                        <li><a nav-collapse href="#/account/thing_suggestions">Get Suggestions</a></li>
+                        <li class="divider"></li>
+                        <li><a nav-collapse ng-click="logout()">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">About<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a nav-collapse href="#/about">About scorethings</a></li>
                         <li><a nav-collapse href="#/about/donate">Donate</a></li>
                         <li><a nav-collapse href="#/faq">FAQs</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a nav-collapse ng-show="!isLoggedIn()" ng-click="loginWithTwitter()">Login With Twitter</a></li>
-                <li ng-show="isLoggedIn()" class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@{{identity.twitterHandle}} <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a nav-collapse href="#/account">Account</a></li>
-                        <li><a nav-collapse href="#/account/thing_suggestions">Thing Suggestions</a></li>
-                        <li class="divider"></li>
-                        <li><a nav-collapse ng-click="logout()">Logout</a></li>
                     </ul>
                 </li>
             </ul>

@@ -1,16 +1,6 @@
-angular.module('app').controller('NewScoreCtrl', ['$scope', 'youtubeVideoUrlPattern', '$modal', '$location', 'Score', 'Restangular', 'usSpinnerService', 'twitter', 'notifier', 'scoreCategories', function($scope, youtubeVideoUrlPattern, $modal, $location, Score, Restangular, usSpinnerService, twitter, notifier, scoreCategories) {
+angular.module('app').controller('NewScoreCtrl', ['$window', '$scope', 'youtubeVideoUrlPattern', '$modal', '$location', 'Score', 'Restangular', 'usSpinnerService', 'twitter', 'notifier', 'scoreCategories', function($window, $scope, youtubeVideoUrlPattern, $modal, $location, Score, Restangular, usSpinnerService, twitter, notifier, scoreCategories) {
     $scope.thingInputValue = '';
-
-    scoreCategories.getAll().then(
-        function success(results) {
-            $scope.scoreCategoriesMap = results.scoreCategoriesMap;
-            $scope.generalScoreCategory = results.generalScoreCategory;
-            $scope.score.score_category_id = $scope.generalScoreCategory.id;
-        },
-        function error(errorMsg) {
-            notifier.error(errorMsg);
-        }
-    );
+    $scope.scoreCategories = [];
 
     $scope.setTab = function(thingType) {
         $scope.thingInputValue = '';
@@ -40,10 +30,6 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', 'youtubeVideoUrlPatt
         HASHTAG: 'SomethingSomethingCats   or   #SomethingSomethingCats'
     };
 
-    $scope.scoreCategoriesMap = {};
-
-
-
     $scope.findThingToScore = function() {
         usSpinnerService.spin('spinner-1');
         if($scope.score.thing.type == 'TWITTER_ACCOUNT') {
@@ -51,7 +37,6 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', 'youtubeVideoUrlPatt
                 .then(function(thingPreviews) {
                     usSpinnerService.stop('spinner-1');
                     $scope.thingPreviews = thingPreviews;
-                    console.log(thingPreviews);
                 }, function(response) {
                     usSpinnerService.stop('spinner-1');
                     console.log('error retrieving thing previews');
@@ -60,44 +45,31 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', 'youtubeVideoUrlPatt
         }
     };
 
-    $scope.$watch('score.score_category_id', function(scoreCategoryId) {
-        if(!scoreCategoryId) {
-            return;
-        }
-        $scope.chosenScoreCategory =  $scope.scoreCategoriesMap[scoreCategoryId];
-    });
 
-    $scope.chooseScoreCategory = function() {
+    $scope.scoreThing = function(thingPreview) {
         $modal.open({
-            templateUrl: 'scores/chooseScoreCategoryModal.html',
+            templateUrl: 'scores/scoreThingModal.html',
+            controller: 'ScoreThingModalCtrl',
             size: 'md',
-            controller: function($scope, $modalInstance, scoreCategoriesMap, chosenScoreCategory) {
-                $scope.scoreCategoriesMap = scoreCategoriesMap;
-                $scope.chosenScoreCategory = chosenScoreCategory;
-
-                $scope.chooseScoreCategory = function(scoreCategory) {
-                    $modalInstance.close(scoreCategory);
-                };
-                $scope.cancel = function() {
-                    $modalInstance.dismiss('now dismissed');
-                };
-            },
             resolve: {
-                scoreCategoriesMap: function() {
-                    return $scope.scoreCategoriesMap;
-                },
-                chosenScoreCategory: function() {
-                    return $scope.chosenScoreCategory;
+                thing: function() {
+                    return {
+                        external_id: thingPreview.external_id,
+                        display_value: thingPreview.display_value,
+                        type: thingPreview.type
+                    };
                 }
             }
-        })
-            .result.then(
-            function closed(chosenScoreCategory) {
-                // user clicked a score category, so put that id in the score
-                $scope.score.score_category_id = chosenScoreCategory.id;
-            },
-            function dismissed(result) {
-            });
+        }).result.then(
+                function closed(score) {
+                    console.log(score);
+                    notifier.success('you scored that thing: ' + score.thing.display_value + '!');
+                },
+                function dismissed(result) {
+                    if(result.error) {
+                        notifier.error('you failed to scored that thing!');
+                    }
+                });
     };
 
 

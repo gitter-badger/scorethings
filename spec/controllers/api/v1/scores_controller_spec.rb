@@ -16,10 +16,10 @@ RSpec.describe Api::V1::ScoresController do
       @request.env['HTTP_AUTHORIZATION'] = ""
       post_data = {
           score: {
-              thing: @hashtag_thing.attributes,
               score_category_id: @score_category._id,
-              points: 21
-          }
+              points: 21,
+              thing: @hashtag_thing.attributes,
+          },
       }
 
       post :create, post_data

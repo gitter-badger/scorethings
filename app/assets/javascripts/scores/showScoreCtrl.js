@@ -1,6 +1,5 @@
 angular.module('app').controller('ShowScoreCtrl', ['$scope', '$routeParams', 'Score', 'notifier', function($scope, $routeParams, Score, notifier) {
     var scoreId = $routeParams.scoreId;
-    console.log(Score);
 
     Score.one(scoreId).get().then(
         function successGet(response) {

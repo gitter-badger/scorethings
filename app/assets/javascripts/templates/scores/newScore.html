@@ -1,5 +1,5 @@
 <div>
-    <h2>Score A Thing</h2>
+    <h2>Score A Thing (work in progress)</h2>
     <div class="row">
         <tabset justified="true" class="col-xs-12">
             <tab select="setTab('TWITTER_ACCOUNT')" heading="Twitter Account">
@@ -23,30 +23,44 @@
                            class="form-control"
                            placeholder="{{placeholders[score.thing.type]}}"
                            ng-model="thingInputValue">
-                    <span class="hidden-sm hidden-xs input-group-btn">
-                        <button class="hidden-sm hidden-xs btn btn-default" ng-click="chooseScoreCategory()" type="button">
-                            {{chosenScoreCategory.name}}
-                        </button>
-                    </span>
-                    <span class="hidden-sm hidden-xs input-group-btn">
-                        <button class="btn btn-primary" ng-disabled="!thingInputValue" type="submit">Find Thing To Score</button>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" ng-disabled="!thingInputValue" type="submit">Find Thing</button>
                     </span>
                 </div>
             </div>
         </div>
-        <div class="visible-sm visible-xs row">
-            <div class="col-xs-12">
-                <button class="col-xs-6 btn btn-default" ng-click="chooseScoreCategory()" type="button">
-                    {{chosenScoreCategory.name}}
-                </button>
-                <button class="col-xs-6 btn btn-primary" ng-disabled="!thingInputValue" type="submit">Find Thing To Score</button>
-            </div>
-        </div>
-        <div>
-            Thing Previews: (rough draft)
-            <div ng-repeat="thingPreview in thingPreviews">
-                {{thingPreview.display_value}}
-            </div>
-        </div>
     </form>
+    <div ng-show="thingPreviews.length">
+        <h4>Things</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="image-uri"></th>
+                    <th class="verified"></th>
+                    <th class="display-value"></th>
+                    <th class="hidden-xs real-name"></th>
+                    <th class="hidden-xs hidden-sm description"></th>
+                    <th class="score-button"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="thingPreview in thingPreviews">
+                    <td class="image-uri">
+                        <img ng-src="{{thingPreview.image_uri}}">
+                    </td>
+                    <td class="verified">
+                        <i tooltip="Verified" class="glyphicon glyphicon-ok" ng-show="thingPreview.verified"></i>
+                    </td>
+                    <td class="display-value">
+                        <a target="_blank" ng-href="{{thingPreview.uri}}">{{thingPreview.display_value}}</a>
+                    </td>
+                    <td class="hidden-xs real-name">{{thingPreview.real_name}}</td>
+                    <td class="hidden-xs hidden-sm description">{{thingPreview.description}}</td>
+                    <td>
+                        <button class="btn btn-primary btn-md" ng-click="scoreThing(thingPreview)">Score</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

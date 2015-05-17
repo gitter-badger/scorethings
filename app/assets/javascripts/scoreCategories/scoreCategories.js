@@ -7,22 +7,9 @@ angular.module('app').factory('scoreCategories', ['$http', '$q', function($http,
                     if(!response.data || !response.data.score_categories) {
                         deferred.reject('score category data was not formatted correctly');
                     }
-                    var scoreCategoriesMap = {};
-                    var generalScoreCategory;
-
                     var scoreCategories = response.data.score_categories;
 
-                    angular.forEach(scoreCategories, function(scoreCategory) {
-                        if(scoreCategory.general) {
-                            generalScoreCategory = scoreCategory;
-                        }
-                        scoreCategoriesMap[scoreCategory.id] = scoreCategory;
-                    });
-
-                    deferred.resolve({
-                        scoreCategoriesMap: scoreCategoriesMap,
-                        generalScoreCategory: generalScoreCategory
-                    });
+                    deferred.resolve(scoreCategories);
                 }, function error() {
                     deferred.reject('failed to get score categories');
                 });

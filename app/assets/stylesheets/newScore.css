@@ -7,3 +7,15 @@ copied from http://stackoverflow.com/a/22656437/4694250
     margin: 0px;
     padding: 0px;
 }
+.thing-preview-list > .modal-header {
+    max-height: 4em;
+}
+.thing-preview-list > .modal-body {
+    max-height: 16em;
+    min-height: 16em;
+    overflow-y: scroll;
+}
+
+#points > .slider {
+    width: 100%;
+}

@@ -40,10 +40,5 @@ Rails.application.configure do
 
   # memcached with dalli
   # https://github.com/mperham/dalli
-  config.cache_store = :dalli_store,
-      'localhost:11211',
-      {:failover => true,
-       :socket_timeout => 1.5,
-       :socket_failure_delay => 0.2
-      }
+  config.cache_store = :dalli_store, 'localhost:11211', {:failover => true, :socket_timeout => 1.5, :socket_failure_delay => 0.2}
 end

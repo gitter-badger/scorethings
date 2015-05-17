@@ -1,4 +1,4 @@
-angular.module('app', ['restangular', 'ngRoute', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'angularSpinner', 'siyfion.sfTypeahead'])
+angular.module('app', ['restangular', 'ngRoute', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'angularSpinner', 'siyfion.sfTypeahead', 'ui.bootstrap-slider'])
     .config(['$httpProvider', 'localStorageServiceProvider', '$locationProvider', 'RestangularProvider', function($httpProvider, localStorageServiceProvider,  $locationProvider, RestangularProvider) {
         localStorageServiceProvider.setPrefix('scorethings');
 
@@ -6,6 +6,7 @@ angular.module('app', ['restangular', 'ngRoute', 'templates', 'LocalStorageModul
         RestangularProvider.setRestangularFields({
             id: "_id"
         });
+
         return $httpProvider.interceptors.push('AuthInterceptor');
     }])
     .factory('Categories', ['Restangular', function(Restangular) {

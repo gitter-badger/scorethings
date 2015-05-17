@@ -1,12 +1,7 @@
-<h2>Score for {{score.thing.value}}</h2>
+<h2>Score for {{score.thing.display_value}}</h2>
 by {{score.user.twitter_uid}}
 <div>
-    <h3>Category:</h3>
-    {{score.score_category.name}}: {{score.score_category.description}}
-</div>
-<div>
-    <h3>Points:</h3>
-    {{score.points}}
+    <h3>{{score.score_category.name}}: {{score.points}} / 100</h3>
 </div>
 <div>
     <h3>Date Created:</h3>
