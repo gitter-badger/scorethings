@@ -7,13 +7,12 @@ module Api
         score_params = params.require(:score).permit(:points, :score_category_id,
           :thing => [:type, :display_value, :external_id])
 
-        thing_params = score_params[:thing]
-        thing = Thing.new(thing_params)
+        thing = Thing.new(score_params[:thing])
         if !thing.valid?
           # TODO this handles invalidation and twitter account not found,
           # refactor to seperate and give more detailed error messages
           return render json: {
-                            error: "failed to determine thing from params: #{thing.errors}",
+                            error: "failed to determine thing from params: #{thing.errors.full_messages}",
                             status: :bad_request
                         }, status: :bad_request
         end

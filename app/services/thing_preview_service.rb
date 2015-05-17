@@ -1,7 +1,7 @@
 class ThingPreviewService
 
   def preview_twitter_account(thing_input)
-    Rails.cache.fetch("preview_twitter_account#{thing_input}", :expires_in => 24.hour) do
+    #Rails.cache.fetch("preview_twitter_account#{thing_input}", :expires_in => 24.hour) do
       # strip off '@' char at beginning
       if thing_input[0] == '@'
         thing_input[0] = ''
@@ -19,6 +19,6 @@ class ThingPreviewService
             description: (account_result.description unless !account_result.description?),
             type: Scorething::ThingTypes::TWITTER_ACCOUNT)
       end
-    end
+    #end
   end
 end

@@ -1,4 +1,4 @@
-angular.module('app').controller('ScoreThingModalCtrl', ['$scope', '$modalInstance', 'Restangular', 'thing', 'scoreCategories', 'notifier', function($scope, $modalInstance, Restangular, thing, scoreCategories, notifier) {
+angular.module('app').controller('ScoreThingModalCtrl', ['$scope', '$modalInstance', '$http', 'thing', 'scoreCategories', 'notifier', function($scope, $modalInstance, $http, thing, scoreCategories, notifier) {
     $scope.thing = thing;
     scoreCategories.getAll().then(
         function success(scoreCategories) {
@@ -16,12 +16,13 @@ angular.module('app').controller('ScoreThingModalCtrl', ['$scope', '$modalInstan
     };
 
     $scope.createScore = function() {
-        var scores = Restangular.all('scores');
-        scores.post($scope.score).then(function(response) {
-            $modalInstance.close(response.score);
-        }, function(response) {
-            $modalInstance.dismiss({error: response});
-        });
+        $http.post('/api/v1/scores', {score: $scope.score})
+            .success(function(response) {
+                console.log(response);
+                $modalInstance.close(response.score);
+            }).error(function(response) {
+                $modalInstance.dismiss({error: response.error});
+            });
     };
 
     $scope.cancel = function() {
