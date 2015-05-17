@@ -18,7 +18,6 @@
  *= require seiyria-bootstrap-slider/dist/css/bootstrap-slider.min
  *= require_self
  */
-@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css")
 
 header nav ul {
     list-style: none;
