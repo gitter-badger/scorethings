@@ -13,7 +13,7 @@ class ThingPreviewService
             display_value: "@#{account_result.screen_name}",
             real_name: account_result.name,
             external_id: account_result.id,
-            image_uri: account_result.profile_image_uri.to_s,
+            image_uri: account_result.profile_image_uri(:bigger).to_s,
             uri: account_result.uri.to_s,
             verified: account_result.verified?,
             description: (account_result.description unless !account_result.description?),

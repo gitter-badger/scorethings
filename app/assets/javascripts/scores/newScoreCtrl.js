@@ -52,25 +52,14 @@ angular.module('app').controller('NewScoreCtrl', ['$window', '$scope', 'youtubeV
             controller: 'ScoreThingModalCtrl',
             size: 'md',
             resolve: {
-                thing: function() {
-                    return {
-                        external_id: thingPreview.external_id,
-                        display_value: thingPreview.display_value,
-                        type: thingPreview.type
-                    };
+                thingPreview: function() {
+                    return thingPreview;
                 }
             }
         }).result.then(
                 function closed(score) {
-                    console.log(score);
-                    notifier.success('you scored that thing: ' + score.thing.display_value + '!');
                 },
                 function dismissed(result) {
-                    if(result.error) {
-                        notifier.error('you failed to scored that thing!');
-                    }
                 });
     };
-
-
 }]);
