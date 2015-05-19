@@ -1,0 +1,18 @@
+<div>
+    <h3>New Score List</h3>
+    <form ng-submit="createScoreList()">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="input-group">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="My Score List"
+                           ng-model="scoreList.name">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" ng-disabled="!scoreList.name" type="submit">Create</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

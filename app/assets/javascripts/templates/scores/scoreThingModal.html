@@ -8,6 +8,16 @@
     <div ng-show="showRecenlySavedScoreMessage" class="modal-body">
         You just saved a score for {{score.thing.display_value}}.
         <br>
+        <div ng-show="score.score_lists.length">
+            <h4>The score belongs with the following score lists</h4>
+            <ul>
+                <li ng-repeat="scoreList in score.score_lists">
+                    <a ng-href="#/score_lists/{{scoreList.id}}">{{scoreList.name}}</a>
+                </li>
+            </ul>
+
+
+        </div>
         Do you want to create another score for that thing?
         <button class="btn btn-primary" type="button" ng-click="createAnotherScore()">Yes</button>
         <button class="btn btn-default" type="button" ng-click="close()">No</button>

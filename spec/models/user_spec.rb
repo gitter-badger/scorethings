@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe User do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   before do
-    @user = build(:user_alpha)
+    @user = create(:user_alpha)
   end
 
   describe "creating a new user with oauth" do
@@ -44,6 +44,75 @@ RSpec.describe User do
       expect {
         other_user.change_score(@score, {points: 75})
       }.to raise_error(UnauthorizedModificationError)
+    end
+  end
+
+  describe "organizing scores into score lists" do
+    before do
+      @score = @user.create_score(build(:score))
+    end
+
+    it "should allow the user to create an empty score list" do
+      expect(@user.score_lists.length).to eq(1)
+      score_list = @user.create_score_list(name: 'Another Empty Score List')
+      expect(@user.score_lists.length).to eq(2)
+      expect(@user.score_lists.second).to eq(score_list)
+      expect(@user.score_lists.second.scores.length).to eq(0)
+    end
+
+    it "should allow the user to add a score to the score list" do
+      score_list = @user.create_score_list(name: 'Another Empty Score List')
+
+      expect(@user.score_lists.first.scores.length).to eq(1)
+      @user.add_score_to_score_list(score_list, @score)
+      expect(@user.score_lists.first.scores.length).to eq(1)
+    end
+
+    it "should not allow a user to add a score to another user's score list" do
+      other_user = create(:user_bravo)
+      other_user_score_list = other_user.create_score_list(name: 'First Score List')
+
+      other_user_score = other_user.create_score(build(:score))
+
+      # cannot add other user's score to other user's score list
+      expect {
+        @user.add_score_to_score_list(other_user_score_list, other_user_score)
+      }.to raise_error(UnauthorizedModificationError)
+
+      # cannot user's score to other user's score list
+      expect {
+        @user.add_score_to_score_list(other_user_score_list, @score)
+      }.to raise_error(UnauthorizedModificationError)
+    end
+
+    describe "removing a score from a score list" do
+      before do
+        @score_list = @user.create_score_list(name: 'My Scores For Patton Oswalt')
+        @another_score = @user.create_score(build(:score))
+
+        @user.add_score_to_score_list(@score_list, @score)
+        @user.add_score_to_score_list(@score_list, @another_score)
+      end
+
+      it "should remove a score from a score list" do
+        @user.remove_score_from_score_list(@score_list, @another_score)
+        expect(@user.scores.length).to eq(2)
+        expect(@user.score_lists.first.scores.length).to eq(1)
+        expect(@user.score_lists.first.scores.first).to eq(@score)
+      end
+
+      it "should not remove a score from another user's score list" do
+        other_user = create(:user_bravo)
+        other_user_score_list = other_user.create_score_list(name: 'First Score List')
+        other_user_score = other_user.create_score(build(:score))
+        other_user.add_score_to_score_list(other_user_score_list, other_user_score)
+        expect(other_user_score_list.scores.length).to eq(1)
+
+        expect {
+          @user.remove_score_from_score_list(other_user_score_list, other_user_score)
+        }.to raise_error(UnauthorizedModificationError)
+        expect(other_user_score_list.scores.length).to eq(1)
+      end
     end
   end
 end

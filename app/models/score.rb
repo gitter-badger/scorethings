@@ -7,6 +7,7 @@ class Score
   belongs_to :user
   belongs_to :score_category
   embeds_one :thing
+  has_and_belongs_to_many :score_lists, inverse_of: :scores
 
   validates_numericality_of :points, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, only_integer: true
 

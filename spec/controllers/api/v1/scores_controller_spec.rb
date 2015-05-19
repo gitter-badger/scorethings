@@ -206,7 +206,7 @@ RSpec.describe Api::V1::ScoresController do
 
       it "should not allow other users to delete the score" do
         other_user = create(:user_bravo)
-        other_user_score = other_user.create_score(Score.new(thing: @twitter_account_thin, score_category: @score_category))
+        other_user_score = other_user.create_score(Score.new(thing: @hashtag_thing, score_category: @score_category))
         expect(Score.where(id: other_user_score._id).first.nil?).to be false
         delete :destroy, {id: other_user_score._id}
         expect(response).to have_http_status(:forbidden)

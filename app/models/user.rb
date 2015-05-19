@@ -8,6 +8,7 @@ class User
   field :twitter_handle, type: String
 
   has_many :scores
+  has_many :score_lists
 
   def to_builder
     Jbuilder.new do |user|
@@ -21,6 +22,64 @@ class User
     self.scores << score
     score.save
     score
+
+    if has_score_list_with_matching_score_list_thing(score.thing)
+      add_score_to_any_score_lists_with_matching_thing(score)
+    else
+      create_new_score_list_for_score(score)
+    end
+
+    score.reload
+  end
+
+  def create_score_list(attrs)
+    score_list = ScoreList.new(attrs)
+    self.score_lists << score_list
+    score_list.save
+    score_list
+  end
+
+  def create_new_score_list_for_score(score)
+    score_list = ScoreList.build_score_list_from_score(score)
+    self.score_lists << score_list
+    score_list.save
+    score_list
+  end
+
+  def has_score_list_with_matching_score_list_thing(thing)
+    self.score_lists.each do |score_list|
+      if score_list.has_score_list_thing_matching_thing(thing)
+        return true
+      end
+    end
+    return false
+  end
+  ``
+  def add_score_to_any_score_lists_with_matching_thing(score)
+    self.score_lists.each do |score_list|
+      if score_list.has_score_list_thing_matching_thing(score.thing)
+        score_list.scores << score
+      end
+    end
+  end
+
+
+  # TODO create method on ScoreList to restrict adding/removing scores not owned by user?
+  # rather than on user?  security vulnerability?
+  def add_score_to_score_list(score_list, score)
+    if self != score_list.user
+      raise UnauthorizedModificationError
+    end
+
+    score_list.scores << score
+  end
+
+  def remove_score_from_score_list(score_list, score)
+    if self != score_list.user
+      raise UnauthorizedModificationError
+    end
+
+    score_list.scores.delete(score)
   end
 
   # TODO common logic between delete and change score
@@ -31,11 +90,25 @@ class User
     score.destroy
   end
 
+  def delete_score_list(score_list)
+    if self != score_list.user
+      raise UnauthorizedModificationError
+    end
+    score_list.destroy
+  end
+
   def change_score(score, update_attrs)
     if self != score.user
       raise UnauthorizedModificationError
     end
     score.update_attributes(update_attrs)
+  end
+
+  def change_score_list(score_list, update_attrs)
+    if self != score_list.user
+      raise UnauthorizedModificationError
+    end
+    score_list.update_attributes(update_attrs)
   end
 
   def self.create_with_omniauth(auth)

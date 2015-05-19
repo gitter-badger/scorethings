@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       match '/twitter/user_info' => 'twitter#user_info', via: :get, as: :twitter_user_info
 
       resources :scores, except: [:edit, :new]
+      resources :score_lists, except: [:edit, :new]
 
       get '/users/:id/scores' => 'users#scores'
 

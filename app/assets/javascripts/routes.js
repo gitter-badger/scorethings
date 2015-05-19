@@ -26,6 +26,14 @@ angular.module('app').config(['$routeProvider', function($routeProvider) {
                 templateUrl: 'scores/showScore.html',
                 controller: 'ShowScoreCtrl'
             }).
+            when('/score_lists/new', {
+                templateUrl: 'scoreLists/newScoreList.html',
+                controller: 'NewScoreListCtrl'
+            }).
+            when('/score_lists/:scoreListId', {
+                templateUrl: 'scoreLists/showScoreList.html',
+                controller: 'ShowScoreListCtrl'
+            }).
             when('/users/:userId/scores', {
                 templateUrl: 'users/userScores.html',
                 controller: 'UserScoresCtrl'
