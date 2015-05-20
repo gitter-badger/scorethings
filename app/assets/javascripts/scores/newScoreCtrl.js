@@ -39,7 +39,7 @@ angular.module('app').controller('NewScoreCtrl', ['$window', '$scope', 'youtubeV
                     $scope.thingPreviews = thingPreviews;
                 }, function(response) {
                     usSpinnerService.stop('spinner-1');
-                    console.log('error retrieving thing previews');
+                    console.log('error retrieving things previews');
                     console.log(response);
                 });
         }

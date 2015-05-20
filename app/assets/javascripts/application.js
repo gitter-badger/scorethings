@@ -31,6 +31,7 @@
 //= require angular-sanitize/angular-sanitize.min.js
 //= require seiyria-bootstrap-slider/dist/bootstrap-slider.min
 //= require angular-bootstrap-slider/slider
+//= require angularjs-rails-resource/angularjs-rails-resource.min
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app

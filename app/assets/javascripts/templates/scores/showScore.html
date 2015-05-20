@@ -1,20 +1,20 @@
-<h2>Score for {{score.thing.display_value}}</h2>
-by {{score.user.twitter_uid}}
+<h2>Score for {{score.thing.displayValue}}</h2>
+by {{score.user.twitterUid}}
 <div>
-    <h3>{{score.score_category.name}}: {{score.points}} / 100</h3>
+    <h3>{{score.scoreCategory.name}}: {{score.points}} / 100</h3>
 </div>
 <div>
     <h3>Date Created:</h3>
-    {{score.created_at | date}}
+    {{score.createdAt | date}}
 </div>
 <div>
     <h3>Date Updated:</h3>
-    {{score.updated_at | date}}
+    {{score.updatedAt | date}}
 </div>
 <div>
     <h3>Score Lists</h3>
     <ul>
-        <li ng-repeat="scoreList in score.score_lists">
+        <li ng-repeat="scoreList in score.scoreLists">
             <a ng-href="#/score_lists/{{scoreList.id}}">{{scoreList.name}}</a>
         </li>
     </ul>

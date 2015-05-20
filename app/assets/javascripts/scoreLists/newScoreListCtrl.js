@@ -1,17 +1,16 @@
-angular.module('app').controller('NewScoreListCtrl', ['$scope', 'usSpinnerService', 'notifier', '$http', '$location', function($scope, usSpinnerService, notifier, $http, $location) {
-    $scope.scoreList = {
-        scoreListThings: []
-    };
+angular.module('app').controller('NewScoreListCtrl', ['$scope', 'usSpinnerService', 'notifier', 'ScoreList', '$location', function($scope, usSpinnerService, notifier, ScoreList, $location) {
+    $scope.scoreList = new ScoreList({
+    });
 
     $scope.createScoreList = function() {
         usSpinnerService.spin('spinner-1');
-        $http.post('/api/v1/score_lists', {score_list: $scope.scoreList})
-            .success(function(response) {
-                usSpinnerService.stop('spinner-1');
-                $location.path('score_lists/' + response.score_list.id);
-                notifier.success('You created a score list');
-            }).error(function(response) {
-                usSpinnerService.stop('spinner-1');
-            });
+        var res = $scope.scoreList.create();
+        res.then(function(scoreList) {
+            usSpinnerService.stop('spinner-1');
+            $location.path('score_lists/' + scoreList.id);
+            notifier.success('You created a score list');
+        }, function(resp) {
+            usSpinnerService.stop('spinner-1');
+        });
     };
 }]);

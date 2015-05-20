@@ -1,7 +1,7 @@
 angular.module('app').controller('ScoreThingModalCtrl', ['$scope', '$modalInstance', '$http', 'thingPreview', 'scoreCategories', 'notifier', 'usSpinnerService', function($scope, $modalInstance, $http, thingPreview, scoreCategories, notifier, usSpinnerService) {
     function initializeScore() {
         $scope.score = {
-            // TODO turn thingPreview into thing (fewer attributes)?
+            // TODO turn thingPreview into things (fewer attributes)?
             thing: thingPreview,
             points: 75,
             score_category_id: null
@@ -39,7 +39,7 @@ angular.module('app').controller('ScoreThingModalCtrl', ['$scope', '$modalInstan
                 $scope.showRecenlySavedScoreMessage = true;
             }).error(function(response) {
                 usSpinnerService.stop('spinner-1');
-                notifier.error('There was a problem scoring that thing');
+                notifier.error('There was a problem scoring that things');
             });
     };
 

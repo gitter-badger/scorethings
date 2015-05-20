@@ -9,4 +9,4 @@ ScoreCategory.create!(name: 'Bold', description: 'not hesitating or fearful of a
 ScoreCategory.create!(name: 'Honest', description: 'honorable in principles, intentions, and actions')
 ScoreCategory.create!(name: 'Kind', description: 'of a good or benevolent nature or disposition')
 ScoreCategory.create!(name: 'Helpful', description: 'giving or rendering aid or assistance; of service')
-ScoreCategory.create!(name: 'Beautiful', description: 'having beauty; possessing qualities that give great pleasure or satisfaction to see, hear, thing about')
+ScoreCategory.create!(name: 'Beautiful', description: 'having beauty; possessing qualities that give great pleasure or satisfaction to see, hear, things about')

@@ -1,25 +1,35 @@
 FactoryGirl.define do
-  sequence(:twitter_account_display_value) { |n| "SomeTwitterUser_#{n}" }
-  sequence(:twitter_account_external_id) { |n| "10000#{n}" }
-  sequence(:youtube_video_external_id) { |n| "99000#{n}" }
-  sequence(:youtube_video_display_value) { |n| "Another cat video ##{n}" }
-  sequence(:hashtag_display_value) { |n| "#SomeHashtag#{n}" }
+  sequence(:thing_title) { |n| "SomeTwitterUser_#{n}" }
+  sequence(:thing_external_id) { |n| "10000#{n}" }
+  sequence(:thing_image_uri) { |n| "http://image.url.com/9283#{n}.jpg" }
+  sequence(:thing_uri) { |n| "http://resources.url.com/9283#{n}" }
+  sequence(:thing_description) { |n| "Thing description #{n}" }
 
-  factory :twitter_account_thing, class: Thing do |t|
-    t.type Scorething::ThingTypes::TWITTER_ACCOUNT
-    t.external_id { FactoryGirl.generate(:twitter_account_external_id) }
-    t.display_value { FactoryGirl.generate(:twitter_account_display_value) }
-  end
+  factory :thing, class: Thing do
+    title { FactoryGirl.generate(:thing_title) }
+    external_id { FactoryGirl.generate(:thing_external_id) }
+    image_uri { FactoryGirl.generate(:thing_image_uri) }
+    uri { FactoryGirl.generate(:thing_uri) }
+    description { FactoryGirl.generate(:thing_description) }
 
-  factory :youtube_video_thing, class: Thing do |t|
-    t.type Scorething::ThingTypes::YOUTUBE_VIDEO
-    t.external_id { FactoryGirl.generate(:youtube_video_external_id) }
-    t.display_value { FactoryGirl.generate(:youtube_video_display_value) }
-  end
+    trait :twitter_tweet do
+      type Scorethings::ThingTypes::TWITTER_TWEET
+    end
 
-  factory :hashtag_thing, class: Thing do |t|
-    t.type Scorething::ThingTypes::HASHTAG
-    t.external_id nil
-    t.display_value { FactoryGirl.generate(:hashtag_display_value) }
+    trait :twitter_account do
+      type Scorethings::ThingTypes::TWITTER_ACCOUNT
+    end
+
+    trait :youtube_video do
+      type Scorethings::ThingTypes::YOUTUBE_VIDEO
+    end
+
+    trait :hashtag do
+      type Scorethings::ThingTypes::HASHTAG
+      external_id nil
+      image_uri nil
+      uri nil
+      description nil
+    end
   end
 end

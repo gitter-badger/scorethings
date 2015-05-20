@@ -30,6 +30,7 @@ module.exports = function(config) {
             '../../vendor/assets/components/angular-typeahead/angular-typeahead.js',
             '../../vendor/assets/components/angular-bootstrap-slider/slider.js',
             '../../vendor/assets/components/seiyria-bootstrap-slider/js/bootstrap-slider.js',
+            '../../vendor/assets/components/angularjs-rails-resource/angularjs-rails-resource.js',
             // FIXME I don't undertand why I needed to add app.js, before the **/*.js was working,
             // but when I actually did the ls **/*.js, it didn't show up
             '../../app/assets/javascripts/app.js',

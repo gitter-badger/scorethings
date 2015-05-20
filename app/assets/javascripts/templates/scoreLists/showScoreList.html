@@ -1,4 +1,4 @@
 <h3>Score List: {{scoreList.name}}</h3>
-Average Score: {{scoreList.average_score}}
-<score-panel ng-repeat="score in scoreList.scores | orderBy:'-created_at'" score="score">
+Average Score: {{scoreList.averageScore}}
+<score-panel ng-repeat="score in scoreList.scores | orderBy:'-createdAt'" score="score">
 </score-panel>

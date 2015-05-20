@@ -8,17 +8,18 @@ RSpec.describe Api::V1::ScoresController do
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
     @general_category = create(:score_category, general: true)
-    @hashtag_thing = build(:hashtag_thing)
   end
 
   describe "POST create" do
     it "should not allow creating score if user is not authenticated" do
+      thing = create(:thing, :twitter_account)
+
       @request.env['HTTP_AUTHORIZATION'] = ""
       post_data = {
           score: {
               score_category_id: @score_category._id,
               points: 21,
-              thing: @hashtag_thing.attributes,
+              thing_id: thing._id
           },
       }
 
@@ -27,19 +28,15 @@ RSpec.describe Api::V1::ScoresController do
       expect(response).to have_http_status(:unauthorized)
     end
 
-    describe "creating a score with a thing type YOUTUBE_VIDEO" do
+    describe "creating a score with a things type YOUTUBE_VIDEO" do
       before do
-        @youtube_video_thing = build(:youtube_video_thing)
+        @youtube_video_thing = create(:thing, :youtube_video)
       end
 
-      it "should create a new score for a youtube video with an external_id" do
+      it "should create a new score for a youtube video" do
         post_data = {
             score: {
-                thing: {
-                    external_id: @youtube_video_thing.external_id,
-                    display_value: @youtube_video_thing.display_value,
-                    type: Scorething::ThingTypes::YOUTUBE_VIDEO
-                },
+                thing_id: @youtube_video_thing._id,
                 score_category_id: @score_category._id,
                 points: 21
             }
@@ -52,79 +49,46 @@ RSpec.describe Api::V1::ScoresController do
         # FIXME this code and poorly designed specs will hide bugs in the future, need to add specs for TwitterService
         expect(Score.first.thing.external_id).to eq(@youtube_video_thing.external_id)
       end
-
-      it "should not create a new score for a youtube video without an external_id" do
-        post_data = {
-            score: {
-                thing: {
-                    external_id: nil,
-                    display_value: @youtube_video_thing.display_value,
-                    type: Scorething::ThingTypes::YOUTUBE_VIDEO
-                },
-                score_category_id: @score_category._id,
-                points: 21
-            }
-        }
-        expect(Score.all.length).to eq(0)
-        post :create, post_data
-        expect(response).to have_http_status(:bad_request)
-        expect(Score.all.length).to eq(0)
-      end
     end
 
-    describe "creating a score with a thing type TWITTER_ACCOUNT" do
+    describe "creating a score with a things type TWITTER_ACCOUNT" do
       before do
-        @twitter_account_thing = build(:twitter_account_thing)
+        @twitter_account_thing = create(:thing, :twitter_account)
       end
 
-      it "should not create a new score for a twitter account when given just a display_value and not the external id" do
-        allow_any_instance_of(TwitterService).to receive(:get_twitter_account_thing_from_params).and_return(Thing.new(@twitter_account_thing.attributes))
-
+      it "should not create a new score for a twitter account thing when it cannot be retrieved with the thing id" do
         post_data = {
             score: {
-                thing: {
-                    external_id: nil,
-                    display_value: @twitter_account_thing.display_value,
-                    type: Scorething::ThingTypes::TWITTER_ACCOUNT
-
-                },
+                thing_id: 'notanidindb',
                 score_category_id: @score_category._id,
                 points: 21
             }
         }
         expect(Score.all.length).to eq(0)
         post :create, post_data
-        expect(response).to have_http_status(:bad_request)
         expect(Score.all.length).to eq(0)
+        expect(response).to have_http_status(:not_found)
       end
 
-      it "should not create a new score for a twitter account when given a twitter external_id that can't be found in twitter" do
-        twitter_account_input_with_handle = {
-            display_value: '',
-            type: Scorething::ThingTypes::TWITTER_ACCOUNT,
-            external_id: '1111111'
-        }
-
-        allow_any_instance_of(TwitterService).to receive(:get_twitter_account_thing_from_params).with(twitter_account_input_with_handle).and_return(nil)
-
+      it "should not create a new score without a thing id" do
         post_data = {
             score: {
-                thing: twitter_account_input_with_handle,
+                thing_id: nil,
                 score_category_id: @score_category._id,
                 points: 21
             }
         }
         expect(Score.all.length).to eq(0)
         post :create, post_data
-        expect(response).to have_http_status(:bad_request)
+        expect(response).to have_http_status(:not_found)
       end
 
       it "should create a new score with a general category if a score_category_id is not provided" do
-        allow_any_instance_of(TwitterService).to receive(:get_twitter_account_thing_from_params).and_return(Thing.new(@twitter_account_thing.attributes))
+        allow_any_instance_of(ThingService).to receive(:load).with(@twitter_account_thing.type, @twitter_account_thing.external_id).and_return(@twitter_account_thing)
 
         post_data = {
             score: {
-                thing: @twitter_account_thing.attributes,
+                thing_id: @twitter_account_thing._id,
                 score_category_id: nil,
                 points: 21
             }
@@ -139,43 +103,17 @@ RSpec.describe Api::V1::ScoresController do
         # maybe shouldn't use factory for this one, could hide bugs (what is factory's external_id)
         expect(Score.first.thing.type).to eq(@twitter_account_thing.type)
         expect(Score.first.thing.external_id).to eq(@twitter_account_thing.external_id)
-        expect(Score.first.thing.display_value).to eq(@twitter_account_thing.display_value)
+        expect(Score.first.thing.title).to eq(@twitter_account_thing.title)
         expect(Score.first.score_category).to_not be_nil
         expect(Score.first.score_category.general).to be true
       end
-
-
-    end
-
-    it "should create a new score for a hashtag when given a hashtag" do
-      post_data = {
-          score: {
-              thing: @hashtag_thing.attributes,
-              score_category_id: @score_category._id,
-              points: 21
-          }
-      }
-      post :create, post_data
-      expect(response).to have_http_status(:created)
-    end
-
-    it "should say the request was bad if there isn't a twitter uid or hashtag in the thing input" do
-      bad_thing_params = {type: 'SOME_UNSUPPORTED_TYPE', display_value: 'asodf'}
-      post_data = {
-          score: {
-              thing: bad_thing_params,
-              score_category_id: @score_category._id,
-              points: 21
-          }
-      }
-      post :create, post_data
-      expect(response).to have_http_status(:bad_request)
     end
   end
 
   describe "read/update/delete score" do
     before do
-      @score = @user.create_score(Score.new(thing: @hashtag_thing, score_category: @score_category))
+      @thing = create(:thing, :twitter_account)
+      @score = @user.create_score(Score.new(thing: @thing, score_category: @score_category))
     end
 
     describe "PUT score" do
@@ -189,7 +127,7 @@ RSpec.describe Api::V1::ScoresController do
 
       it "should not allow other users to change the score" do
         other_user = create(:user_bravo)
-        other_user_score = other_user.create_score(Score.new(thing: @hashtag_thing, score_category: @score_category))
+        other_user_score = other_user.create_score(Score.new(thing: @thing, score_category: @score_category))
         put :update, {id: other_user_score._id, score: {points: 55}}
         expect(response).to have_http_status(:forbidden)
       end
@@ -206,7 +144,7 @@ RSpec.describe Api::V1::ScoresController do
 
       it "should not allow other users to delete the score" do
         other_user = create(:user_bravo)
-        other_user_score = other_user.create_score(Score.new(thing: @hashtag_thing, score_category: @score_category))
+        other_user_score = other_user.create_score(Score.new(thing: @thing, score_category: @score_category))
         expect(Score.where(id: other_user_score._id).first.nil?).to be false
         delete :destroy, {id: other_user_score._id}
         expect(response).to have_http_status(:forbidden)

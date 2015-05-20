@@ -10,10 +10,6 @@ Rails.application.routes.draw do
       get '/auth/twitter/callback' => 'auth_token#create'
       get '/auth/failure' => 'auth_token#failure'
 
-
-      match '/twitter/handle_search' => 'twitter#handle_search', via: :get, as: :twitter_handle_search
-      match '/twitter/user_info' => 'twitter#user_info', via: :get, as: :twitter_user_info
-
       resources :scores, except: [:edit, :new]
       resources :score_lists, except: [:edit, :new]
 
@@ -21,7 +17,9 @@ Rails.application.routes.draw do
 
       get '/score_categories' => 'score_categories#index'
 
-      get '/thing_preview/twitter_account' => 'thing_preview#twitter_account'
+      resources :things, except: [:destroy, :edit, :new]
+
+      get '/things/:thing_type/search' => 'things#search'
     end
   end
 

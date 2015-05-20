@@ -1,3 +1,6 @@
-angular.module('app').factory('ScoreList', ['Restangular', function(Restangular) {
-    return Restangular.service('score_lists');
+angular.module('app').factory('ScoreList', ['railsResourceFactory', function(railsResourceFactory) {
+    return railsResourceFactory({
+        url: '/api/v1/score_lists',
+        name: 'score_list'
+    })
 }]);

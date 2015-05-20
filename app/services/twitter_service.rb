@@ -48,6 +48,6 @@ class TwitterService
       return nil
     end
 
-    Thing.new(type: Scorething::ThingTypes::TWITTER_ACCOUNT, display_value: twitter_account[:screen_name], external_id: twitter_account[:id])
+    Thing.new(type: Scorethings::ThingTypes::TWITTER_ACCOUNT, display_value: twitter_account[:screen_name], external_id: twitter_account[:id])
   end
 end

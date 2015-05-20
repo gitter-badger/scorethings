@@ -7,8 +7,8 @@ class User
   field :twitter_uid, type: String
   field :twitter_handle, type: String
 
-  has_many :scores
-  has_many :score_lists
+  has_many :scores, autosave: true
+  has_many :score_lists, autosave: true
 
   def to_builder
     Jbuilder.new do |user|
@@ -20,11 +20,9 @@ class User
   def create_score(score)
     score.user = self
     self.scores << score
-    score.save
-    score
 
-    if has_score_list_with_matching_score_list_thing(score.thing)
-      add_score_to_any_score_lists_with_matching_thing(score)
+    if has_score_list_with_thing_filter(score.thing)
+      add_score_to_any_score_list_with_with_thing_filter(score)
     else
       create_new_score_list_for_score(score)
     end
@@ -39,27 +37,20 @@ class User
     score_list
   end
 
-  def create_new_score_list_for_score(score)
+  def create_new_score_list_for_score(score={})
     score_list = ScoreList.build_score_list_from_score(score)
     self.score_lists << score_list
-    score_list.save
     score_list
   end
 
-  def has_score_list_with_matching_score_list_thing(thing)
-    self.score_lists.each do |score_list|
-      if score_list.has_score_list_thing_matching_thing(thing)
-        return true
-      end
-    end
-    return false
+  def has_score_list_with_thing_filter(thing={})
+    !ScoreList.where(user: self, 'things.id' => thing._id).first.nil?
   end
   ``
-  def add_score_to_any_score_lists_with_matching_thing(score)
-    self.score_lists.each do |score_list|
-      if score_list.has_score_list_thing_matching_thing(score.thing)
-        score_list.scores << score
-      end
+  def add_score_to_any_score_list_with_with_thing_filter(score)
+    thing = score.thing
+    !ScoreList.where(user: self, 'things.id' => thing._id).each do |score_list|
+      score_list.scores << score
     end
   end
 

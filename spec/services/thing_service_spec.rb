@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe ThingPreviewService do
+RSpec.describe ThingService do
   before do
-    @autocomplete_service = ThingPreviewService.new
+    @thing_service = ThingService.new
     Rails.cache.clear
   end
 
@@ -23,16 +23,16 @@ RSpec.describe ThingPreviewService do
       # can't test Twitter::User profile_image_uri -> image_uri
 
       allow_any_instance_of(TwitterService).to receive(:search_for_twitter_accounts).with('patton').and_return([pattonoswalt_user, jeffpatton_user])
-      results = @autocomplete_service.preview_twitter_account('patton')
+      results = @thing_service.search(Scorethings::ThingTypes::TWITTER_ACCOUNT, 'patton')
       expect(results).to_not be_nil
       expect(results.length).to eq(2)
 
-      expect(results[0].external_id).to eq(11111)
-      expect(results[0].display_value).to eq('@pattonoswalt')
+      expect(results[0].external_id).to eq('11111')
+      expect(results[0].title).to eq('@pattonoswalt (Patton Oswalt)')
       expect(results[0].uri).to eq('https://twitter.com/pattonoswalt')
 
-      expect(results[1].external_id).to eq(22222)
-      expect(results[1].display_value).to eq('@jeffpatton')
+      expect(results[1].external_id).to eq('22222')
+      expect(results[1].title).to eq('@jeffpatton (Jeff Patton)')
       expect(results[1].uri).to eq('https://twitter.com/jeffpatton')
     end
   end

@@ -4,17 +4,15 @@ module Api
       skip_before_action :authenticate_request, only: [:show]
 
       def create
-        score_params = params.require(:score).permit(:points, :score_category_id,
-          :thing => [:type, :display_value, :external_id])
+        score_params = params.require(:score).permit(:points, :score_category_id, :thing_id)
 
-        thing = Thing.new(score_params[:thing])
-        if !thing.valid?
-          # TODO this handles invalidation and twitter account not found,
-          # refactor to seperate and give more detailed error messages
+
+        thing = Thing.where(id: score_params[:thing_id]).first
+        if thing.nil?
           return render json: {
-                            error: "failed to determine thing from params: #{thing.errors.full_messages}",
-                            status: :bad_request
-                        }, status: :bad_request
+                            error: "could not create score, could not find thing with id #{score_params[:thing_id]}",
+                            status: :not_found
+                        }, status: :not_found
         end
 
         score_category = ScoreCategory.where(id: score_params[:score_category_id]).first
@@ -23,7 +21,7 @@ module Api
           score_category = ScoreCategory.where(general: true).first
         end
 
-        score_params.delete(:thing)
+        score_params.delete(:things)
 
         score = Score.new(score_params)
         score.thing = thing
@@ -31,7 +29,7 @@ module Api
 
         begin
           @score = @current_user.create_score(score)
-          render template: '/api/v1/scores/create.jbuilder', status: :created, formats: [:json]
+          return render template: '/api/v1/scores/create.jbuilder', status: :created, formats: [:json]
         rescue Mongoid::Errors::Validations => error
           return render json: {
                             error: "invalid: #{error}",

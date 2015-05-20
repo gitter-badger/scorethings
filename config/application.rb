@@ -9,12 +9,13 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Scorething
+module Scorethings
   module ThingTypes
     # Thing types
-    TWITTER_ACCOUNT = 'TWITTER_ACCOUNT'
-    YOUTUBE_VIDEO = 'YOUTUBE_VIDEO'
-    HASHTAG = 'HASHTAG'
+    TWITTER_ACCOUNT = 'twitter_account'
+    TWITTER_TWEET = 'twitter_tweet'
+    YOUTUBE_VIDEO = 'youtube_video'
+    HASHTAG = 'hashtag'
   end
 
   class Application < Rails::Application
