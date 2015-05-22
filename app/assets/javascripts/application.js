@@ -23,7 +23,6 @@
 //= require angular-bootstrap/ui-bootstrap-tpls.min
 //= require spin.js/spin
 //= require angular-spinner/angular-spinner.min.js
-//= require lodash
 //= require typeahead.js/dist/bloodhound
 //= require typeahead.js/dist/typeahead.bundle
 //= require angular-typeahead/angular-typeahead.min
