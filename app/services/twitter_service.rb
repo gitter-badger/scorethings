@@ -1,53 +1,102 @@
 class TwitterService
-  def search_for_twitter_accounts(twitter_handle)
-    Rails.cache.fetch("twitter_handle_search_#{twitter_handle}", :expires_in => 2.hour) do
-      $twitter.user_search(twitter_handle)
-    end
-  end
-
-  def account_exists(twitter_uid)
-    !get_twitter_account_from_uid(twitter_uid).nil?
-  end
-
-  def get_twitter_account_from_uid(twitter_uid)
-    begin
-      Rails.cache.fetch("twitter_user_info_for_uid_#{twitter_handle}", :expires_in => 2.hour) do
-        $twitter.user(twitter_uid.to_i)
+  def search_for_twitter_accounts(query)
+    Rails.cache.fetch("twitter_handle_search_#{query}", :expires_in => 8.hour) do
+      # FIXME Nooooope...what if someone has a twitter account that starts with http?
+      if query.start_with?('http')
+        begin
+          twitter_user = $twitter.user(query)
+          return [map_user_to_thing(twitter_user)]
+        rescue Twitter::Error::NotFound
+          return []
+        end
+      else
+        search_results = $twitter.user_search(query)
+        return search_results.map do |search_result|
+          map_user_to_thing(search_result)
+        end
       end
-    rescue Twitter::Error::NotFound
-      nil
     end
   end
 
-  def get_twitter_account_from_handle(twitter_handle)
-    begin
-      Rails.cache.fetch("twitter_user_info_for_handle_#{twitter_handle}", :expires_in => 2.hour) do
-        $twitter.user(twitter_handle)
+  def search_for_twitter_tweets(query)
+    Rails.cache.fetch("search_for_twitter_tweets#{query}", :expires_in => 1.hour) do
+      begin
+        # FIXME Nooooope...what if someone has a twitter account that starts with http?
+        if query.start_with?('http')
+            status = query.match('\/(\d+)$')
+            if status.nil?
+              return []
+            else
+              begin
+                tweet = $twitter.status(status[1])
+                return [map_tweet_to_thing(tweet)]
+              rescue Twitter::Error::NotFound
+                return []
+              end
+            end
+        else
+          search_results = $twitter.search(query, result_type: 'recent').take(10)
+          return search_results.map do |search_result|
+            map_tweet_to_thing(search_result)
+          end
+        end
+      rescue Twitter::Error::TooManyRequests
+        puts "Too Many Twitter Requests"
+        return []
       end
-    rescue Twitter::Error::NotFound
-      nil
     end
   end
 
-  def get_twitter_account_thing_from_params(thing_input_params)
-    twitter_account = nil
-    if !thing_input_params[:external_id].nil?
-      twitter_uid = thing_input_params[:external_id]
-      twitter_account = get_twitter_account_from_uid(twitter_uid)
-    elsif !thing_input_params[:display_value].nil?
-      twitter_handle = thing_input_params[:display_value]
-
-      if twitter_handle.length > 0 && twitter_handle[0] == '@'
-        twitter_handle[0] = ''
+  def load_user(user_id)
+    Rails.cache.fetch("load_user(#{user_id})", :expires_in => 4.hour) do
+      begin
+        map_user_to_thing($twitter.user(user_id.to_i))
+      rescue Twitter::Error::NotFound
+        return nil
       end
-
-      twitter_account = get_twitter_account_from_handle(twitter_handle)
     end
+  end
 
-    if twitter_account.nil?
-      return nil
+  def load_tweet(tweet_status_id)
+    Rails.cache.fetch("load_tweet(#{tweet_status_id})", :expires_in => 1.hour) do
+      begin
+        map_tweet_to_thing($twitter.status(tweet_status_id))
+      rescue Twitter::Error::NotFound
+        return nil
+      end
     end
+  end
 
-    Thing.new(type: Scorethings::ThingTypes::TWITTER_ACCOUNT, display_value: twitter_account[:screen_name], external_id: twitter_account[:id])
+  # FIXME I'm not sure how to write tests for this, the mapping functions, yet.
+  # I need to figure out how to deal with mock Twitter::SearchResults, so
+  # I'm just going to not have the mapping functions private until I can,
+  # so I can have tests for it
+  #private
+
+  # TODO I think there should take advantage of mongoid doc inheritence, so tweets
+  # have more metadata particular to tweets, or youtube videos, or whatever
+  # but, I do want Things to be generic...I don't know....I'll think about it
+  # http://mongoid.org/en/mongoid/docs/documents.html#inheritance
+
+  def map_user_to_thing(twitter_user)
+    Thing.new(
+        title: "@#{twitter_user.screen_name} (#{twitter_user.name})",
+        external_id: twitter_user.id,
+        image_uri: twitter_user.profile_image_uri(:bigger).to_s,
+        uri: twitter_user.uri.to_s,
+        verified: twitter_user.verified?,
+        description: (twitter_user.description unless !twitter_user.description?),
+        type: Scorethings::ThingTypes::TWITTER_ACCOUNT)
+  end
+
+  def map_tweet_to_thing(tweet)
+    Thing.new(
+        title: "Tweet From @#{tweet.user.screen_name} at #{tweet.created_at.strftime("%A, %d %b %Y %l:%M %p")}",
+        external_id: tweet.id,
+        image_uri: tweet.user.profile_image_uri(:bigger).to_s,
+        uri: tweet.uri.to_s,
+        verified: tweet.user.verified?,
+        description: tweet.text,
+        type: Scorethings::ThingTypes::TWITTER_TWEET)
   end
 end

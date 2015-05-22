@@ -8,23 +8,23 @@ RSpec.describe Api::V1::ScoresController do
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
     @general_category = create(:score_category, general: true)
+    @twitter_account_thing = create(:thing, :twitter_account)
   end
 
-  describe "POST create" do
+  describe "POST score_thing" do
     it "should not allow creating score if user is not authenticated" do
       thing = create(:thing, :twitter_account)
 
       @request.env['HTTP_AUTHORIZATION'] = ""
       post_data = {
+          thing_type: thing.type,
+          external_id: thing.external_id,
           score: {
               score_category_id: @score_category._id,
-              points: 21,
-              thing_id: thing._id
+              points: 21
           },
       }
-
-      post :create, post_data
-
+      post :score_thing, post_data
       expect(response).to have_http_status(:unauthorized)
     end
 
@@ -35,78 +35,114 @@ RSpec.describe Api::V1::ScoresController do
 
       it "should create a new score for a youtube video" do
         post_data = {
+            thing_type: @youtube_video_thing.type,
+            external_id: @youtube_video_thing.external_id,
             score: {
-                thing_id: @youtube_video_thing._id,
                 score_category_id: @score_category._id,
                 points: 21
             }
         }
         expect(Score.all.length).to eq(0)
-        post :create, post_data
+        post :score_thing, post_data
         expect(response).to have_http_status(:created)
         expect(Score.all.length).to eq(1)
 
-        # FIXME this code and poorly designed specs will hide bugs in the future, need to add specs for TwitterService
-        expect(Score.first.thing.external_id).to eq(@youtube_video_thing.external_id)
+        expect(Score.first.thing).to eq(@youtube_video_thing)
+      end
+    end
+
+    describe "creating a score with a things type HASHTAG" do
+      before do
+        @hashtag_thing = create(:thing, :hashtag)
+      end
+
+      it "should create a new score for a hashtag thing" do
+        post_data = {
+            thing_type: @hashtag_thing.type,
+            external_id: @hashtag_thing.external_id,
+            score: {
+                score_category_id: @score_category._id,
+                points: 21
+            }
+        }
+        expect(Score.all.length).to eq(0)
+        post :score_thing, post_data
+        expect(response).to have_http_status(:created)
+        expect(Score.all.length).to eq(1)
+
+        expect(Score.first.thing).to eq(@hashtag_thing)
       end
     end
 
     describe "creating a score with a things type TWITTER_ACCOUNT" do
+      it "should create a new score for a twitter account thing" do
+        post_data = {
+            thing_type: @twitter_account_thing.type,
+            external_id: @twitter_account_thing.external_id,
+            score: {
+                score_category_id: @score_category._id,
+                points: 21
+            }
+        }
+        expect(Score.all.length).to eq(0)
+        post :score_thing, post_data
+        expect(response).to have_http_status(:created)
+        expect(Score.all.length).to eq(1)
+
+        expect(Score.first.thing).to eq(@twitter_account_thing)
+      end
+    end
+
+    describe "creating a score with a score category" do
       before do
-        @twitter_account_thing = create(:thing, :twitter_account)
+        @another_non_general_score_category = create(:score_category, general: false)
       end
 
-      it "should not create a new score for a twitter account thing when it cannot be retrieved with the thing id" do
+      it "should create a new score with the score category passed in params" do
         post_data = {
+            thing_type: @twitter_account_thing.type,
+            external_id: @twitter_account_thing.external_id,
             score: {
-                thing_id: 'notanidindb',
-                score_category_id: @score_category._id,
+                score_category_id: @another_non_general_score_category._id.to_s,
                 points: 21
             }
         }
-        expect(Score.all.length).to eq(0)
-        post :create, post_data
-        expect(Score.all.length).to eq(0)
-        expect(response).to have_http_status(:not_found)
+        post :score_thing, post_data
+
+        expect(Score.first.score_category).to eq(@another_non_general_score_category)
       end
 
-      it "should not create a new score without a thing id" do
+      it "should create a new score with the general score category when no score category passed in params" do
         post_data = {
+            thing_type: @twitter_account_thing.type,
+            external_id: @twitter_account_thing.external_id,
             score: {
-                thing_id: nil,
-                score_category_id: @score_category._id,
-                points: 21
-            }
-        }
-        expect(Score.all.length).to eq(0)
-        post :create, post_data
-        expect(response).to have_http_status(:not_found)
-      end
-
-      it "should create a new score with a general category if a score_category_id is not provided" do
-        allow_any_instance_of(ThingService).to receive(:load).with(@twitter_account_thing.type, @twitter_account_thing.external_id).and_return(@twitter_account_thing)
-
-        post_data = {
-            score: {
-                thing_id: @twitter_account_thing._id,
                 score_category_id: nil,
                 points: 21
             }
         }
-        expect(Score.all.length).to eq(0)
-        post :create, post_data
-        expect(response).to have_http_status(:created)
-        expect(Score.all.length).to eq(1)
+        post :score_thing, post_data
 
-        # TODO one of the problems with using factory in spec is that
-        # comparing result with expectation hides actual values
-        # maybe shouldn't use factory for this one, could hide bugs (what is factory's external_id)
-        expect(Score.first.thing.type).to eq(@twitter_account_thing.type)
-        expect(Score.first.thing.external_id).to eq(@twitter_account_thing.external_id)
-        expect(Score.first.thing.title).to eq(@twitter_account_thing.title)
-        expect(Score.first.score_category).to_not be_nil
-        expect(Score.first.score_category.general).to be true
+        expect(Score.first.score_category).to eq(@general_category)
       end
+    end
+
+    it "should create a new score with a general category if a score_category_id is not provided" do
+      post_data = {
+          thing_type: @twitter_account_thing.type,
+          external_id: @twitter_account_thing.external_id,
+          score: {
+              score_category_id: nil,
+              points: 21
+          }
+      }
+      expect(Score.all.length).to eq(0)
+      post :score_thing, post_data
+      expect(response).to have_http_status(:created)
+      expect(Score.all.length).to eq(1)
+
+      expect(Score.first.thing).to eq(@twitter_account_thing)
+      expect(Score.first.score_category.general?).to be true
     end
   end
 
@@ -166,6 +202,4 @@ RSpec.describe Api::V1::ScoresController do
       end
     end
   end
-
-
 end

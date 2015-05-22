@@ -7,18 +7,24 @@
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   <meta name="description" content="">
   <meta name="author" content="">
+  <meta name="twitter:widgets:theme" content="light">
+  <meta name="twitter:widgets:link-color" content="#55acee">
+  <meta name="twitter:widgets:border-color" content="#55acee">
   <%= favicon_link_tag 'favicon.png', type: 'image/png' %>
   <title>scorethings - score things</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
-
   <base href="/">
+  <script>
+    //copied from https://github.com/twbs/bootstrap/issues/12852#issuecomment-59621810
+      $(document).on('click','.navbar-collapse.in',function(e) {
+          if( $(e.target).is('a') && ( $(e.target).attr('class') != 'dropdown-toggle' ) ) {
+              $(this).collapse('hide');
+          }
+      });
+  </script>
 </head>
-<body ng-app="app" ng-controller="MainCtrl">
-    <%= yield %>
-    <br>
-    <br>
-    <br>
-    <br>
-</body>
+    <body ng-app="app">
+      <%= yield %>
+    </body>
 </html>

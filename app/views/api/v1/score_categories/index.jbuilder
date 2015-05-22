@@ -1,0 +1,1 @@
+json.score_categories @score_categories

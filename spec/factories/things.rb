@@ -5,6 +5,8 @@ FactoryGirl.define do
   sequence(:thing_uri) { |n| "http://resources.url.com/9283#{n}" }
   sequence(:thing_description) { |n| "Thing description #{n}" }
 
+  sequence(:thing_hashtag_external_id) { |n| "SomeHashtagAboutCats#{n}" }
+
   factory :thing, class: Thing do
     title { FactoryGirl.generate(:thing_title) }
     external_id { FactoryGirl.generate(:thing_external_id) }
@@ -24,12 +26,13 @@ FactoryGirl.define do
       type Scorethings::ThingTypes::YOUTUBE_VIDEO
     end
 
-    trait :hashtag do
-      type Scorethings::ThingTypes::HASHTAG
-      external_id nil
-      image_uri nil
-      uri nil
-      description nil
+    trait :hashtag do |h|
+      h.type Scorethings::ThingTypes::HASHTAG
+      h.external_id {FactoryGirl.generate(:thing_hashtag_external_id)}
+      h.title {"##{FactoryGirl.generate(:thing_hashtag_external_id)}"}
+      h.image_uri nil
+      h.uri nil
+      h.description nil
     end
   end
 end

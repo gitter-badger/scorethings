@@ -1,0 +1,45 @@
+<h2>Search Scores</h2>
+<form ng-submit="searchForScores()">
+    <div class="row col-xs-12">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text"
+                       id="query"
+                       class="form-control"
+                       placeholder="Example:  CoolCats or @pattonoswalt"
+                       ng-model="query">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" ng-disabled="!query" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div ng-show="scores.length">
+    <h3>Scores</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Thing</th>
+                <th>Category</th>
+                <th>Points</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="score in scores" >
+            <td>
+                <a ui-sref="things.detail({thingId: score.thing.id})">{{score.thing.title}}</a>
+            </td>
+            <td>
+                {{score.scoreCategory.name}}
+            </td>
+            <td>
+                <a ui-sref="scores.detail({scoreId: score.id})">{{score.points}}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

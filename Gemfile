@@ -45,6 +45,7 @@ gem 'angular-ui-bootstrap-rails'
 gem 'twitter'
 gem 'dalli'
 gem 'api_cache'
+gem 'mongoid_search'
 
 group :production, :staging do
   gem 'heroku_rails_deflate'

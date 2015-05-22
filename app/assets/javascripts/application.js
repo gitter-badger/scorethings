@@ -13,7 +13,7 @@
 //= require jquery/dist/jquery.min.js
 //= require angular/angular.min.js
 //= require angular-resource/angular-resource.min.js
-//= require angular-route/angular-route.min.js
+//= require angular-ui-router/release/angular-ui-router.min
 //= require angular-local-storage/dist/angular-local-storage.min
 //= require angular-jwt/dist/angular-jwt.min
 //= require angular-rails-templates.js
@@ -23,7 +23,6 @@
 //= require angular-bootstrap/ui-bootstrap-tpls.min
 //= require spin.js/spin
 //= require angular-spinner/angular-spinner.min.js
-//= require restangular/dist/restangular.min
 //= require lodash
 //= require typeahead.js/dist/bloodhound
 //= require typeahead.js/dist/typeahead.bundle
@@ -32,6 +31,7 @@
 //= require seiyria-bootstrap-slider/dist/bootstrap-slider.min
 //= require angular-bootstrap-slider/slider
 //= require angularjs-rails-resource/angularjs-rails-resource.min
+//= require angular-deferred-bootstrap/angular-deferred-bootstrap.min
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app

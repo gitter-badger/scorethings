@@ -10,16 +10,23 @@ Rails.application.routes.draw do
       get '/auth/twitter/callback' => 'auth_token#create'
       get '/auth/failure' => 'auth_token#failure'
 
+      get '/things/search' => 'things#search'
+      get '/things/find' => 'things#find'
+
+      post '/things/:thing_type/:external_id/scores' => 'scores#score_thing'
+
+      resources :things, except: [:destroy, :edit, :new] do
+        get 'scores' => 'things#scores'
+      end
+
+      get '/scores/search' => 'scores#search'
       resources :scores, except: [:edit, :new]
+
       resources :score_lists, except: [:edit, :new]
 
       get '/users/:id/scores' => 'users#scores'
 
       get '/score_categories' => 'score_categories#index'
-
-      resources :things, except: [:destroy, :edit, :new]
-
-      get '/things/:thing_type/search' => 'things#search'
     end
   end
 

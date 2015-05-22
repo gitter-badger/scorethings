@@ -1,0 +1,68 @@
+<h2>Search Things</h2>
+<h4><small>You can find a thing to score here</small></h4>
+<form ng-submit="findThing()">
+    <div class="col-xs-12 col-sm-3">
+        <div class="form-group">
+            <label for="thingType">Source</label>
+            <select id="thingType"
+                    class="form-control"
+                    ng-model="selectedThingType"
+                    ng-options="validThingTypeKey as validThingTypeValue.label for (validThingTypeKey, validThingTypeValue)  in validThingTypes">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-9">
+        <div class="form-group">
+            <label for="query">Thing</label>
+            <div class="input-group">
+                <input type="text"
+                       id="query"
+                       class="form-control"
+                       placeholder="{{validThingTypes[selectedThingType].examplePlaceholder}}"
+                       ng-model="query">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" ng-disabled="!query" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </span>
+                <span ng-show="selectedThingType == 'hashtag'" class="input-group-btn">
+                    <button class="btn btn-primary" ng-disabled="!query" ng-click="scoreHashtagQuery()">
+                        Score
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="col-xs-12" ng-show="things.length">
+    <h3>Things</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Verified</th>
+                <th class="hidden-xs">Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="thing in things">
+            <td>
+               <img ng-src="{{thing.imageUri}}">
+            </td>
+            <td>
+                <a target="_blank" ng-href="{{thing.uri}}">{{thing.title}}</a>
+            </td>
+            <td>
+                <i tooltip="Verified Somewhere" class="glyphicon glyphicon-ok" ng-show="thing.verified"></i>
+            </td>
+            <td class="hidden-xs">{{thing.description}}</td>
+            <td>
+                <button class="btn btn-primary btn-md" ng-click="scoreThing(thing)">Score</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

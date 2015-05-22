@@ -12,6 +12,7 @@ class User
 
   def to_builder
     Jbuilder.new do |user|
+      user.twitter_handle self.twitter_handle
       user.twitter_uid self.twitter_uid
       user.id self._id.to_s
     end
@@ -46,7 +47,7 @@ class User
   def has_score_list_with_thing_filter(thing={})
     !ScoreList.where(user: self, 'things.id' => thing._id).first.nil?
   end
-  ``
+
   def add_score_to_any_score_list_with_with_thing_filter(score)
     thing = score.thing
     !ScoreList.where(user: self, 'things.id' => thing._id).each do |score_list|

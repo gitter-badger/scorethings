@@ -2,6 +2,9 @@
 
 [![Build Status](https://api.travis-ci.org/manuisfunny/scorethings.png)](https://travis-ci.org/manuisfunny/scorethings/)
 
+[![Feature Requests](http://feathub.com/manuisfunny/scorethings?format=svg)](http://feathub.com/manuisfunny/scorethings)
+
+
 This is a website that will allow you to rank and score the things you like (or dislike).
 
 It is deployed to Heroku at http://www.scorethings.com  It will take a few seconds to load, because I'm hosting it with 1 web dyno and it sleeps after 1 hour of inactivity.

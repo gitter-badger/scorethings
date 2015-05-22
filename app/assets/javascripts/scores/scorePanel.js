@@ -1,4 +1,4 @@
-angular.module('app').directive('scorePanel', [function() {
+angular.module('app').directive('scorePanel', 'identity', [function(identity) {
     return {
         restrict: 'E',
         replace: true,
@@ -7,6 +7,9 @@ angular.module('app').directive('scorePanel', [function() {
         },
         templateUrl: 'scores/scorePanel.html',
         link: function($scope, element, attrs) {
+            $scope.isOwner = function(){
+                return identity.userId == $scope.score.user._id;
+            };
         }
     };
 }]);

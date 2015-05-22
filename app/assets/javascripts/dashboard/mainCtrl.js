@@ -1,4 +1,4 @@
-angular.module('app').controller('MainCtrl', ['$scope', '$rootScope', 'authService', 'notifier', function($scope, $rootScope, authService, notifier) {
+angular.module('app').controller('MainCtrl', ['scoreCategoriesData', '$scope', '$rootScope', 'authService', 'notifier', function(scoreCategoriesData, $scope, $rootScope, authService, notifier) {
     $rootScope.loginWithTwitter = function() {
         var openUrl = '/auth/twitter';
         window.$windowScope = $scope;
@@ -16,5 +16,9 @@ angular.module('app').controller('MainCtrl', ['$scope', '$rootScope', 'authServi
             authService.storeAuthToken(token);
             notifier.success('Logged in');
         });
+    };
+
+    $scope.init = function(scoreCategories) {
+        $scope.$evalAsync(scoreCategoriesData.set(scoreCategories));
     };
 }]);
