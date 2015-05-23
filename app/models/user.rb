@@ -1,20 +1,31 @@
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
-  # FIXME move twitter uid and handle(?) into new AuthProvider embeded doc
-  # want to have multiple providers (Google, Facebook, SoundCloud, etc.)
-  # allow user to link different accounts to one scorethings account
-  field :twitter_uid, type: String
-  field :twitter_handle, type: String
+  include Mongoid::Search
+  include Mongoid::Token
 
-  has_many :scores, autosave: true
-  has_many :score_lists, autosave: true
+  field :username, type: String
+  field :description, type: String
+  embeds_one :auth_provider
+
+  has_many :scores, autosave: true, dependent: :delete
+  has_many :score_lists, autosave: true, dependent: :delete
+
+  validates_presence_of :username
+  validates_length_of :description, maximum: 150
+  validates_format_of :username, with: /\A[a-z0-9_-]{3,16}\z/
+
+  token :contains => :fixed_numeric, :length => 8
+  search_in :username, :description
 
   def to_builder
     Jbuilder.new do |user|
-      user.twitter_handle self.twitter_handle
-      user.twitter_uid self.twitter_uid
+      user.username self.username
+      user.description self.description
       user.id self._id.to_s
+      if self.auth_provider.public?
+        user.auth_provider self.auth_provider.to_builder
+      end
     end
   end
 
@@ -60,7 +71,7 @@ class User
   # rather than on user?  security vulnerability?
   def add_score_to_score_list(score_list, score)
     if self != score_list.user
-      raise UnauthorizedModificationError
+      raise Exceptions::UnauthorizedModificationError
     end
 
     score_list.scores << score
@@ -68,7 +79,7 @@ class User
 
   def remove_score_from_score_list(score_list, score)
     if self != score_list.user
-      raise UnauthorizedModificationError
+      raise Exceptions::UnauthorizedModificationError
     end
 
     score_list.scores.delete(score)
@@ -77,28 +88,28 @@ class User
   # TODO common logic between delete and change score
   def delete_score(score)
     if self != score.user
-      raise UnauthorizedModificationError
+      raise Exceptions::UnauthorizedModificationError
     end
     score.destroy
   end
 
   def delete_score_list(score_list)
     if self != score_list.user
-      raise UnauthorizedModificationError
+      raise Exceptions::UnauthorizedModificationError
     end
     score_list.destroy
   end
 
   def change_score(score, update_attrs)
     if self != score.user
-      raise UnauthorizedModificationError
+      raise Exceptions::UnauthorizedModificationError
     end
     score.update_attributes(update_attrs)
   end
 
   def change_score_list(score_list, update_attrs)
     if self != score_list.user
-      raise UnauthorizedModificationError
+      raise Exceptions::UnauthorizedModificationError
     end
     score_list.update_attributes(update_attrs)
   end
@@ -108,22 +119,38 @@ class User
     # http://railsapps.github.io/tutorial-rails-mongoid-omniauth.html
 
     create! do |user|
-      user.twitter_uid = auth[:uid]
-
-      auth_info = auth[:info]
-      if auth_info.nil?
-        # TODO throw error if you can't get the twitter nickname for the handle?
+      if auth[:provider] == 'twitter'
+        auth_provider = AuthProvider.create_twitter_provider(auth)
+        if !auth_provider.valid?
+          # TODO is this a security issue, the full error messages?  too much disclosure of information for hackers?
+          # raise AuthenticationFailureError "failed to create user with omniauth provider: #{provider.errors.full_message}"
+          raise Exceptions::AuthenticationFailureError
+        end
+        user.username = auth_provider.handle
+        user.auth_provider = auth_provider
+      else
+        raise Exceptions::AuthenticationFailureError
       end
-
-      user.twitter_handle = auth_info[:nickname]
     end
   end
+
+  def self.find_by_omniauth(auth)
+    # TODO is this a security issue, the reason why authentication failed?
+    # too much disclosure of information for hackers?
+
+    # TODO should there be a check that
+    # the auth[:type] is only a valid type (twitter, google, etc.)?
+    if auth.nil? || auth[:uid].nil? || auth[:provider].nil?
+      raise Exceptions::AuthenticationFailureError
+    end
+    User.where('auth_provider.uid' => auth[:uid], 'auth_provider.type' => auth[:provider]).first
+  end
+
 
   def generate_auth_token
     payload = {
         user_id: self._id.to_s,
-        twitter_handle: self.twitter_handle,
-        twitter_uid: self.twitter_uid
+        username: self.username
     }
     AuthToken.encode(payload)
   end

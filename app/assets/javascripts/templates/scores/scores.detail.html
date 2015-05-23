@@ -1,5 +1,5 @@
 <h3>Score for {{score.thing.title}}</h3>
-by {{score.user.twitterHandle}}
+by {{score.user.username}}
 <div>
     <h3>{{score.scoreCategory.name}}: {{score.points}}</h3>
 </div>
@@ -15,7 +15,7 @@ by {{score.user.twitterHandle}}
     <h3>Score Lists</h3>
     <ul>
         <li ng-repeat="scoreList in score.scoreLists">
-            <a ng-href="#/score_lists/{{scoreList.id}}">{{scoreList.name}}</a>
+            <a ng-href="#/score_lists/{{scoreList.token}}">{{scoreList.name}}</a>
         </li>
     </ul>
 </div>

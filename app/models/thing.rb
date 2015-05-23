@@ -1,6 +1,7 @@
 class Thing
   include Mongoid::Document
   include Mongoid::Search
+  include Mongoid::Token
 
   field :title, type: String
   field :type, type: String
@@ -10,9 +11,10 @@ class Thing
   field :description, type: String
   field :verified, type: Boolean, default: false
 
-  has_many :scores, autosave: true
+  has_many :scores, autosave: true, dependent: :delete
   has_and_belongs_to_many :score_lists
 
+  token :contains => :fixed_numeric, :length => 8
   search_in :title, :description
 
   validates_presence_of :external_id, :title, :type
@@ -25,6 +27,7 @@ class Thing
   def to_builder
     Jbuilder.new do |thing|
       thing.id self.id.to_s
+      thing.token self.token
       thing.description self.description
       thing.title self.title
       thing.type self.type

@@ -1,10 +1,16 @@
 class ScoreList
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Search
+  include Mongoid::Token
+
   field :name, type: String
   has_and_belongs_to_many :scores, inverse_of: :score_lists
   belongs_to :user
   has_and_belongs_to_many :things
+
+  token :contains => :fixed_numeric, :length => 8
+  search_in :name
 
   validates_presence_of :name
   validates_presence_of :user
@@ -12,6 +18,7 @@ class ScoreList
   def to_builder
     Jbuilder.new do |score_list|
       score_list.name self.name
+      score_list.token self.token
       score_list.id self.id.to_s
       score_list.num_of_scores self.scores.length
     end

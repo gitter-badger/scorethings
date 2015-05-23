@@ -5,7 +5,6 @@ angular.module('app').controller('ThingsDetailScoresCtrl', ['$window', '$scope',
     console.log(Thing);
     Thing.get(thingId + '/scores').then(
         function successGet(thing) {
-            console.log(thing);
             $scope.thing = thing;
         },
         function errorGet(response) {

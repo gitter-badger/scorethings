@@ -8,7 +8,7 @@ angular.module('app')
             tokenName: 'authToken',
             set: function(token) {
                 localStorageService.set(this.tokenName, token);
-                identity.twitterHandle = this.getTwitterHandle();
+                identity.username = this.getUsername();
                 identity.userId = this.getUserId();
             },
             isSet: function() {
@@ -22,15 +22,15 @@ angular.module('app')
                 var payload = token && jwtHelper.decodeToken(token);
                 return payload && payload[attr];
             },
-            getTwitterHandle: function() {
-                return this.getAttr('twitter_handle');
+            getUsername: function() {
+                return this.getAttr('username');
             },
             getUserId: function() {
                 return this.getAttr('user_id');
             },
             clear: function() {
                 localStorageService.remove(this.tokenName);
-                identity.twitterHandle = this.getTwitterHandle();
+                identity.username = null;
             }
         };
     }])

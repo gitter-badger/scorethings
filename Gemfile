@@ -46,6 +46,7 @@ gem 'twitter'
 gem 'dalli'
 gem 'api_cache'
 gem 'mongoid_search'
+gem 'mongoid_token'
 
 group :production, :staging do
   gem 'heroku_rails_deflate'

@@ -1,2 +1,0 @@
-class UnauthorizedModificationError < StandardError
-end

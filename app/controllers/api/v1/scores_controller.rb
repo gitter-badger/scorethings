@@ -82,7 +82,7 @@ module Api
         begin
           score_params = params.require(:score).permit(:points, :score_category_id)
           @current_user.change_score(@score, score_params)
-        rescue UnauthorizedModificationError
+        rescue Exceptions::UnauthorizedModificationError
           return render json: {
                             error: "failed to change score for id: #{params[:id]}",
                             status: :forbidden
@@ -91,33 +91,35 @@ module Api
       end
 
       def destroy
-        @score = Score.where(id: params[:id]).first
-        if @score.nil?
-          return render json: {
-                            error: "failed to score for id: #{params[:id]}",
-                            status: :not_found
-                        }, status: :not_found
-        end
+        id = params.require(:id)
         begin
+          @score = Score.find(id)
           @current_user.delete_score(@score)
           return render json: {
                             status: :ok
                         }, status: :ok
-        rescue UnauthorizedModificationError
+        rescue Mongoid::Errors::DocumentNotFound
           return render json: {
-                            error: "failed to delete score for id: #{params[:id]}",
+                            error: "failed to score for id: #{id}",
+                            status: :not_found
+                        }, status: :not_found
+        rescue Exceptions::UnauthorizedModificationError
+          return render json: {
+                            error: "failed to delete score for id: #{id}",
                             status: :forbidden
                         }, status: :forbidden
         end
       end
 
       def show
-        @score = Score.where(id: params[:id]).first
-        if @score.nil?
-          return render json: {
-                            error: "failed to score for id: #{params[:id]}",
-                            status: :not_found
-                        }, status: :not_found
+        id = params.require(:id)
+        begin
+          @score = Score.find(id)
+        rescue Mongoid::Errors::DocumentNotFound
+            return render json: {
+                              error: "failed to score for id: #{params[:id]}",
+                              status: :not_found
+                          }, status: :not_found
         end
       end
    end

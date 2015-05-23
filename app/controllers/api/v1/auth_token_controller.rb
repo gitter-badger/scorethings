@@ -5,17 +5,27 @@ module Api
 
       def create
         auth = request.env['omniauth.auth']
-        if auth.nil?
-          return render status: :unauthorized, template: 'auth_token/authentication_failure'
-        end
 
-        user = User.where(twitter_uid: auth['uid']).first || User.create_with_omniauth(auth)
-
-        if user
+        begin
+          user = User.find_by_omniauth(auth)
+          if user.nil?
+            user = User.create_with_omniauth(auth)
+          end
           @auth_token = user.generate_auth_token
-          return render status: :ok, template: 'auth_token/authentication_success'
-        else
-          return render status: :unauthorized, template: 'auth_token/authentication_failure'
+          respond_to do |format|
+            format.html { render 'auth_token/authentication_success' }
+            format.json { head :ok, json: @auth_token }
+          end
+        rescue Exceptions::AuthenticationFailureError
+          return respond_unauthorized
+        end
+      end
+
+      private
+      def respond_unauthorized
+        respond_to do |format|
+          format.html { render 'auth_token/authentication_failure', status: :unauthorized }
+          format.json { head :unauthorized }
         end
       end
     end

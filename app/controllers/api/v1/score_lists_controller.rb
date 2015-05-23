@@ -28,7 +28,7 @@ module Api
         begin
           score_list_params = params.require(:score_list).permit(:name)
           @current_user.change_score_list(@score_list, score_list_params)
-        rescue UnauthorizedModificationError
+        rescue Exceptions::UnauthorizedModificationError
           return render json: {
                             error: "failed to change score_list for id: #{params[:id]}",
                             status: :forbidden
@@ -49,7 +49,7 @@ module Api
           return render json: {
                             status: :ok
                         }, status: :ok
-        rescue UnauthorizedModificationError
+        rescue Exceptions::UnauthorizedModificationError
           return render json: {
                             error: "failed to delete score_list for id: #{params[:id]}",
                             status: :forbidden

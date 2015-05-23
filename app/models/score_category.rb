@@ -1,18 +1,23 @@
 class ScoreCategory
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Token
+
   field :name, type: String
   field :description, type: String
   field :general, type: Boolean, default: false
+
+  token :contains => :fixed_numeric, :length => 8
 
   validates_presence_of :name, :description
   validates_uniqueness_of :name
 
   def to_builder
-    Jbuilder.new do |category|
-      category.id self.id.to_s
-      category.name self.name
-      category.description self.description
+    Jbuilder.new do |score_category|
+      score_category.id self.id.to_s
+      score_category.token self.token
+      score_category.name self.name
+      score_category.description self.description
     end
   end
 

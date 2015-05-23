@@ -74,11 +74,20 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'scoreLists/scoreLists.search.html',
                     controller: 'ScoreListsCtrl'
                 }).
-                /* score list show */
                 state('scoreLists.new', {
                     url: '/new',
                     templateUrl: 'scoreLists/scoreLists.new.html',
                     controller: 'ScoreListsNewCtrl'
+                }).
+                state('scoreLists.featured', {
+                    url: '/featured',
+                    templateUrl: 'scoreLists/scoreLists.featured.html',
+                    controller: 'ScoreListsFeaturedCtrl'
+                }).
+                state('scoreLists.scorewars', {
+                    url: '/scorewars',
+                    templateUrl: 'scoreLists/scoreLists.scorewars.html',
+                    controller: 'ScoreListsScorewarsCtrl'
                 }).
                 state('scoreLists.detail', {
                     url: '/:scoreListId',
@@ -123,11 +132,16 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 templateUrl: 'users/users.html',
                 controller: 'UsersMainCtrl'
             }).
-            state('users.detail', {
-                url: '/:userId',
-                templateUrl: 'users/users.detail.html',
-                controller: 'UsersDetailCtrl'
-            }).
+                state('users.search', {
+                    url: '/search',
+                    templateUrl: 'users/users.search.html',
+                    controller: 'UsersSearchCtrl'
+                }).
+                state('users.detail', {
+                    url: '/:userId',
+                    templateUrl: 'users/users.detail.html',
+                    controller: 'UsersDetailCtrl'
+                }).
                 state('users.detail.scores', {
                     url: '/scores',
                     templateUrl: 'users/users.detail.scores.html',

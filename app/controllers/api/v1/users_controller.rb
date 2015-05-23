@@ -9,6 +9,11 @@ module Api
         @scores = user.scores
       end
 
+      def search
+        query = params[:query]
+        @scores = User.full_text_search(query)
+      end
+
       def user_from_params
         user_id = params[:id]
         begin

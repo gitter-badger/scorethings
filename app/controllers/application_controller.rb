@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   helper_method :correct_user?
 
 
-  rescue_from NotAuthenticatedError do
+  rescue_from Exceptions::NotAuthenticatedError do
     render json: {
                error: 'Not Authorized'
            },
@@ -31,9 +31,9 @@ class ApplicationController < ActionController::Base
 
   def authenticate_request
     if auth_token_expired?
-      fail AuthenticationTimeoutError
+      fail Exceptions::AuthenticationTimeoutError
     elsif !@current_user
-      fail NotAuthenticatedError
+      fail Exceptions::NotAuthenticatedError
     end
   end
 

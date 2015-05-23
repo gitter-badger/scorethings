@@ -5,6 +5,6 @@ angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-
         return $httpProvider.interceptors.push('AuthInterceptor');
     }])
     .run(['identity', 'AuthToken', function(identity, AuthToken) {
-        identity.twitterHandle = AuthToken.getTwitterHandle();
+        identity.username = AuthToken.getUsername();
         identity.userId = AuthToken.getUserId();
     }]);

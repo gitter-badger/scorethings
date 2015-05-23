@@ -7,8 +7,4 @@ angular.module('app').controller('ScoresSearchCtrl', ['$scope', '$stateParams', 
             return;
         });
     };
-    $scope.cloneScore = function(score) {
-        console.log('cloningScore');
-        console.log(score);
-    };
 }]);

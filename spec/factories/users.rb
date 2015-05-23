@@ -1,11 +1,13 @@
 FactoryGirl.define do
+  sequence(:user_description) { |n| "User Description #{n}" }
+
   factory :user_alpha, class: User do
-    twitter_handle 'manuisfunny'
-    twitter_uid '1234'
+    username 'manuisfunny'
+    description { FactoryGirl.generate(:user_description) }
   end
 
   factory :user_bravo, class: User do
-    twitter_handle 'bravo'
-    twitter_uid '8888'
+    username 'bravo'
+    description { FactoryGirl.generate(:user_description) }
   end
 end

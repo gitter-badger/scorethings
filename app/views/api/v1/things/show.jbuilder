@@ -1,5 +1,6 @@
 json.thing do
   json.id @thing.id.to_s
+  json.token @thing.token
   json.title @thing.title
   json.type @thing.type
   json.external_id @thing.external_id

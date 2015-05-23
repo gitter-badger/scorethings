@@ -45,4 +45,18 @@ RSpec.describe ScoreList do
     end
   end
 
+  describe "delete if user is deleted" do
+    it "should delete all scores that belonged to a user when the user is deleted" do
+      other_user = create(:user_bravo)
+
+      expect(ScoreList.all.length).to eq(1)
+      other_user.create_score_list(name: 'something')
+      expect(ScoreList.all.length).to eq(2)
+
+      expect(User.all.length).to eq(2)
+      @user.destroy!
+      expect(User.all.length).to eq(1)
+      expect(ScoreList.all.length).to eq(1)
+    end
+  end
 end
