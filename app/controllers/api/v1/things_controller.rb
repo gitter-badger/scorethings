@@ -2,7 +2,7 @@ module Api
   module V1
     class ThingsController < ApplicationController
       # TODO allow unauthenticated read?
-      skip_before_action :authenticate_request, :current_user, only: [:search, :show, :score]
+      skip_before_action :authenticate_request, :current_user, only: [:search, :show, :find]
 
       def create
         thing_params = params.require(:thing).permit(:type, :external_id, :title)

@@ -41,6 +41,8 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'ThingS
     };
     $scope.scoreHashtagQuery = function() {
         var hashtagExternalId = stripPrefix($scope.query);
+
+        console.log('scoring hashtag ' + hashtagExternalId);
         new ThingScore({
             externalId: hashtagExternalId,
             thingType: $scope.selectedThingType,
@@ -52,7 +54,6 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'ThingS
             function(response) {
                 var createdScore = response.score;
                 notifier.success('created score for thing: ' + createdScore.thing.title);
-                console.log(createdScore);
             },
             function() {
                 notifier.error('failed to created score');
@@ -74,7 +75,7 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'ThingS
         if(!$scope.query.length) return;
 
         if($scope.selectedThingType == 'hashtag') {
-            return $scope.scoreHashtagQuery();
+            return;
         }
 
         Thing.get('search', {thingType: $scope.selectedThingType, query: $scope.query}).then(function(things) {
