@@ -1,4 +1,4 @@
-angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'ThingScore', 'notifier', function($scope, Thing, ThingScore, notifier) {
+angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifier', 'scoreModalFactory', function($scope, Thing, notifier, scoreModalFactory) {
     function validThingType(label, examplePlaceholder) {
         return {
             label: label,
@@ -22,6 +22,12 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'ThingS
 
     $scope.scoreThing = function(thing) {
         console.log(thing);
+        var scoreInput = {thing: thing};
+        scoreModalFactory.openModal(scoreInput, function(response) {
+            console.log('in thing search');
+            console.log(response);
+        });
+        /*
         new ThingScore({
             externalId: thing.externalId,
             thingType: $scope.selectedThingType,
@@ -38,10 +44,17 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'ThingS
                 function() {
                     notifier.error('failed to created score');
                 });
+                */
     };
     $scope.scoreHashtagQuery = function() {
         var hashtagExternalId = stripPrefix($scope.query);
+        $scope.scoreThing({
+            externalId: hashtagExternalId,
+            type: 'hashtag',
+            title: '#' + $scope.query
+        });
 
+        /*
         console.log('scoring hashtag ' + hashtagExternalId);
         new ThingScore({
             externalId: hashtagExternalId,
@@ -58,11 +71,13 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'ThingS
             function() {
                 notifier.error('failed to created score');
             });
+            */
     };
 
     function stripPrefix(value) {
         if(!value) return;
 
+        // FIXME strip off all prefix, not just first char
         if((value[0] == '@' || value[0] == '#') && value.length > 1) {
             return value.substr(1);
         }
@@ -70,7 +85,7 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'ThingS
     }
 
 
-    $scope.findThing = function() {
+    $scope.searchThing = function() {
         $scope.query = stripPrefix($scope.query);
         if(!$scope.query.length) return;
 
