@@ -115,23 +115,21 @@ class User
   end
 
   def self.create_with_omniauth(auth)
-    # copied from
-    # http://railsapps.github.io/tutorial-rails-mongoid-omniauth.html
-
     create! do |user|
-      if auth[:provider] == 'twitter'
-        auth_provider = AuthProvider.create_twitter_provider(auth)
-        if !auth_provider.valid?
-          # TODO is this a security issue, the full error messages?  too much disclosure of information for hackers?
-          # raise AuthenticationFailureError "failed to create user with omniauth provider: #{provider.errors.full_message}"
-          raise Exceptions::AuthenticationFailureError
-        end
-        user.username = auth_provider.handle
-        user.auth_provider = auth_provider
-      else
+      auth_provider = AuthProvider.build_auth_provider(auth)
+      if !auth_provider.valid?
+        # TODO is this a security issue, the full error messages?  too much disclosure of information for hackers?
+        # raise AuthenticationFailureError "failed to create user with omniauth provider: #{provider.errors.full_message}"
         raise Exceptions::AuthenticationFailureError
       end
+      random_username = User.generate_random_username
+      user.username = random_username
+      user.auth_provider = auth_provider
     end
+  end
+
+  def self.generate_random_username
+    "user_#{Random.new.rand(0..30000000)}"
   end
 
   def self.find_by_omniauth(auth)

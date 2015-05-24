@@ -24,18 +24,23 @@ RSpec.describe User do
       expect(user.auth_provider.type).to eq('twitter')
       expect(user.auth_provider.uid).to eq('2121')
       expect(user.auth_provider.handle).to eq('alpha')
-      expect(user.username).to eq('alpha')
+    end
+
+    it "should create a new user account with a google auth" do
+      auth = mock_auth('google', '2121', {name: 'John Doe'})
+
+      expect(User.all.length).to eq(0)
+      user = User.create_with_omniauth(auth)
+
+      expect(User.all.length).to eq(1)
+      expect(user.auth_provider.type).to eq('google')
+      expect(user.auth_provider.uid).to eq('2121')
+      expect(user.auth_provider.handle).to eq('John Doe')
+      expect(user.username).to_not be_nil
     end
 
     it "should not create a new user account without a twitter auth uid" do
       auth = mock_auth('twitter', nil, {nickname: 'alpha'})
-      expect {
-        User.create_with_omniauth(auth)
-      }.to raise_error(Exceptions::AuthenticationFailureError)
-    end
-
-    it "should not create a new user account with an unsupported auth" do
-      auth = mock_auth('somecoolprovider', '2121', {nickname: 'alpha'})
       expect {
         User.create_with_omniauth(auth)
       }.to raise_error(Exceptions::AuthenticationFailureError)

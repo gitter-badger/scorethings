@@ -33,8 +33,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'puma'
 
 gem 'devise'
-gem 'omniauth'
+gem 'omniauth-oauth2'
 gem 'omniauth-twitter'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-github'
+gem 'omniauth-soundcloud'
+
 gem 'jwt'
 gem 'angular-rails-templates', '~> 0.1.4'
 gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'

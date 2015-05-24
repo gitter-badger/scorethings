@@ -2,12 +2,12 @@ Rails.application.routes.draw do
   # FIXME even though I modified the callback URL settings at apps.twitter.com,
   # I think omniauth middleware has the old/non nested URL callback hardcoded somewhere
   # until I can fix that, I'll just keep this outside of the namespace as a hack
-  get '/auth/twitter/callback' => 'api/v1/auth_token#create'
-  get '/auth/twitter' => 'api/v1/auth_token#create'
+  get '/auth/:provider/callback' => 'api/v1/auth_token#create'
+  get '/auth/:provider' => 'api/v1/auth_token#create'
 
   namespace :api do
     namespace :v1 do
-      get '/auth/twitter/callback' => 'auth_token#create'
+      get '/auth/:provider/callback' => 'auth_token#create'
       get '/auth/failure' => 'auth_token#failure'
 
       get '/things/search' => 'things#search'

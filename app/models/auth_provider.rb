@@ -29,7 +29,8 @@ class AuthProvider
     end
   end
 
-  def self.create_twitter_provider(auth)
+  def self.build_auth_provider(auth)
+    # TODO special error messages, or would that expose security info for hackers?
     auth_uid = auth[:uid]
     if auth_uid.nil?
       raise Exceptions::AuthenticationFailureError
@@ -40,13 +41,18 @@ class AuthProvider
       raise Exceptions::AuthenticationFailureError
     end
 
-    auth_handle = auth_info[:nickname]
+    auth_handle = auth_info[:nickname] || auth_info[:name]
+    if auth_handle.nil?
+      raise Exceptions::AuthenticationFailureError
+    end
+
+    auth_provider = auth[:provider]
     if auth_handle.nil?
       raise Exceptions::AuthenticationFailureError
     end
 
     AuthProvider.new(
-      type: 'twitter',
+      type: auth_provider,
       uid: auth_uid,
       handle: auth_handle
     )

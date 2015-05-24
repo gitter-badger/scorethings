@@ -79,7 +79,7 @@ GEM
     dalli (2.7.4)
     database_cleaner (1.4.1)
     debug_inspector (0.0.2)
-    devise (3.4.1)
+    devise (3.5.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -181,6 +181,7 @@ GEM
       connection_pool (~> 2.0)
       optionable (~> 0.2.0)
     multi_json (1.11.0)
+    multi_xml (0.5.5)
     multipart-post (2.0.0)
     naught (1.0.0)
     nenv (0.2.0)
@@ -190,12 +191,31 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     oauth (0.4.7)
+    oauth2 (0.9.4)
+      faraday (>= 0.8, < 0.10)
+      jwt (~> 1.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (~> 1.2)
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
       rack (~> 1.0)
+    omniauth-github (1.1.2)
+      omniauth (~> 1.0)
+      omniauth-oauth2 (~> 1.1)
+    omniauth-google-oauth2 (0.2.6)
+      omniauth (> 1.0)
+      omniauth-oauth2 (~> 1.1)
     omniauth-oauth (1.1.0)
       oauth
       omniauth (~> 1.0)
+    omniauth-oauth2 (1.1.2)
+      faraday (>= 0.8, < 0.10)
+      multi_json (~> 1.3)
+      oauth2 (~> 0.9.3)
+      omniauth (~> 1.2)
+    omniauth-soundcloud (1.0.1)
+      omniauth-oauth2 (~> 1.1.0)
     omniauth-twitter (1.2.0)
       json (~> 1.3)
       omniauth-oauth (~> 1.1)
@@ -268,7 +288,7 @@ GEM
       rspec-mocks (~> 3.2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
-    sass (3.4.13)
+    sass (3.4.14)
     sass-rails (5.0.3)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.1)
@@ -349,7 +369,10 @@ DEPENDENCIES
   mongoid-rspec (~> 2.1.0)
   mongoid_search
   mongoid_token
-  omniauth
+  omniauth-github
+  omniauth-google-oauth2
+  omniauth-oauth2
+  omniauth-soundcloud
   omniauth-twitter
   puma
   rails (= 4.2.1)

@@ -1,0 +1,5 @@
+<a ng-class="'btn btn-lg btn-block btn-social btn-' + (provider.name)"
+   ng-click="respondToClick(provider)">
+    <i ng-class="'fa fa-' + (provider.faName || provider.name)"></i>
+    {{provider.title}}
+</a>
