@@ -15,12 +15,17 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 state('scores.search', {
                     url: '/search',
                     templateUrl: 'scores/scores.search.html',
-                    controller: 'ScoresSearchCtrl'
+                    controller: 'ScoresSearchCtrl',
+                    reloadOnSearch : false
                 }).
                 state('scores.featured', {
                     url: '/featured',
                     templateUrl: 'scores/scores.featured.html',
                     controller: 'ScoresFeaturedCtrl'
+                }).
+                state('scores.scoreAThing', {
+                    url: '/scoreAThing',
+                    templateUrl: 'scores/scores.scoreAThing.html'
                 }).
                 state('scores.detail', {
                     url: '/:scoreId',
@@ -38,7 +43,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 state('things.search', {
                     url: '/search',
                     templateUrl: 'things/things.search.html',
-                    controller: 'ThingsSearchCtrl'
+                    reloadOnSearch : false
                 }).
                 state('things.featured', {
                     url: '/featured',

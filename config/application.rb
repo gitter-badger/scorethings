@@ -19,7 +19,7 @@ module Scorethings
   end
 
   class Application < Rails::Application
-    config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
+    config.assets.paths << Rails.root.join('bower_components')
     config.assets.enabled = true
   end
 end
