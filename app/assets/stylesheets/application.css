@@ -13,8 +13,8 @@
  *= require_tree .
  *= require bootswatch/readable/bootstrap.min
  *= require toastr/toastr.min.css
+ *= require font-awesome
  *= require bootstrap-social/bootstrap-social.css
- *= require font-awesome/css/font-awesome
  *= require seiyria-bootstrap-slider/dist/css/bootstrap-slider.min
  *= require_self
  */
