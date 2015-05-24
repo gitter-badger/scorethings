@@ -1,4 +1,13 @@
 angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.rule(function ($injector, $location) {
+            //what this function returns will be set as the $location.url
+            var path = $location.path(), normalized = path.toLowerCase();
+            if (path != normalized) {
+                //instead of returning a new url string, I'll just change the $location.path directly so I don't have to worry about constructing a new url string and so a new state change is not triggered
+                $location.replace().path(normalized);
+            }
+            // because we've returned nothing, no state change occurs
+        });
         $urlRouterProvider.otherwise('/');
         $stateProvider.
             state('home', {
@@ -24,7 +33,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'ScoresFeaturedCtrl'
                 }).
                 state('scores.scoreAThing', {
-                    url: '/scoreAThing',
+                    url: '/score_a_thing',
                     templateUrl: 'scores/scores.scoreAThing.html'
                 }).
                 state('scores.detail', {
@@ -70,7 +79,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                  score lists
             */
             state('scoreLists', {
-                url: '/scoreLists',
+                url: '/score_lists',
                 templateUrl: 'scoreLists/scoreLists.html',
                 controller: 'ScoreListsMainCtrl'
             }).
@@ -153,7 +162,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'UsersDetailScoresCtrl'
                 }).
                 state('users.detail.scoreLists', {
-                    url: '/scoreLists',
+                    url: '/score_lists',
                     templateUrl: 'users/users.detail.scoreLists.html',
                     controller: 'UsersDetailScoreListsCtrl'
                 }).
