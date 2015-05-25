@@ -1,6 +1,7 @@
 class ThingService
   def initialize
     @twitter_service = TwitterService.new
+    @youtube_service = YoutubeService.new
   end
 
   def search(thing_type, query)
@@ -36,15 +37,19 @@ class ThingService
     if query[0] == '@'
       query[0] = ''
     end
-    return @twitter_service.search_for_twitter_accounts(query)
+    @twitter_service.search_for_twitter_accounts(query)
   end
 
   def search_twitter_tweet(query)
-    return @twitter_service.search_for_twitter_tweets(query)
+    @twitter_service.search_for_twitter_tweets(query)
   end
 
   def search_youtube_videos(query)
-    []
+    @youtube_service.search_for_videos(query)
+  end
+
+  def load_youtube_video(video_id)
+    @youtube_service.load_video(video_id)
   end
 
   def load_twitter_account(user_id)

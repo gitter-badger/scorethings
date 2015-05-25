@@ -38,8 +38,10 @@
     </form>
 </div>
 <div ng-show="status == SAVED">
-    <h1>Score Saved</h1>
-    <div>
-        <a ui-sref="scores.detail({scoreId: score.id})" ng-click="close()">View Score</a>
+    <div class="modal-header">
+        <h3 class="modal-title">Score Saved</h3>
+    </div>
+    <div class="modal-body">
+        <a ui-sref="scores.detail({scoreId: score.token})" ng-click="close()">View That Score</a>
     </div>
 </div>

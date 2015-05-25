@@ -16,7 +16,6 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifi
 
     $scope.$watch('selectedThingType', function() {
         $scope.things = [];
-        $scope.query = '';
     });
 
 

@@ -1,21 +1,58 @@
 <h1>scorethings</h1>
-<ol>
-    <li><h4>Score things on Twitter and YouTube.</h4></li>
-    <li><h4>Defend your score with a short comment.</h4></li>
-    <li><h4>View and judge other people's scores....about things.</h4></li>
-</ol>
-<br>
-<div><h4>Try it out.</h4>
+<div>
+    <h4>What are things you can score?*:</h4>
+    <div class="panel panel-default thing-source-panel">
+        <div class="panel-body">
+            <i class="fa fa-twitter-square fa-3x"></i>
+            <br>
+            Twitter accounts and tweets
+        </div>
+    </div>
+    <div class="panel panel-default thing-source-panel">
+        <div class="panel-body">
+            <i class="fa fa-youtube-square fa-3x"></i>
+            <br>
+            YouTube videos <span class="unimplemented-feature">and channels</span>
+            (partially unimplemented right now)
+        </div>
+    </div>
+    <div class="panel panel-default thing-source-panel">
+        <div class="panel-body">
+            <i class="fa fa-github-square fa-3x"></i>
+            <br>
+            <span class="unimplemented-feature">GitHub accounts, repositories, and issues</span>
+            (unimplemented right now)
+        </div>
+    </div>
+    <div class="panel panel-default thing-source-panel">
+        <div class="panel-body">
+            <i class="fa fa-soundcloud fa-3x"></i>
+            <br>
+            <span class="unimplemented-feature">SoundCloud accounts and tracks</span>
+            (unimplemented right now)
+
+        </div>
+    </div>
+</div>
+<div>
+    <h4>Try it out.</h4>
     If you want to quit at anytime, or score something you regret,
-    you can easily delete your scorethings data.</div>
-<br>
+    you can easily delete your scorethings data.
+</div>
 <div style="padding: 1em" class="container-fluid">
     <div class="row">
         <div style="text-align: center">
             <a class="btn btn-primary btn-lg" ui-sref="scores.scoreAThing">
-                "Score" A "Thing"
+                Score a thing
             </a>
         </div>
-        <h5><small>TODO: remove double quotes, looks tacky...I don't know, it's kind of growing on me..</small></h5>
     </div>
+</div>
+<div>
+    <small>* None of these websites have actually given me permission to score their things, just
+        permission to use their easy to use, well documented, free APIs.
+        It would be super cool if you didn't tell them you're scoring their things.
+        <strong>Especially </strong> SoundCloud.
+        That's were I listen to my favorite German mashup songs.  Don't tell SoundCloud.
+    </small>
 </div>
