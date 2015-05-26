@@ -154,7 +154,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
             state('score_categories', {
                 url: '/score_categories',
                 templateUrl: 'scoreCategories/scoreCategories.html',
-                controller: 'ScoreCategoriesIndexCtrl'
+                controller: 'ScoreCategoriesCtrl'
             }).
 
             /*
