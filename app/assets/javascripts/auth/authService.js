@@ -7,6 +7,9 @@ angular.module('app').service('authService', ['AuthToken', '$rootScope', functio
             AuthToken.set(token);
             $rootScope.$broadcast('userLoggedOn');
         },
+        isExpired: function() {
+            return AuthToken.isExpired();
+        },
         logout: function() {
             AuthToken.clear();
             $rootScope.$broadcast('userLoggedOff');

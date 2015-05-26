@@ -93,6 +93,11 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'scoreLists/scoreLists.new.html',
                     controller: 'ScoreListsNewCtrl'
                 }).
+                state('scoreLists.detail', {
+                    url: '/:scoreListId',
+                    templateUrl: 'scoreLists/scoreLists.detail.html',
+                    controller: 'ScoreListsDetailCtrl'
+                }).
                 state('scoreLists.featured', {
                     url: '/featured',
                     templateUrl: 'scoreLists/scoreLists.featured.html',
@@ -102,11 +107,6 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     url: '/scorewars',
                     templateUrl: 'scoreLists/scoreLists.scorewars.html',
                     controller: 'ScoreListsScorewarsCtrl'
-                }).
-                state('scoreLists.detail', {
-                    url: '/:scoreListId',
-                    templateUrl: 'scoreLists/scoreLists.detail.html',
-                    controller: 'ScoreListsDetailCtrl'
                 }).
                     state('scoreLists.detail.scores', {
                         url: '/scores',
@@ -118,25 +118,6 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                         templateUrl: 'scoreLists/scoreLists.detail.scores.detail.html',
                         controller: 'ScoreListsDetailScoresDetailCtrl'
                     }).
-            /*
-                Help
-             */
-            state('help', {
-                url: '/help',
-                templateUrl: 'help/help.html'
-            }).
-                state('help.howTo', {
-                    url: '/howTo',
-                    templateUrl: 'help/help.howTo.html'
-                }).
-                state('help.videos', {
-                    url: '/videos',
-                    templateUrl: 'help/help.videos.html'
-                }).
-                state('help.faq', {
-                    url: '/faq',
-                    templateUrl: 'help/help.faq.html'
-                }).
 
             /*
                 users
@@ -172,7 +153,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
              */
             state('score_categories', {
                 url: '/score_categories',
-                templateUrl: 'scoreCategories/scoreCategoryIndex.html',
+                templateUrl: 'scoreCategories/scoreCategories.html',
                 controller: 'ScoreCategoriesIndexCtrl'
             }).
 
@@ -181,36 +162,35 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
             */
             state('about', {
                 url: '/about',
-                templateUrl: 'about/about.html',
-                controller: 'AboutCtrl'
+                templateUrl: 'about/about.html'
             }).
+                state('about.scorethings', {
+                    url: '/scorethings',
+                    templateUrl: 'about/about.scorethings.html'
+                }).
 
             /*
-                 contribute
-            */
-            state('contribute', {
-                url: '/contribute',
-                templateUrl: 'contribute/contribute.html'
-            }).
-            state('contribute.help', {
+             Help
+             */
+            state('help', {
                 url: '/help',
-                templateUrl: 'contribute/contribute.help.html'
+                templateUrl: 'help/help.html'
             }).
-            state('contribute.feedback', {
+            state('help.documentation', {
+                url: '/documentation',
+                templateUrl: 'help/help.documentation.html'
+            }).
+            state('help.feedback', {
                 url: '/feedback',
-                templateUrl: 'contribute/contribute.feedback.html'
+                templateUrl: 'help/help.feedback.html'
             }).
-            state('contribute.bugs', {
+            state('help.bugs', {
                 url: '/bugs',
-                templateUrl: 'contribute/contribute.bugs.html'
+                templateUrl: 'help/help.bugs.html'
             }).
-            state('contribute.features', {
-                url: '/features',
-                templateUrl: 'contribute/contribute.features.html'
-            }).
-            state('contribute.donate', {
+            state('help.donate', {
                 url: '/donate',
-                templateUrl: 'contribute/contribute.donate.html'
+                templateUrl: 'help/help.donate.html'
             }).
 
         /*

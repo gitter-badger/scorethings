@@ -23,21 +23,27 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Thing</th>
-                <th>Category</th>
                 <th>Points</th>
+                <th>Category</th>
+                <th>Thing</th>
+                <th>By User</th>
             </tr>
         </thead>
         <tbody>
         <tr ng-repeat="score in scores" >
             <td>
-                <a ui-sref="things.detail({thingId: score.thing.token})">{{score.thing.title}}</a>
+                <a ui-sref="scores.detail({scoreId: score.token})">
+                    {{score.points}}
+                </a>
             </td>
             <td>
                 {{score.scoreCategory.name}}
             </td>
             <td>
-                <a ui-sref="scores.detail({scoreId: score.token})">{{score.points}}</a>
+                <a ui-sref="things.detail({thingId: score.thing.token})">{{score.thing.title}}</a>
+            </td>
+            <td>
+                <a href="">{{score.user.username}}</a>
             </td>
         </tr>
         </tbody>

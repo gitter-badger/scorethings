@@ -1,21 +1,20 @@
-<h3>Score for {{score.thing.title}}</h3>
-by {{score.user.username}}
+<h3>Score</h3>
+by <a ui-sref="user.detail({userId: score.user.token})">{{score.user.username}}</a>
+<div>
+    <h3>Thing: <a ui-sref="things.detail({thingId: score.thing.token})">{{score.thing.title}}</a></h3>
+    <img ng-src="{{score.thing.imageUri}}">
+</div>
 <div>
     <h3>{{score.scoreCategory.name}}: {{score.points}}</h3>
 </div>
-<div>
-    <h3>Date Created:</h3>
-    {{score.createdAt | date}}
-</div>
-<div>
-    <h3>Date Updated:</h3>
-    {{score.updatedAt | date}}
+<div ng-show="score.user.id == identity.userId">
+    <button class="btn btn-primary" ng-click="editScore()">Edit</button>
 </div>
 <div>
     <h3>Score Lists</h3>
     <ul>
         <li ng-repeat="scoreList in score.scoreLists">
-            <a ng-href="#/score_lists/{{scoreList.token}}">{{scoreList.name}}</a>
+            <a ui-sref="scoreLists.detail({scoreListId: scoreList.token})">{{scoreList.name}}</a>
         </li>
     </ul>
 </div>

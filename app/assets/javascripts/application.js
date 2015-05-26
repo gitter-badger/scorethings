@@ -27,10 +27,10 @@
 //= require typeahead.js/dist/typeahead.bundle
 //= require angular-typeahead/angular-typeahead.min
 //= require angular-sanitize/angular-sanitize.min.js
-//= require seiyria-bootstrap-slider/dist/bootstrap-slider.min
-//= require angular-bootstrap-slider/slider
 //= require angularjs-rails-resource/angularjs-rails-resource.min
-//= require angular-deferred-bootstrap/angular-deferred-bootstrap.min
+//= require jquery-knob/dist/jquery.knob.min
+//= require angular-animate/angular-animate.min.js
+//= require angular-loading-bar/build/loading-bar.min.js
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app

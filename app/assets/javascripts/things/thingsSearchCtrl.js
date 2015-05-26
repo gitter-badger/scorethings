@@ -22,28 +22,10 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifi
     $scope.scoreThing = function(thing) {
         console.log(thing);
         var scoreInput = {thing: thing};
-        scoreModalFactory.openModal(scoreInput, function(response) {
+        scoreModalFactory.openModal(scoreInput, {closeOnSave: false}, function saveSuccessCallbackFn(response) {
             console.log('in thing search');
             console.log(response);
         });
-        /*
-        new ThingScore({
-            externalId: thing.externalId,
-            thingType: $scope.selectedThingType,
-            score: {
-                points: 75
-            }
-        }).create()
-            .then(
-                function(response) {
-                    var createdScore = response.score;
-                    notifier.success('created score for thing: ' + createdScore.thing.title);
-                    console.log(createdScore);
-                },
-                function() {
-                    notifier.error('failed to created score');
-                });
-                */
     };
     $scope.scoreHashtagQuery = function() {
         var hashtagExternalId = stripPrefix($scope.query);

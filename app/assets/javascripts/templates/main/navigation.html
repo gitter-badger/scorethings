@@ -16,8 +16,8 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Scores<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="scores.search">Search Scores</a></li>
-                        <li><a ui-sref="scores.search({random:'true'})">Random  <i class="fa fa-random"></i></a></li>
                         <li><a ui-sref="scores.scoreAThing">Score A Thing</a></li>
+                        <li class="disabled"><a ui-sref="scores.featured">Featured Scores</a></li>
                     </ul>
                 </li>
                 <!-- Things -->
@@ -25,31 +25,39 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Things<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="things.search">Search Things</a></li>
-                        <li><a ui-sref="things.featured">Featured Things</a></li>
-                        <li><a ui-sref="things.search({random:true})">Random  <i class="fa fa-random"></i></a></li>
+                        <li class="disabled"><a ui-sref="things.featured">Featured Things</a></li>
                     </ul>
                 </li>
                 <!-- Score Lists -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Score Lists<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="scoreLists.new">Create Score List</a></li>
-                        <li><a ui-sref="scoreLists.search">Search Score Lists</a></li>
-                        <li><a ui-sref="scoreLists.scorewars" style="color: red;"><strong>scorewars</strong></a></li>
+                        <li class="disabled"><a ui-sref="scoreLists.new">Create Score List</a></li>
+                        <li class="disabled"><a ui-sref="scoreLists.search">Search Score Lists</a></li>
+                        <li class="disabled"><a ui-sref="scoreLists.scorewars"><strong>scorewars</strong></a></li>
+                    </ul>
+                </li>
+                <!-- Users -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Users<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="disabled"><a ui-sref="users.search">Search Users</a></li>
+                        <li class="disabled"><a ui-sref="users.featured">Featured Users</a></li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <!-- How To Contribute -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">How To Contribute<span class="caret"></span></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="contribute.feedback">Give Feedback</a></li>
-                        <li><a ui-sref="contribute.features">Request Features</a></li>
+                        <li class="disabled"><a ui-sref="help.feedback">Give Feedback</a></li>
+                        <li class="disabled"><a ui-sref="help.features">Request Features</a></li>
+                        <li class="disabled"><a ui-sref="help.bugs">Report Bugs</a></li>
+                        <li class="disabled"><a ui-sref="help.help">Help With Development</a></li>
+                        <li><a ui-sref="help.donate">Donate</a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="contribute.bugs">Report Bugs</a></li>
-                        <li><a ui-sref="contribute.help">Help With Development</a></li>
-                        <li><a ui-sref="contribute.donate">Donate</a></li>
+                        <li class="disabled"><a ui-sref="help.documentation">Documentation</a></li>
                     </ul>
                 </li>
 
@@ -58,23 +66,11 @@
                 <li ng-show="isLoggedIn()" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{identity.username}} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="account.settings">Settings</a></li>
+                        <li class="disabled"><a ui-sref="account.settings">Settings</a></li>
                         <li class="divider"></li>
                         <li><a ui-sref="about">About scorethings</a></li>
                         <li class="divider"></li>
                         <li><a ng-click="logout()">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-
-            <!-- Help -->
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help<span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="help.howTo">How-Tos</a></li>
-                        <li><a ui-sref="help.videos">Videos</a></li>
-                        <li><a ui-sref="help.faq">FAQs</a></li>
                     </ul>
                 </li>
             </ul>

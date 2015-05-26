@@ -15,21 +15,9 @@
  *= require toastr/toastr.min.css
  *= require font-awesome/css/font-awesome
  *= require bootstrap-social/bootstrap-social.css
- *= require seiyria-bootstrap-slider/dist/css/bootstrap-slider.min
+ *= require angular-loading-bar/build/loading-bar.min.css
  *= require_self
  */
-
-/* copied from http://stackoverflow.com/a/22869052/4694250 for heroku 404 issue */
-@font-face {
-    font-family: 'FontAwesome';
-    src: url('/assets/fonts/fontawesome-webfont.eot?v=4.0.3');
-    src: url('/assets/fonts/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'),
-    url('/assets/fonts/fontawesome-webfont.woff?v=4.0.3') format('woff'),
-    url('/assets/fonts/fontawesome-webfont.ttf?v=4.0.3') format('truetype'),
-    url('/assets/fonts/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
 
 header nav ul {
     list-style: none;

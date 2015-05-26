@@ -2,7 +2,7 @@
 <div>
     <ul>
         <li ng-repeat="score in thing.scores">
-            <a ui-sref="scores.detail({scoreId: score.token})"> By {{score.user.username}}: {{score.points}}</a>
+            <a ui-sref="scores.detail({scoreId: score.token})"> Score By {{score.user.username}}, Points: {{score.points}}</a>
         </li>
     </ul>
 </div>
