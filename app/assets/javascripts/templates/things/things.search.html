@@ -23,7 +23,7 @@
                            ng-model="query">
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-disabled="!query" type="submit">
-                            <i class="glyphicon glyphicon-search"></i>
+                            <i class="fa fa-search"></i>
                         </button>
                     </span>
                     <span ng-show="selectedThingType == 'hashtag'" class="input-group-btn">
@@ -57,7 +57,8 @@
                     <a target="_blank" ng-href="{{thing.uri}}">{{thing.title}}</a>
                 </td>
                 <td>
-                    <i tooltip="Verified Somewhere" class="glyphicon glyphicon-ok" ng-show="thing.verified"></i>
+                    <i ng-show="thing.verified" tooltip="Verified (but not by scorethings)"
+                       class="fa fa-check"></i>
                 </td>
                 <td class="hidden-xs">{{thing.description}}</td>
                 <td>

@@ -13,7 +13,6 @@
  *= require_tree .
  *= require bootswatch/readable/bootstrap.min
  *= require toastr/toastr.min.css
- *= require font-awesome/css/font-awesome
  *= require bootstrap-social/bootstrap-social.css
  *= require angular-loading-bar/build/loading-bar.min.css
  *= require_self
