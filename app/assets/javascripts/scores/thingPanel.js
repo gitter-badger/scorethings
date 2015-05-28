@@ -5,7 +5,7 @@ angular.module('app').directive('thingPanel', [function() {
         scope: {
             thing: '='
         },
-        templateUrl: 'scores/thingPanel.html',
+        templateUrl: 'things/thingPanel.html',
         link: function($scope, element, attrs) {
             $scope.scoreThing = function() {
                 console.log('scoring thing');

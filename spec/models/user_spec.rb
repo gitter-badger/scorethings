@@ -117,18 +117,74 @@ RSpec.describe User do
       end
     end
 
-    describe "automatically putting created scores into score lists" do
-      it "should put a newly created score into a new score list" do
-        expect(@user.score_lists.length).to eq(0)
-        expect(@user.scores.length).to eq(0)
 
-        score = @user.create_score(build(:score))
-        expect(@user.score_lists.length).to eq(1)
-        expect(@user.scores.length).to eq(1)
 
-        expect(@user.score_lists.first.scores.length).to eq(1)
-        expect(@user.score_lists.first.scores.first).to eq(score)
-        expect(@user.scores.first.score_lists.length).to eq(1)
+    describe "adding and removing thing filters to score lists" do
+      it "should add a thing filter" do
+        thing = create(:thing, :twitter_account)
+        score_list = @user.create_score_list(name: 'Cat Stuff')
+        expect(score_list.things.length).to eq(0)
+
+        @user.add_thing_filter_to_score_list(score_list, thing)
+        expect(score_list.things.length).to eq(1)
+      end
+
+      it "should remove a thing filter" do
+        thing = create(:thing, :twitter_account)
+        score_list = @user.create_score_list(name: 'Cat Stuff')
+        @user.add_thing_filter_to_score_list(score_list, thing)
+        expect(score_list.things.length).to eq(1)
+        @user.remove_thing_filter_from_score_list(score_list, thing)
+        expect(score_list.things.length).to eq(0)
+      end
+
+      it "should put created score in any score lists with thing filter" do
+        thing = create(:thing, :twitter_account)
+        score_list_with_thing = @user.create_score_list(name: 'Cat Stuff')
+        score_list_with_thing.things << thing
+        score_list_without_thing = @user.create_score_list(name: 'Whatever Stuff')
+
+        @user.create_score(build(:score, thing: thing))
+        score_list_with_thing.reload
+        score_list_without_thing.reload
+
+        expect(score_list_with_thing.scores.length).to eq(1)
+        expect(score_list_without_thing.scores.length).to eq(0)
+      end
+
+      it "should put scores in score list after adding a thing filter" do
+        thing = create(:thing, :twitter_account)
+        score_list = @user.create_score_list(name: 'Cat Stuff')
+        other_score_list = @user.create_score_list(name: 'Cat Stuff')
+        @user.create_score(build(:score, thing: thing))
+
+        expect(score_list.scores.length).to eq(0)
+        expect(other_score_list.scores.length).to eq(0)
+        @user.add_thing_filter_to_score_list(score_list, thing)
+        expect(score_list.scores.length).to eq(1)
+        expect(other_score_list.scores.length).to eq(0)
+      end
+
+      describe "restricting access to adding/removing thing filters" do
+        before do
+          @thing = create(:thing, :twitter_account)
+          @score_list = @user.create_score_list(name: 'Cat Stuff')
+          @other_user = create(:user_bravo)
+          @other_user_score_list = @other_user.create_score_list(name: 'Dumb Cat Stuff')
+        end
+
+        it "should not allow adding a thing filter to another user's score list" do
+          expect {
+            @user.add_thing_filter_to_score_list(@other_user_score_list, @thing)
+          }.to raise_error(Exceptions::UnauthorizedModificationError)
+        end
+
+        it "should not allow removing a thing filter from another user's score list" do
+          @other_user.add_thing_filter_to_score_list(@other_user_score_list, @thing)
+          expect {
+            @user.remove_thing_filter_from_score_list(@other_user_score_list, @thing)
+          }.to raise_error(Exceptions::UnauthorizedModificationError)
+        end
       end
     end
 
@@ -150,6 +206,12 @@ RSpec.describe User do
       it "should not allow a user to add another user's score to another user's score list" do
         expect {
           @user.add_score_to_score_list(@other_user_score_list, @other_user_score)
+        }.to raise_error(Exceptions::UnauthorizedModificationError)
+      end
+
+      it "should not allow a user to add another user's score to their score list" do
+        expect {
+          @user.add_score_to_score_list(@other_user_score_list, @score)
         }.to raise_error(Exceptions::UnauthorizedModificationError)
       end
 

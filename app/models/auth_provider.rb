@@ -6,7 +6,6 @@ class AuthProvider
   field :handle, type: String
   field :type, type: String
   field :public, type: Boolean, default: false
-
   embedded_in :user
 
   validates_presence_of :uid, :handle, :type
@@ -15,7 +14,6 @@ class AuthProvider
 
   search_in :handle
 
-  embedded_in :user
 
   def to_builder
     Jbuilder.new do |auth_provider|

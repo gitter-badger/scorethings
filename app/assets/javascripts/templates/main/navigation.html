@@ -17,7 +17,10 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="scores.search">Search Scores</a></li>
                         <li><a ui-sref="scores.scoreAThing">Score A Thing</a></li>
-                        <li class="disabled"><a ui-sref="scores.featured">Featured Scores</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="profile.scores">My Scores</a></li>
+                        <li><a ui-sref="profile.scoreLists">My Score Lists</a></li>
+                        <li><a ng-click="showNewScoreListModal()">New Score List</a></li>
                     </ul>
                 </li>
                 <!-- Things -->
@@ -25,24 +28,14 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Things<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="things.search">Search Things</a></li>
-                        <li class="disabled"><a ui-sref="things.featured">Featured Things</a></li>
                     </ul>
                 </li>
-                <!-- Score Lists -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Score Lists<span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li class="disabled"><a ui-sref="scoreLists.new">Create Score List</a></li>
-                        <li class="disabled"><a ui-sref="scoreLists.search">Search Score Lists</a></li>
-                        <li class="disabled"><a ui-sref="scoreLists.scorewars"><strong>scorewars</strong></a></li>
-                    </ul>
-                </li>
+
                 <!-- Users -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Users<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="disabled"><a ui-sref="users.search">Search Users</a></li>
-                        <li class="disabled"><a ui-sref="users.featured">Featured Users</a></li>
+                        <li><a ui-sref="users.search">Search Users</a></li>
                     </ul>
                 </li>
             </ul>

@@ -1,4 +1,17 @@
-angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifier', 'scoreModalFactory', function($scope, Thing, notifier, scoreModalFactory) {
+angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifier', 'scoreModalFactory', '$stateParams', '$location', function($scope, Thing, notifier, scoreModalFactory, $stateParams, $location) {
+    $scope.showNoResultsMessage = false;
+    handleQueryParams($location.$$search);
+
+    function handleQueryParams(params) {
+        if(!params) return;
+
+        $scope.query = params.query;
+        $scope.selectedThingType = params.thingType || 'twitter_account';
+        if(params.query && params.thingType) {
+            searchThing();
+        }
+    }
+
     function validThingType(label, examplePlaceholder) {
         return {
             label: label,
@@ -12,10 +25,14 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifi
         hashtag: validThingType('Hashtag', '#SomethingCats or SomethingCats')
     };
 
-    $scope.selectedThingType = 'twitter_account';
 
     $scope.$watch('selectedThingType', function() {
         $scope.things = [];
+        $scope.showNoResultsMessage = false;
+    });
+
+    $scope.$watch('query', function() {
+        $scope.showNoResultsMessage = false;
     });
 
 
@@ -34,25 +51,6 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifi
             type: 'hashtag',
             title: '#' + $scope.query
         });
-
-        /*
-        console.log('scoring hashtag ' + hashtagExternalId);
-        new ThingScore({
-            externalId: hashtagExternalId,
-            thingType: $scope.selectedThingType,
-            score: {
-                points: 75
-            }
-        }).create()
-            .then(
-            function(response) {
-                var createdScore = response.score;
-                notifier.success('created score for thing: ' + createdScore.thing.title);
-            },
-            function() {
-                notifier.error('failed to created score');
-            });
-            */
     };
 
     function stripPrefix(value) {
@@ -66,7 +64,9 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifi
     }
 
 
-    $scope.searchThing = function() {
+    $scope.searchThing =  searchThing;
+
+    function searchThing() {
         $scope.query = stripPrefix($scope.query);
         if(!$scope.query.length) return;
 
@@ -74,8 +74,18 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifi
             return;
         }
 
+        $location.search({
+            query: $scope.query,
+            thingType: $scope.selectedThingType
+        });
+
+        $scope.showNoResultsMessage = false;
+
         Thing.get('search', {thingType: $scope.selectedThingType, query: $scope.query}).then(function(things) {
             $scope.things = things;
+            if(!$scope.things.length) {
+                $scope.showNoResultsMessage = true;
+            }
         });
-    };
+    }
 }]);

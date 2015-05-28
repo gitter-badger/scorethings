@@ -58,13 +58,62 @@ module Api
       end
 
       def show
-        @score_list = ScoreList.where(id: params[:id]).first
-        if @score_list.nil?
+        score_list_id = params.require(:id)
+        begin
+        @score_list = ScoreList.find(score_list_id)
+        rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             error: "failed to score_list for id: #{params[:id]}",
                             status: :not_found
                         }, status: :not_found
         end
+      end
+
+      def add_score
+        begin
+          handle_score_list_score do |score_list, score|
+            @current_user.add_score_to_score_list(score_list, score)
+            @score_list = score_list
+          end
+        rescue Exceptions::UnauthorizedModificationError
+          return render json: {
+                            error: "failed to add score to score list, score list belongs to another user",
+                            status: :forbidden
+                        }, status: :forbidden
+        rescue Mongoid::Errors::DocumentNotFound
+          return render json: {
+                            error: "could not find score_list with id #{score_list_id}, or score with id #{score_id}",
+                            status: :not_found
+                        }, status: :not_found
+        end
+      end
+
+      def remove_score
+        begin
+          handle_score_list_score do |score_list, score|
+            @score_list = @current_user.remove_score_from_score_list(score_list, score)
+          end
+        rescue Exceptions::UnauthorizedModificationError
+          return render json: {
+                            error: "failed to remove score from score list, score list belongs to another user",
+                            status: :forbidden
+                        }, status: :forbidden
+        rescue Mongoid::Errors::DocumentNotFound
+          return render json: {
+                            error: "could not find score_list with id #{score_list_id}, or score with id #{score_id}",
+                            status: :not_found
+                        }, status: :not_found
+        end
+      end
+
+      private
+      def handle_score_list_score
+        score_list_id = params.require(:score_list_id)
+        score_id = params.require(:id)
+
+        score_list = ScoreList.find(score_list_id)
+        score = Score.find(score_id)
+        yield(score_list, score)
       end
    end
   end

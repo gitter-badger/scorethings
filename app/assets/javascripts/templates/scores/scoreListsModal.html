@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h5>Your Score Lists</h5>
+</div>
+<div class="modal-body">
+    <table class="table table-striped">
+        <tbody>
+            <tr ng-repeat="scoreList in scoreLists">
+                <td>
+                    <a ui-sref="scoreLists.detail({scoreListId: scoreList.token})">{{scoreList.name}}</a>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm" type="button" ng-click="removeScoreFromScoreList(scoreList)">Remove</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="close()">Close</button>
+</div>

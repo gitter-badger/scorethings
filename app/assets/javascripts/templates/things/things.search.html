@@ -1,6 +1,5 @@
 <div ng-controller="ThingsSearchCtrl">
     <h2>Search Things</h2>
-    <h4><small>You can find a thing to score here</small></h4>
     <form ng-submit="searchThing()">
         <div class="col-xs-12 col-sm-3">
             <div class="form-group">
@@ -36,6 +35,10 @@
         </div>
     </form>
 
+    <div class="col-xs-12" ng-show="showNoResultsMessage">
+        <h5>Sorry, no results found for "{{query}}".</h5>
+    </div>
+
     <div class="col-xs-12" ng-show="things.length">
         <h3>Things</h3>
         <table class="table table-striped">
@@ -43,28 +46,23 @@
                 <tr>
                     <th></th>
                     <th>Title</th>
-                    <th>Verified</th>
                     <th class="hidden-xs">Description</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="thing in things">
-                <td>
-                   <img ng-src="{{thing.imageUri}}">
-                </td>
-                <td>
-                    <a target="_blank" ng-href="{{thing.uri}}">{{thing.title}}</a>
-                </td>
-                <td>
-                    <i ng-show="thing.verified" tooltip="Verified (but not by scorethings)"
-                       class="fa fa-check"></i>
-                </td>
-                <td class="hidden-xs">{{thing.description}}</td>
-                <td>
-                    <button class="btn btn-primary btn-md" ng-click="scoreThing(thing)">Score</button>
-                </td>
-            </tr>
+                <tr ng-repeat="thing in things">
+                    <td>
+                       <img ng-src="{{thing.imageUri}}">
+                    </td>
+                    <td>
+                        <a target="_blank" ng-href="{{thing.uri}}">{{thing.title}}</a>
+                    </td>
+                    <td class="hidden-xs">{{thing.description}}</td>
+                    <td>
+                        <button class="btn btn-primary btn-md" ng-click="scoreThing(thing)">Score</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

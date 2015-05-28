@@ -1,12 +1,8 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      # TODO allow unauthenticated read?
-      skip_before_action :authenticate_request, :current_user, only: [:scores]
-
-      def scores
-        user = user_from_params
-        @scores = user.scores
+      def show
+        @user = user_from_params
       end
 
       def search

@@ -35,7 +35,7 @@ RSpec.describe ScoreList do
     it "should build a new score list from a score" do
       score_list = ScoreList.build_score_list_from_score(@score)
       expect(score_list).not_to be_nil
-      expect(score_list.name).to eq("Score List For #{@score.thing.title}")
+      expect(score_list.name).to_not be_nil
       expect(score_list.scores.length).to eq(1)
       expect(score_list.scores.first).to eq(@score)
       expect(score_list.things.length).to eq(1)

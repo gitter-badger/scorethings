@@ -5,7 +5,21 @@ module Api
 
       def search
         query = params[:query]
-        @scores = Score.full_text_search(query)
+        user_id = params[:user_id]
+        if user_id.nil?
+          @scores = Score.full_text_search(query, allow_empty_search: true)
+        else
+          # user specified, search scores that belong to that user
+          begin
+            user = User.find(user_id)
+            @scores = user.scores.full_text_search(query, allow_empty_search: true)
+          rescue Mongoid::Errors::DocumentNotFound
+            return render json: {
+                              error: "Could not find user with id #{user_id}",
+                              status: :not_found
+                          }, status: :not_found
+          end
+        end
       end
 
       def score_thing
@@ -50,7 +64,6 @@ module Api
           score_category = ScoreCategory.where(id: score_params[:score_category_id]).first
         end
 
-        score_params[:thing_id] = thing[:id]
         score = Score.new(score_params)
         score.thing = thing
         score.score_category = score_category
@@ -67,21 +80,42 @@ module Api
       end
 
       def create
-        raise "unimplemented, I will...like..totally get to this soon"
+        score_params = params.require(:score).permit(:score_category_id, :thing_id, :points)
+        if score_params[:thing_id].nil?
+          return render json: {
+                            error: "thing_id is required",
+                            status: :bad_request
+                        }, status: :bad_request
+
+        end
+        begin
+          score = Score.new(score_params)
+          thing = Thing.find(score_params[:thing_id])
+          score.thing = thing
+
+          @score = @current_user.create_score(score)
+          return render template: '/api/v1/scores/create.jbuilder', status: :created, formats: [:json]
+        rescue Mongoid::Errors::DocumentNotFound
+          return render json: {
+                            status: :not_found
+                        }, status: :not_found
+        rescue Mongoid::Errors::Validations => error
+          return render json: {
+                            error: "failed to create score: #{error.full_messages.to_s}",
+                            status: :bad_request
+                        }, status: :bad_request
+        end
       end
 
       def update
-        @score = Score.where(id: params[:id]).first
-        if @score.nil?
-          return render json: {
-                            error: "failed to score for id: #{params[:id]}",
-                            status: :not_found
-                        }, status: :not_found
-        end
-
         begin
+          @score = Score.find(params.require(:id))
           score_params = params.require(:score).permit(:points, :score_category_id)
           @current_user.change_score(@score, score_params)
+        rescue Mongoid::Errors::DocumentNotFound
+          return render json: {
+                            status: :not_found
+                        }, status: :not_found
         rescue Exceptions::UnauthorizedModificationError
           return render json: {
                             error: "failed to change score for id: #{params[:id]}",

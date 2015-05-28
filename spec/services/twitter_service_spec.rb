@@ -30,26 +30,5 @@ RSpec.describe TwitterService do
       expect(twitter_account_thing.uri).to eq('https://twitter.com/pattonoswalt')
       expect(twitter_account_thing.verified).to be true
     end
-
-    xit "should map a twitter tweet to a thing" do
-      # FIXME for some reason, I'm not able to get the Twitter::User in the Twitter::Tweet
-      # need to figure that out
-      created_at_time = Time.now
-      funny_tweet = Twitter::Tweet.new(
-          id: 212121,
-          uri: Addressable::URI.parse('https://twitter.com/pattonoswalt/status/600803460729057280'),
-          created_at: created_at_time,
-          text: 'Something something funny.  LOL.')
-      funny_tweet.user = @pattonoswalt_user
-      # FIXME for some reason, I need to use the profile_image_url= method to set the image url
-      # can't test Twitter::User profile_image_uri -> image_uri
-      twitter_tweet_thing = @twitter_service.map_tweet_to_thing(funny_tweet)
-      expect(twitter_tweet_thing).to_not be_nil
-
-      expect(funny_tweet.external_id).to eq('212121')
-      expect(funny_tweet.title).to eq('tweet from @pattonoswalt at 2015-05-19 23:21:22 +0000')
-      expect(funny_tweet.uri).to eq('https://twitter.com/pattonoswalt/status/600803460729057280')
-      expect(funny_tweet.verified).to be true
-    end
   end
 end

@@ -7,7 +7,7 @@ class ScoreList
   field :name, type: String
   has_and_belongs_to_many :scores, inverse_of: :score_lists
   belongs_to :user
-  has_and_belongs_to_many :things
+  has_and_belongs_to_many :things, autosave: true
 
   token :contains => :fixed_numeric, :length => 8
   search_in :name
@@ -19,8 +19,7 @@ class ScoreList
     Jbuilder.new do |score_list|
       score_list.name self.name
       score_list.token self.token
-      score_list.id self.id.to_s
-      score_list.num_of_scores self.scores.length
+      score_list.id self.token
     end
   end
 
@@ -29,10 +28,10 @@ class ScoreList
     if score_user.nil?
       return
     end
-    score_list = score_user.create_score_list(name: "Score List For #{score.thing.title}")
+    score_list = score_user.create_score_list(name: "Score List Built From Score #{score.token}")
     score_list.scores << score
     score_list.things << score.thing
-    score_list
+    return score_list
   end
 
   def average_score

@@ -1,5 +1,5 @@
-angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'angularSpinner', 'siyfion.sfTypeahead', 'rails', 'angular-loading-bar', 'ngAnimate'])
-    .config(['$httpProvider', 'railsSerializerProvider', 'localStorageServiceProvider', '$locationProvider', function($httpProvider, railsSerializerProvider, localStorageServiceProvider) {
+angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'rails'])
+    .config(['$httpProvider', 'localStorageServiceProvider', function($httpProvider, localStorageServiceProvider) {
         localStorageServiceProvider.setPrefix('scorethings');
 
         return $httpProvider.interceptors.push('AuthInterceptor');

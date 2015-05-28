@@ -1,0 +1,59 @@
+<div class="modal-header">
+    <h5>Search For One Of Your Scores To Add To Score List</h5>
+</div>
+<div class="modal-body">
+        <form ng-submit="search()">
+            <div class="row col-xs-12">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text"
+                               id="query"
+                               class="form-control"
+                               placeholder="Hint: Search empty to get all your scores"
+                               ng-model="query">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><span class="hidden-xs">Points</span></th>
+                    <th>Category</th>
+                    <th>Thing</th>
+                    <th class="hidden-xs">Thing Type</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="score in scores">
+                    <td>
+                        {{score.points}}
+                    </td>
+                    <td>
+                        {{score.scoreCategory.name}}
+                    </td>
+                    <td>
+                        {{score.thing.title}}
+                    </td>
+                    <td class="hidden-xs">
+                        {{score.thing.type | thingType}}
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" type="button" ng-click="addScoreToScoreList(score)">Add</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="close()">Close</button>
+</div>

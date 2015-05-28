@@ -1,4 +1,4 @@
-angular.module('app').controller('NewScoreListCtrl', ['$scope', 'usSpinnerService', 'notifier', 'ScoreList', '$location', function($scope, usSpinnerService, notifier, ScoreList, $location) {
+angular.module('app').controller('ScoreListsNewCtrl', ['$scope', 'usSpinnerService', 'notifier', 'ScoreList', '$location', function($scope, usSpinnerService, notifier, ScoreList, $location) {
     $scope.scoreList = new ScoreList({
     });
 

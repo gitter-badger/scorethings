@@ -6,14 +6,18 @@ class User
 
   field :username, type: String
   field :description, type: String
+  field :default_points, type: Integer, default: 0
+  field :filter_obscenity, type: Boolean, default: true
+
   embeds_one :auth_provider
 
   has_many :scores, autosave: true, dependent: :delete
   has_many :score_lists, autosave: true, dependent: :delete
 
   validates_presence_of :username
-  validates_length_of :description, maximum: 150
+  validates_uniqueness_of :username
   validates_format_of :username, with: /\A[a-z0-9_-]{3,16}\z/
+  validates_length_of :description, maximum: 150
 
   token :contains => :fixed_numeric, :length => 8
   search_in :username, :description
@@ -23,22 +27,15 @@ class User
       user.username self.username
       user.description self.description
       user.id self._id.to_s
-      if self.auth_provider.public?
-        user.auth_provider self.auth_provider.to_builder
-      end
+      user.token self.token
     end
   end
 
   def create_score(score)
     score.user = self
-    self.scores << score
+    score.save!
 
-    if has_score_list_with_thing_filter(score.thing)
-      add_score_to_any_score_list_with_with_thing_filter(score)
-    else
-      create_new_score_list_for_score(score)
-    end
-
+    add_score_to_any_score_list_with_thing_filter(score)
     score.reload
   end
 
@@ -49,28 +46,18 @@ class User
     score_list
   end
 
-  def create_new_score_list_for_score(score={})
+  def create_new_score_list_for_score(score)
     score_list = ScoreList.build_score_list_from_score(score)
-    self.score_lists << score_list
+    score_list.user = self
     score_list
   end
 
-  def has_score_list_with_thing_filter(thing={})
-    !ScoreList.where(user: self, 'things.id' => thing._id).first.nil?
-  end
-
-  def add_score_to_any_score_list_with_with_thing_filter(score)
-    thing = score.thing
-    !ScoreList.where(user: self, 'things.id' => thing._id).each do |score_list|
-      score_list.scores << score
-    end
-  end
 
 
   # TODO create method on ScoreList to restrict adding/removing scores not owned by user?
   # rather than on user?  security vulnerability?
   def add_score_to_score_list(score_list, score)
-    if self != score_list.user
+    if self != score_list.user || self != score.user
       raise Exceptions::UnauthorizedModificationError
     end
 
@@ -78,12 +65,31 @@ class User
   end
 
   def remove_score_from_score_list(score_list, score)
-    if self != score_list.user
+    if self != score_list.user || self != score.user
       raise Exceptions::UnauthorizedModificationError
     end
 
     score_list.scores.delete(score)
+    score_list
   end
+
+  def add_thing_filter_to_score_list(score_list, thing)
+    if self != score_list.user
+      raise Exceptions::UnauthorizedModificationError
+    end
+    score_list.things << thing
+    scores.where(thing: thing).each do |score_to_retroactively_add_to_score_list|
+      score_list.scores << score_to_retroactively_add_to_score_list
+    end
+  end
+
+  def remove_thing_filter_from_score_list(score_list, thing)
+    if self != score_list.user
+      raise Exceptions::UnauthorizedModificationError
+    end
+    score_list.things.delete(thing)
+  end
+
 
   # TODO common logic between delete and change score
   def delete_score(score)
@@ -151,6 +157,17 @@ class User
         username: self.username
     }
     AuthToken.encode(payload)
+  end
+
+  private
+  def add_score_to_any_score_list_with_thing_filter(score)
+    # TODO figure out correct way to do this, with querying
+    # maybe data design is wrong, too normalized, too many relationships?
+    self.score_lists.each do |score_list|
+      if score_list.things.include? score.thing
+        score_list.scores << score
+      end
+    end
   end
 end
 

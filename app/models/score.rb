@@ -6,9 +6,9 @@ class Score
 
   field :points, type: Integer, default: 0
 
-  belongs_to :user
-  belongs_to :score_category
-  belongs_to :thing
+  belongs_to :user, dependent: :destroy
+  belongs_to :score_category, dependent: :destroy
+  belongs_to :thing, dependent: :destroy
   has_and_belongs_to_many :score_lists, inverse_of: :scores
 
   token :contains => :fixed_numeric, :length => 8

@@ -1,20 +1,54 @@
 <h3>Score</h3>
-by <a ui-sref="user.detail({userId: score.user.token})">{{score.user.username}}</a>
-<div>
-    <h3>Thing: <a ui-sref="things.detail({thingId: score.thing.token})">{{score.thing.title}}</a></h3>
-    <img ng-src="{{score.thing.imageUri}}">
-</div>
-<div>
-    <h3>{{score.scoreCategory.name}}: {{score.points}}</h3>
-</div>
-<div ng-show="score.user.id == identity.userId">
-    <button class="btn btn-primary" ng-click="editScore()">Edit</button>
-</div>
-<div>
-    <h3>Score Lists</h3>
-    <ul>
-        <li ng-repeat="scoreList in score.scoreLists">
-            <a ui-sref="scoreLists.detail({scoreListId: scoreList.token})">{{scoreList.name}}</a>
-        </li>
-    </ul>
-</div>
+<table class="table table-striped">
+    <tbody>
+    <tr>
+        <th colspan="2">
+            <img ng-src="{{score.thing.imageUri}}">
+        </th>
+    </tr>
+    <tr>
+        <th>Thing</th>
+        <td><a ui-sref="things.detail({thingId: score.thing.token})">{{score.thing.title}}</a></td>
+    </tr>
+    <tr>
+        <th>Thing Type</th>
+        <td>{{score.thing.type | thingType}}
+            <span ng-show="score.thing.uri">
+                (<a target="_blank" ng-href="{{score.thing.uri}}">view</a>)
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <th>User</th>
+        <td><a ui-sref="users.detail({userId: score.user.token})">{{score.user.username}}</a></td>
+    </tr>
+    <tr>
+        <th>Points</th>
+        <td>{{score.scoreCategory.name}}: {{score.points}} / 100</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div class="row" ng-show="isOwner">
+                <button class="col-xs-6 btn btn-default col-xs-6"
+                        ng-click="editScore()" ng-show="isOwner">
+                    <i class="fa fa-pencil"></i>&nbsp;Edit
+                </button>
+                <button class="col-xs-6 btn btn-default col-xs-6"
+                        ng-click="deleteScore()" ng-show="isOwner">
+                    <i class="fa fa-trash-o"></i>&nbsp;Delete
+                </button>
+            </div>
+            <div class="row">
+                <button class="col-xs-6 btn btn-default col-xs-6"
+                        ng-click="showScoreListsModal()">
+                    <i class="fa fa-list"></i>&nbsp;Score Lists
+                </button>
+                <button class="col-xs-6 btn btn-default col-xs-12"
+                        ng-click="share()">
+                    <i class="fa fa-share-alt"></i>&nbsp;Share
+                </button>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>

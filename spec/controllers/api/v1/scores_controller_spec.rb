@@ -16,7 +16,7 @@ RSpec.describe Api::V1::ScoresController do
       thing = create(:thing, :twitter_account)
 
       @request.env['HTTP_AUTHORIZATION'] = ""
-      post_data = {
+      params = {
           thing_type: thing.type,
           external_id: thing.external_id,
           score: {
@@ -24,7 +24,7 @@ RSpec.describe Api::V1::ScoresController do
               points: 21
           },
       }
-      post :score_thing, post_data
+      post :score_thing, params
       expect(response).to have_http_status(:unauthorized)
     end
 
@@ -34,7 +34,7 @@ RSpec.describe Api::V1::ScoresController do
       end
 
       it "should create a new score for a youtube video" do
-        post_data = {
+        params = {
             thing_type: @youtube_video_thing.type,
             external_id: @youtube_video_thing.external_id,
             score: {
@@ -43,7 +43,7 @@ RSpec.describe Api::V1::ScoresController do
             }
         }
         expect(Score.all.length).to eq(0)
-        post :score_thing, post_data
+        post :score_thing, params
         expect(response).to have_http_status(:created)
         expect(Score.all.length).to eq(1)
 
@@ -57,7 +57,7 @@ RSpec.describe Api::V1::ScoresController do
       end
 
       it "should create a new score for a hashtag thing" do
-        post_data = {
+        params = {
             thing_type: @hashtag_thing.type,
             external_id: @hashtag_thing.external_id,
             score: {
@@ -66,7 +66,7 @@ RSpec.describe Api::V1::ScoresController do
             }
         }
         expect(Score.all.length).to eq(0)
-        post :score_thing, post_data
+        post :score_thing, params
         expect(response).to have_http_status(:created)
         expect(Score.all.length).to eq(1)
 
@@ -76,7 +76,7 @@ RSpec.describe Api::V1::ScoresController do
 
     describe "creating a score with a things type TWITTER_ACCOUNT" do
       it "should create a new score for a twitter account thing" do
-        post_data = {
+        params = {
             thing_type: @twitter_account_thing.type,
             external_id: @twitter_account_thing.external_id,
             score: {
@@ -85,7 +85,7 @@ RSpec.describe Api::V1::ScoresController do
             }
         }
         expect(Score.all.length).to eq(0)
-        post :score_thing, post_data
+        post :score_thing, params
         expect(response).to have_http_status(:created)
         expect(Score.all.length).to eq(1)
 
@@ -93,13 +93,50 @@ RSpec.describe Api::V1::ScoresController do
       end
     end
 
-    describe "creating a score with a score category" do
+    describe "POST create" do
+      before do
+        @another_non_general_score_category = create(:score_category, general: false)
+      end
+
+      it "should create a new score" do
+        expect(Score.all.length).to eq(0)
+        params = {
+            score: {
+                thing_id: @twitter_account_thing.id.to_s,
+                score_category_id: @another_non_general_score_category._id.to_s,
+                points: 21
+            }
+        }
+        post :create, params
+        expect(Score.all.length).to eq(1)
+        expect(response).to have_http_status(:created)
+
+        expect(Score.first.score_category).to eq(@another_non_general_score_category)
+        expect(Score.first.thing).to eq(@twitter_account_thing)
+      end
+
+      it "should require a thing_id" do
+        expect(Score.all.length).to eq(0)
+        params = {
+            score: {
+                thing_id: nil,
+                score_category_id: @another_non_general_score_category._id.to_s,
+                points: 21
+            }
+        }
+        post :create, params
+        expect(Score.all.length).to eq(0)
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    describe "POST score_thing" do
       before do
         @another_non_general_score_category = create(:score_category, general: false)
       end
 
       it "should create a new score with the score category passed in params" do
-        post_data = {
+        params = {
             thing_type: @twitter_account_thing.type,
             external_id: @twitter_account_thing.external_id,
             score: {
@@ -107,13 +144,13 @@ RSpec.describe Api::V1::ScoresController do
                 points: 21
             }
         }
-        post :score_thing, post_data
+        post :score_thing, params
 
         expect(Score.first.score_category).to eq(@another_non_general_score_category)
       end
 
       it "should create a new score with the general score category when no score category passed in params" do
-        post_data = {
+        params = {
             thing_type: @twitter_account_thing.type,
             external_id: @twitter_account_thing.external_id,
             score: {
@@ -121,14 +158,14 @@ RSpec.describe Api::V1::ScoresController do
                 points: 21
             }
         }
-        post :score_thing, post_data
+        post :score_thing, params
 
         expect(Score.first.score_category).to eq(@general_category)
       end
     end
 
     it "should create a new score with a general category if a score_category_id is not provided" do
-      post_data = {
+      params = {
           thing_type: @twitter_account_thing.type,
           external_id: @twitter_account_thing.external_id,
           score: {
@@ -137,7 +174,7 @@ RSpec.describe Api::V1::ScoresController do
           }
       }
       expect(Score.all.length).to eq(0)
-      post :score_thing, post_data
+      post :score_thing, params
       expect(response).to have_http_status(:created)
       expect(Score.all.length).to eq(1)
 
@@ -154,11 +191,12 @@ RSpec.describe Api::V1::ScoresController do
 
     describe "PUT score" do
       it "should change the points of a score" do
-        put :update, {id: @score._id, score: {points: 94}}
+        put :update, {id: @score._id.to_s, score: {points: 94}}
         expect(response).to have_http_status(:ok)
 
         @score.reload
         expect(@score.points).to eq(94)
+        expect(assigns(:score).points).to eq(94)
       end
 
       it "should not allow other users to change the score" do
@@ -200,6 +238,54 @@ RSpec.describe Api::V1::ScoresController do
         get :show, {id: @score._id}
         expect(response).to have_http_status(:ok)
       end
+    end
+  end
+
+  describe "GET search" do
+    before do
+      thing_titles = ['apple', 'banana', 'cherry']
+
+      @other_user = create(:user_bravo)
+
+      @things = {}
+      thing_titles.each do |thing_title|
+        @things[thing_title] = create(:thing, :twitter_tweet, title: thing_title, description: "About #{thing_title}")
+      end
+
+      @first_score_with_apple_thing_title = @user.create_score(build(:score, thing: @things['apple']))
+      @second_score_with_apple_thing_title = @other_user.create_score(build(:score, thing: @things['apple']))
+      @score_without_apple_title = @user.create_score(build(:score, thing: @things['banana']))
+    end
+
+    it "should find scores from all users without user_id param" do
+      get :search, {query: 'apple'}
+
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:scores).length).to eq(2)
+      expect(assigns(:scores)).to eq([@first_score_with_apple_thing_title, @second_score_with_apple_thing_title])
+    end
+
+    it "should find scores from only one users with user_id param" do
+      get :search, {query: 'apple', user_id: @user._id}
+
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:scores).length).to eq(1)
+      expect(assigns(:scores)).to eq([@first_score_with_apple_thing_title])
+    end
+
+    it "should find all scores with blank query and blank user_id" do
+      get :search, {}
+
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:scores).length).to eq(3)
+    end
+
+    it "should find all scores for a user with blank query and a user_id" do
+      get :search, {user_id: @other_user._id}
+
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:scores).length).to eq(1)
+      expect(assigns(:scores)).to eq([@second_score_with_apple_thing_title])
     end
   end
 end

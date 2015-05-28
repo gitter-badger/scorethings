@@ -33,4 +33,4 @@ angular.module('app').service('AuthToken', ['localStorageService', 'jwtHelper', 
                 identity.username = null;
             }
         };
-    }])
+    }]);

@@ -23,14 +23,15 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Points</th>
+                <th><span class="hidden-xs">Points</span></th>
                 <th>Category</th>
                 <th>Thing</th>
-                <th>By User</th>
+                <th class="hidden-xs">Thing Type</th>
+                <th>User</th>
             </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="score in scores" >
+        <tr ng-repeat="score in scores">
             <td>
                 <a ui-sref="scores.detail({scoreId: score.token})">
                     {{score.points}}
@@ -42,8 +43,11 @@
             <td>
                 <a ui-sref="things.detail({thingId: score.thing.token})">{{score.thing.title}}</a>
             </td>
+            <td class="hidden-xs">
+                {{score.thing.type | thingType}}
+            </td>
             <td>
-                <a href="">{{score.user.username}}</a>
+                <a ui-sref="users.details({userId: score.user.token})">{{score.user.username}}</a>
             </td>
         </tr>
         </tbody>

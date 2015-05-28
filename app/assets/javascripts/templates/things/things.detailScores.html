@@ -1,8 +1,0 @@
-<h3>Scores for thing {{thing.title}}</h3>
-<div>
-    <ul>
-        <li ng-repeat="score in thing.scores">
-            <a ui-sref="scores.detail({scoreId: score.token})"> Score By {{score.user.username}}, Points: {{score.points}}</a>
-        </li>
-    </ul>
-</div>
