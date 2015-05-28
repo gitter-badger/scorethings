@@ -32,7 +32,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'puma'
 
-gem 'devise'
 gem 'omniauth-oauth2'
 gem 'omniauth-twitter'
 gem 'omniauth-google-oauth2'
