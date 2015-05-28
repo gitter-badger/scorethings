@@ -16,7 +16,7 @@ class User
 
   validates_presence_of :username
   validates_uniqueness_of :username
-  validates_format_of :username, with: /\A[a-z0-9_-]{3,16}\z/
+  validates_format_of :username, with: /\A[A-Za-z0-9_-]{3,16}\z/
   validates_length_of :description, maximum: 150
 
   token :contains => :fixed_numeric, :length => 8
