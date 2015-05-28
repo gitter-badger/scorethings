@@ -9,7 +9,6 @@ class Score
   belongs_to :user
   belongs_to :score_category
   belongs_to :thing
-  has_and_belongs_to_many :score_lists, inverse_of: :scores
 
   token :contains => :fixed_numeric, :length => 8
   search_in :thing => [:description, :title]

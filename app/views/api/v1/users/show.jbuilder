@@ -6,12 +6,6 @@ json.user do
   json.created_at @user.created_at
   json.updated_at @user.updated_at
 
-  json.score_lists(@user.score_lists) do |score_list|
-    json.id score_list.id.to_s
-    json.token score_list.token
-    json.name score_list.name
-  end
-
   json.scores(@user.scores) do |score|
     json.id score.id.to_s
     json.token score.token

@@ -12,7 +12,6 @@ class Thing
   field :verified, type: Boolean, default: false
 
   has_many :scores, autosave: true, dependent: :delete
-  has_and_belongs_to_many :score_lists
 
   token :contains => :fixed_numeric, :length => 8
   search_in :title, :description

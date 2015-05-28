@@ -10,9 +10,4 @@ json.score do
 
   json.score_category @score.score_category.to_builder
   json.score_category_id @score.score_category.id.to_s
-  json.score_lists(@score.score_lists) do |score_list|
-    json.id score_list.id.to_s
-    json.token score_list.token
-    json.name score_list.name
-  end
 end

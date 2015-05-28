@@ -59,19 +59,6 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 }).
 
             /*
-                 score lists
-            */
-            state('scoreLists', {
-                url: '/score_lists',
-                templateUrl: 'scoreLists/scoreLists.html'
-            }).
-                state('scoreLists.detail', {
-                    url: '/:scoreListId',
-                    templateUrl: 'scoreLists/scoreLists.detail.html',
-                    controller: 'ScoreListsDetailCtrl'
-                }).
-
-            /*
                 users
             */
             state('users', {

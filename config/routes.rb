@@ -22,10 +22,6 @@ Rails.application.routes.draw do
       get '/scores/search' => 'scores#search'
       resources :scores, except: [:edit, :new]
 
-      post '/score_lists/:score_list_id/scores/:id' => 'score_lists#add_score'
-      delete '/score_lists/:score_list_id/scores/:id' => 'score_lists#remove_score'
-      resources :score_lists, except: [:edit, :new]
-
       get '/users/:id' => 'users#show'
 
       get '/score_categories' => 'score_categories#index'
