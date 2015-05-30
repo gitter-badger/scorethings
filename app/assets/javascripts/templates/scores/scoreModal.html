@@ -1,12 +1,17 @@
-<form ng-submit="save()">
-    <div class="modal-body">
-            <div class="form-group">
-                <label class="control-label">
-                    Thing
-                </label>
-                <p class="form-control-static">
-                    {{score.thing.title}}
-                </p>
+<div style="text-align: center">
+    <form ng-submit="save()">
+        <div class="modal-header">
+            <h5 class="modal-title">Score Thing</h5>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <img ng-src="{{score.thing.imageUri}}">
+            </div>
+            <div class="row">
+                <h4>{{score.thing.title}}</h4>
+            </div>
+            <div ng-show="score.thing.uri" class="row">
+                <a target="_blank" ng-href="{{score.thing.uri}}">View {{score.thing.type | thingType}}</a>
             </div>
             <div class="form-group">
                 <label for="scoreCategory">Score Category:</label>
@@ -17,11 +22,13 @@
                 </select>
             </div>
             <div class="form-group">
-                <points-dial points="score.points" ng-model="score.points"></points-dial>
+                <label for="points">Points:</label>
+                <input class="input-lg" id="points" ng-model="score.points" type="number" min="0" max="100" step="1">
             </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
-        <button class="btn btn-primary" type="submit">Save</button>
-    </div>
-</form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+    </form>
+</div>

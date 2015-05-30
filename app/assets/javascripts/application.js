@@ -22,7 +22,6 @@
 //= require angular-bootstrap/ui-bootstrap-tpls.min
 //= require angular-sanitize/angular-sanitize.min.js
 //= require angularjs-rails-resource/angularjs-rails-resource.min
-//= require jquery-knob/dist/jquery.knob.min
 //= require angular-animate/angular-animate
 //= require angular-loading-bar/build/loading-bar.min.js
 // AngularJS templates location in app/assets/javascripts/templates

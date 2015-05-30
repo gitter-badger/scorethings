@@ -22,76 +22,36 @@ module Api
         end
       end
 
-      def score_thing
-        score_params = params.require(:score).permit(:points, :score_category_id)
-        score_category_id = score_params[:score_category_id]
-        thing_type = params.require(:thing_type)
-        external_id = params.require(:external_id)
-
-        thing = Thing.where(type: thing_type, external_id: external_id).first
-        valid_thing_types = [Scorethings::ThingTypes::TWITTER_ACCOUNT,
-                             Scorethings::ThingTypes::TWITTER_TWEET,
-                             Scorethings::ThingTypes::YOUTUBE_VIDEO,
-                             Scorethings::ThingTypes::HASHTAG]
-
-        # FIXME This is bad, hard to read flow,  I'm gonna fix it
-        if thing.nil?
-          if thing_type == Scorethings::ThingTypes::HASHTAG
-            thing = Thing.create_hashtag_thing(external_id)
-          elsif valid_thing_types.include? thing_type
-            thing_service = ThingService.new
-            thing = thing_service.load_external_thing(thing_type, external_id)
-            thing.save! unless thing.nil?
-          end
-        end
-
-        if thing.nil?
-          return render json: {
-                            error: "Can't find thing with type #{thing_type} and external_id #{external_id}",
-                            status: :not_found
-                        }, status: :not_found
-        elsif !thing.valid?
-          return render json: {
-                            error: "Failed to create thing for score, it was invalid: (#{thing.errors.full_messages.to_s})",
-                            status: :bad_request
-                        }, status: :bad_request
-        end
-
-        if score_category_id.nil?
-          score_category = ScoreCategory.where(general: true).first
-        else
-          # if params did not include score category, or one couldn't be found, use the general one
-          score_category = ScoreCategory.where(id: score_params[:score_category_id]).first
-        end
-
-        score = Score.new(score_params)
-        score.thing = thing
-        score.score_category = score_category
-
-        begin
-          @score = @current_user.create_score(score)
-          return render template: '/api/v1/scores/score_thing.jbuilder', status: :created, formats: [:json]
-        rescue Mongoid::Errors::Validations => error
-          return render json: {
-                            error: "#{error.full_messages.to_s}",
-                            status: :bad_request
-                        }, status: :bad_request
-        end
-      end
-
       def create
-        score_params = params.require(:score).permit(:score_category_id, :thing_id, :points)
-        if score_params[:thing_id].nil?
+        score_params = params.require(:score).permit(:score_category_id, :thing_id, :points, :thing => [:external_id, :type])
+        thing_params = score_params[:thing]
+
+        if thing_params.nil?
+          thing_id = score_params[:thing_id]
+          thing = Thing.where(id: thing_id).first
+        else
+          thing_service = ThingService.new
+          thing = thing_service.load_external_thing(thing_params[:type], thing_params[:external_id])
+        end
+
+        if thing.nil?
           return render json: {
-                            error: "thing_id is required",
+                            error: "failed to find thing for score",
                             status: :bad_request
                         }, status: :bad_request
-
         end
+
+
         begin
+          if score_params[:score_category_id].nil?
+            score_category = ScoreCategory.where(general: true).first
+          else
+            # if params did not include score category, or one couldn't be found, use the general one
+            score_category = ScoreCategory.where(id: score_params[:score_category_id]).first
+          end
           score = Score.new(score_params)
-          thing = Thing.find(score_params[:thing_id])
           score.thing = thing
+          score.score_category = score_category
 
           @score = @current_user.create_score(score)
           return render template: '/api/v1/scores/create.jbuilder', status: :created, formats: [:json]

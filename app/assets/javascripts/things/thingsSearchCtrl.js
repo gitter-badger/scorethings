@@ -1,4 +1,4 @@
-angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifier', 'scoreModalFactory', '$stateParams', '$location', function($scope, Thing, notifier, scoreModalFactory, $stateParams, $location) {
+angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreModalFactory', 'notifier', '$stateParams', '$state', '$location', function($scope, Thing, scoreModalFactory, notifier, $stateParams, $state, $location) {
     $scope.showNoResultsMessage = false;
     handleQueryParams($location.$$search);
 
@@ -6,27 +6,27 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifi
         if(!params) return;
 
         $scope.query = params.query;
-        $scope.selectedThingType = params.thingType || 'twitter_account';
-        if(params.query && params.thingType) {
+        $scope.selectedType = params.type || 'twitter_account';
+        if(params.query && params.type) {
             searchThing();
         }
     }
 
-    function validThingType(label, examplePlaceholder) {
+    function type(label, examplePlaceholder) {
         return {
             label: label,
             examplePlaceholder: examplePlaceholder && ('Example: ' + examplePlaceholder)
         };
     }
-    $scope.validThingTypes = {
-        twitter_account: validThingType('Twitter Account', 'Patton Oswalt, @pattonoswalt, pattonoswalt, or https://twitter.com/pattonoswalt'),
-        twitter_tweet: validThingType('Twitter Tweet', 'I like cats or https://twitter.com/manuisfunny/status/599219499766718'),
-        youtube_video: validThingType('YouTube Video', 'Cat Stuff or https://www.youtube.com/watch?v=B66feInucFY'),
-        hashtag: validThingType('Hashtag', '#SomethingCats or SomethingCats')
+    $scope.types = {
+        twitter_account: type('Twitter Account', 'Patton Oswalt, @pattonoswalt, pattonoswalt, or https://twitter.com/pattonoswalt'),
+        twitter_tweet: type('Twitter Tweet', 'I like cats or https://twitter.com/manuisfunny/status/599219499766718'),
+        youtube_video: type('YouTube Video', 'Cat Stuff or https://www.youtube.com/watch?v=B66feInucFY'),
+        hashtag: type('Hashtag', '#SomethingCats or SomethingCats')
     };
 
 
-    $scope.$watch('selectedThingType', function() {
+    $scope.$watch('selectedType', function() {
         $scope.things = [];
         $scope.showNoResultsMessage = false;
     });
@@ -37,13 +37,19 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifi
 
 
     $scope.scoreThing = function(thing) {
-        console.log(thing);
-        var scoreInput = {thing: thing};
-        scoreModalFactory.openModal(scoreInput, {closeOnSave: false}, function saveSuccessCallbackFn(response) {
-            console.log('in thing search');
-            console.log(response);
-        });
+        var  scoreInput = {thing: thing};
+        scoreModalFactory.openModal(scoreInput,
+            function saveSuccessCallbackFn(createdScore) {
+                console.log(createdScore);
+                notifier.success('you scored the thing: ' + thing.title);
+                $state.go('scores.show', {scoreId: createdScore.token});
+            },
+            function(response) {
+                notifier.error('failed to score the thing: ' + thing.title);
+                return;
+            });
     };
+
     $scope.scoreHashtagQuery = function() {
         var hashtagExternalId = stripPrefix($scope.query);
         $scope.scoreThing({
@@ -70,18 +76,18 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'notifi
         $scope.query = stripPrefix($scope.query);
         if(!$scope.query.length) return;
 
-        if($scope.selectedThingType == 'hashtag') {
+        if($scope.selectedType == 'hashtag') {
             return;
         }
 
         $location.search({
             query: $scope.query,
-            thingType: $scope.selectedThingType
+            type: $scope.selectedType
         });
 
         $scope.showNoResultsMessage = false;
 
-        Thing.get('search', {thingType: $scope.selectedThingType, query: $scope.query}).then(function(things) {
+        Thing.query({type: $scope.selectedType, query: $scope.query}).then(function(things) {
             $scope.things = things;
             if(!$scope.things.length) {
                 $scope.showNoResultsMessage = true;

@@ -31,6 +31,7 @@ angular.module('app').service('AuthToken', ['localStorageService', 'jwtHelper', 
             clear: function() {
                 localStorageService.remove(this.tokenName);
                 identity.username = null;
+                identity.userId = null;
             }
         };
     }]);

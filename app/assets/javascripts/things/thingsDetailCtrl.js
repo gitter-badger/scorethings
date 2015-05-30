@@ -4,6 +4,7 @@ angular.module('app').controller('ThingsDetailCtrl', ['$scope', '$stateParams', 
     Thing.get(thingId).then(
         function successGet(thing) {
             $scope.thing = thing;
+            console.log(thing.user)
         },
         function errorGet(response) {
             notifier.error('failed to get thing');
@@ -11,13 +12,18 @@ angular.module('app').controller('ThingsDetailCtrl', ['$scope', '$stateParams', 
         });
 
     $scope.scoreThisThing = function() {
-        var newScoreForThisThing = {
-            thing: $scope.thing,
-            thingId: $scope.thing.token
+        $scope.scoreThisThing = function() {
+            var scoreInput = {thing: $scope.thing};
+            scoreModalFactory.openModal(scoreInput,
+                function saveSuccessCallbackFn(createdScore) {
+                    console.log(createdScore);
+                    notifier.success('you scored the thing: ' + $scope.thing.title);
+                    $state.go('scores.show', {scoreId: createdScore.token});
+                },
+                function(response) {
+                    notifier.error('failed to score the thing: ' + $scope.thing.title);
+                    return;
+                });
         };
-        scoreModalFactory.openModal(newScoreForThisThing, {closeOnSave: true}, function saveSuccessCallbackFn(score) {
-            notifier.success('you scored this thing');
-            $state.go('scores.detail', {scoreId: score.token});
-        });
     };
 }]);

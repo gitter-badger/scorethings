@@ -1,11 +1,17 @@
 angular.module('app').factory('scoreCategoriesData', function() {
-    var data = {};
+    var allScoreCategories = {};
+    var generalScoreCategory = {};
     return {
         get: function() {
-            return data;
+            return allScoreCategories;
+        },
+        getGeneralScoreCategory: function() {
+            return generalScoreCategory;
         },
         set: function(dataInput) {
-           data = dataInput;
+            allScoreCategories = dataInput;
+            generalScoreCategory = dataInput['general'];
+            delete allScoreCategories['general'];
         }
     };
 });

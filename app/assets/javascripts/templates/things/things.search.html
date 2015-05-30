@@ -3,11 +3,11 @@
     <form ng-submit="searchThing()">
         <div class="col-xs-12 col-sm-3">
             <div class="form-group">
-                <label for="thingType">Source</label>
-                <select id="thingType"
+                <label for="type">Source</label>
+                <select id="type"
                         class="form-control"
-                        ng-model="selectedThingType"
-                        ng-options="validThingTypeKey as validThingTypeValue.label for (validThingTypeKey, validThingTypeValue)  in validThingTypes">
+                        ng-model="selectedType"
+                        ng-options="typeKey as typeValue.label for (typeKey, typeValue)  in types">
                 </select>
             </div>
         </div>
@@ -18,16 +18,16 @@
                     <input type="text"
                            id="query"
                            class="form-control"
-                           placeholder="{{validThingTypes[selectedThingType].examplePlaceholder}}"
+                           placeholder="{{types[selectedType].examplePlaceholder}}"
                            ng-model="query">
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-disabled="!query" type="submit">
                             <i class="fa fa-search"></i>
                         </button>
                     </span>
-                    <span ng-show="selectedThingType == 'hashtag'" class="input-group-btn">
+                    <span ng-show="selectedType == 'hashtag'" class="input-group-btn">
                         <button class="btn btn-primary" ng-disabled="!query" ng-click="scoreHashtagQuery()">
-                            Score
+                            Score&nbsp;<i class="fa fa-meh-o"></i>
                         </button>
                     </span>
                 </div>
@@ -60,7 +60,10 @@
                     </td>
                     <td class="hidden-xs">{{thing.description}}</td>
                     <td>
-                        <button class="btn btn-primary btn-md" ng-click="scoreThing(thing)">Score</button>
+                        <button class="btn btn-primary btn-md"
+                                ng-disabled="!isLoggedIn()"
+                                ng-click="scoreThing(thing)">
+                            <span class="hidden-xs">Score&nbsp;</span><i class="fa fa-meh-o"></i></button>
                     </td>
                 </tr>
             </tbody>

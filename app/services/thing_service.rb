@@ -4,30 +4,38 @@ class ThingService
     @youtube_service = YoutubeService.new
   end
 
+  def self.find_or_create_by_type_and_external_id(thing_params)
+    thing = Thing.where(type: thing_params[:type], external_id: thing_params[:external_id]).first
+    if thing.nil?
+      self.load_external_thing(thing_params[:type], thing_params[:external_id])
+    end
+  end
+
   def search(thing_type, query)
-    #Rails.cache.fetch("ThingService.search_#{thing_input}_#{query}", :expires_in => 24.hour) do
-      # strip off '@' char at beginning
-    #end
-    if thing_type == Scorethings::ThingTypes::TWITTER_ACCOUNT
-      return search_twitter_account(query)
-    elsif thing_type == Scorethings::ThingTypes::TWITTER_TWEET
-      return search_twitter_tweet(query)
-    elsif thing_type == Scorethings::ThingTypes::YOUTUBE_VIDEO
-      return search_youtube_videos(query)
-    else
-      raise "unimplemented search for thing type: #{thing_type}"
+    Rails.cache.fetch("ThingService.search_#{thing_type}_#{query}", :expires_in => 24.hour) do
+      if thing_type == Scorethings::ThingTypes::TWITTER_ACCOUNT
+        return search_twitter_account(query) || []
+      elsif thing_type == Scorethings::ThingTypes::TWITTER_TWEET
+        return search_twitter_tweet(query) || []
+      elsif thing_type == Scorethings::ThingTypes::YOUTUBE_VIDEO
+        return search_youtube_videos(query) || []
+      else
+        raise "unimplemented search for thing type: #{thing_type}"
+      end
     end
   end
 
   def load_external_thing(thing_type, external_id)
-    if thing_type == Scorethings::ThingTypes::TWITTER_ACCOUNT
-      return load_twitter_account(external_id)
-    elsif thing_type == Scorethings::ThingTypes::TWITTER_TWEET
-      return load_twitter_tweet(external_id)
-    elsif thing_type == Scorethings::ThingTypes::YOUTUBE_VIDEO
-      return load_youtube_video(external_id)
-    else
-      raise "unimplemented load for thing type: #{thing_type}"
+    Rails.cache.fetch("ThingService.load_external_thing_#{thing_type}_#{external_id}", :expires_in => 24.hour) do
+      if thing_type == Scorethings::ThingTypes::TWITTER_ACCOUNT
+        return load_twitter_account(external_id)
+      elsif thing_type == Scorethings::ThingTypes::TWITTER_TWEET
+        return load_twitter_tweet(external_id)
+      elsif thing_type == Scorethings::ThingTypes::YOUTUBE_VIDEO
+        return load_youtube_video(external_id)
+      else
+        raise "unimplemented load for thing type: #{thing_type}"
+      end
     end
   end
 

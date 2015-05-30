@@ -5,14 +5,14 @@ angular.module('app').service('authService', ['AuthToken', '$rootScope', functio
         },
         storeAuthToken: function(token) {
             AuthToken.set(token);
-            $rootScope.$broadcast('userLoggedOn');
+            $rootScope.$broadcast('userLogsIn');
         },
         isExpired: function() {
             return AuthToken.isExpired();
         },
         logout: function() {
             AuthToken.clear();
-            $rootScope.$broadcast('userLoggedOff');
+            $rootScope.$broadcast('userLogsOff');
         }
     };
 }]);

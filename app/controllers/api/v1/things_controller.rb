@@ -2,7 +2,7 @@ module Api
   module V1
     class ThingsController < ApplicationController
       # TODO allow unauthenticated read?
-      skip_before_action :authenticate_request, :current_user, only: [:search, :show, :find]
+      skip_before_action :authenticate_request, :current_user, only: [:show, :index]
 
       def create
         thing_params = params.require(:thing).permit(:type, :external_id, :title)
@@ -25,61 +25,28 @@ module Api
 
       end
 
-      def search
+      def index
         valid_thing_types = [Scorethings::ThingTypes::TWITTER_ACCOUNT,
                              Scorethings::ThingTypes::TWITTER_TWEET,
                              Scorethings::ThingTypes::YOUTUBE_VIDEO,
                              Scorethings::ThingTypes::HASHTAG]
 
-        thing_type = params.require(:thing_type)
-        if !valid_thing_types.include? thing_type
+        type = params.require(:type)
+        if !valid_thing_types.include? type
           return render json: {
-                          error: "unable to search for thing with thing type #{thing_type}",
+                          error: "unable to search for thing with thing type #{type}",
                           status: :bad_request
                       }, status: :bad_request
         end
-        query = params.require(:query)
 
-        thing_service = ThingService.new
-        @things = thing_service.search(thing_type, query)
-
-        if @things.nil?
-          # could not create thing_preview
-          return render json: {
-                            error: "could not find things with value #{query}",
-                            status: :bad_request
-                        }, status: :bad_request
-        end
-      end
-
-      def find
-        valid_thing_types = [Scorethings::ThingTypes::TWITTER_ACCOUNT,
-                             Scorethings::ThingTypes::TWITTER_TWEET,
-                             Scorethings::ThingTypes::YOUTUBE_VIDEO,
-                             Scorethings::ThingTypes::HASHTAG]
-
-        thing_type = params.require(:thing_type)
-        if !valid_thing_types.include? thing_type
-          return render json: {
-                            error: "unable to search for thing with thing type #{thing_type}",
-                            status: :bad_request
-                        }, status: :bad_request
-        end
-        external_id = params[:external_id]
-        if external_id.nil? && thing_type != Scorethings::ThingTypes::HASHTAG
-          return render json: {
-                            error: "cannot find thing without external id, unless type is hashtag",
-                            status: :bad_request
-                        }, status: :bad_request
-        end
-
-        @thing = Thing.where(type: thing_type, external_id: external_id).first
-        if @thing.nil?
-          return render json: {
-                            error: "thing was not found with type: #{thing_type} and external id #{external_id}",
-                            status: :not_found
-                        }, status: :not_found
-
+        query = params[:query]
+        if query.nil?
+          external_id = params[:external_id]
+          puts "params: #{type}, #{external_id}"
+          @things = Thing.where(type: type, external_id: external_id).as_json
+        else
+          thing_service = ThingService.new
+          @things = thing_service.search(type, query)
         end
       end
 
@@ -94,19 +61,6 @@ module Api
                         }, status: :not_found
         end
       end
-
-     def scores
-       thing_id = params.require(:thing_id)
-       begin
-         @thing = Thing.find(thing_id)
-       rescue Mongoid::Errors::DocumentNotFound
-         return render json: {
-                           error: "thing was not found with id: #{thing_id}",
-                           status: :not_found
-                       }, status: :not_found
-       end
-
-     end
     end
   end
 end

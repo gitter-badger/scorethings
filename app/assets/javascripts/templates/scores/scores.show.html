@@ -1,0 +1,103 @@
+<h3 ng-show="!isOwner">Score by <a ui-sref="users.show({userId: score.user.token})">{{score.user.username}}</a></h3>
+<h3 ng-show="isOwner">Your Score</h3>
+<div style="text-align: center">
+    <div class="col-xs-12 col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Thing</h3>
+            </div>
+            <div class="panel-body">
+                <h6><a ui-sref="things.show({thingId: score.thing.token})">{{score.thing.title}}</a></h6>
+                <img ng-src="{{score.thing.imageUri}}">
+                <div ng-show="score.thing.uri" class="row">
+                    <a target="_blank" ng-href="{{score.thing.uri}}">View {{score.thing.type | thingType}}</a>
+                </div>
+                <a class="btn btn-primary btn-sm"
+                   ng-click="scoreThisThing()" ng-show="isLoggedIn()">
+                    <i class="fa fa-plus"></i>&nbsp;Score This Thing {{(isOwner && 'Again') || 'Yourself'}}
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Score</h3>
+            </div>
+            <div class="panel-body">
+                <form name="updateScoreForm" ng-submit="save()">
+                    <div class="form-group">
+                        <select ng-show="isOwner"
+                                id="scoreCategory"
+                                class="form-control"
+                                ng-model="score.scoreCategoryId"
+                                name="scoreCategory"
+                                ng-options="scoreCategory.id as scoreCategory.name for (scoreCategoryId, scoreCategory) in scoreCategories">
+                        </select>
+                        <h1 ng-show="!isOwner">{{score.scoreCategory.name}}</h1>
+                    </div>
+                    <div class="form-group">
+                        <input ng-show="isOwner" class="input-lg" ng-model="score.points" type="number" min="0" max="100" step="1">
+                        <h1 ng-show="!isOwner">{{score.points}}</h1>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <a ng-show="isOwner" ng-disabled="updateScoreForm.$pristine"
+                                    class="btn btn-default col-xs-6" type="submit">
+                                Save
+                            </a>
+                            <a class="btn btn-danger col-xs-6"
+                                    ng-show="isOwner" ng-click="deleteScore()" ng-show="isOwner">
+                                <i class="fa fa-trash-o"></i>&nbsp;Delete
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12" style="text-align: left">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Compare With Other Scores By {{(isOwner && 'You') || 'User'}}</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>More Funny Than...</th>
+                            <th class="hidden-xs">As Funny As...</th>
+                            <th>Less Funny Than...</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <ul>
+                                    <li><a href="">Alpha Boring (55)</a></li>
+                                    <li><a href="">Bravo Lame (49)</a></li>
+                                    <li><a href="">Charlie Tired (31)</a></li>
+                                </ul>
+                            </td>
+                            <td class="hidden-xs">
+                                <ul>
+                                    <li><a href="">Alpha Boring (55)</a></li>
+                                    <li><a href="">Bravo Lame (49)</a></li>
+                                    <li><a href="">Charlie Tired (31)</a></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><a href="">Alpha Boring (55)</a></li>
+                                    <li><a href="">Bravo Lame (49)</a></li>
+                                    <li><a href="">Charlie Tired (31)</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

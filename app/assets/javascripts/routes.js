@@ -34,10 +34,10 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     url: '/score_a_thing',
                     templateUrl: 'scores/scores.scoreAThing.html'
                 }).
-                state('scores.detail', {
+                state('scores.show', {
                     url: '/:scoreId',
-                    templateUrl: 'scores/scores.detail.html',
-                    controller: 'ScoresDetailCtrl'
+                    templateUrl: 'scores/scores.show.html',
+                    controller: 'ShowScoreCtrl'
                 }).
 
             /*

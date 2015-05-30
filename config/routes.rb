@@ -13,11 +13,7 @@ Rails.application.routes.draw do
       get '/things/search' => 'things#search'
       get '/things/find' => 'things#find'
 
-      post '/things/:thing_type/:external_id/scores' => 'scores#score_thing'
-
-      resources :things, except: [:destroy, :edit, :new] do
-        get 'scores' => 'things#scores'
-      end
+      resources :things, except: [:destroy, :edit, :new]
 
       get '/scores/search' => 'scores#search'
       resources :scores, except: [:edit, :new]

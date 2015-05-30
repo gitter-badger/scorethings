@@ -13,7 +13,10 @@ class Score
   token :contains => :fixed_numeric, :length => 8
   search_in :thing => [:description, :title]
 
-  validates_numericality_of :points, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, only_integer: true
+  validates_numericality_of :points, greater_than_or_equal_to: 1, less_than_or_equal_to: 100, only_integer: true
+  validates_presence_of :thing
+  validates_presence_of :score_category
+  validates_presence_of :user
 
   def to_builder
     Jbuilder.new do |score|
