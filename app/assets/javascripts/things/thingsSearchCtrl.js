@@ -20,7 +20,6 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreM
     }
     $scope.types = {
         twitter_account: type('Twitter Account', 'Patton Oswalt, @pattonoswalt, pattonoswalt, or https://twitter.com/pattonoswalt'),
-        twitter_tweet: type('Twitter Tweet', 'I like cats or https://twitter.com/manuisfunny/status/599219499766718'),
         youtube_video: type('YouTube Video', 'Cat Stuff or https://www.youtube.com/watch?v=B66feInucFY'),
         hashtag: type('Hashtag', '#SomethingCats or SomethingCats')
     };

@@ -10,13 +10,12 @@ Rails.application.routes.draw do
       get '/auth/:provider/callback' => 'auth_token#create'
       get '/auth/failure' => 'auth_token#failure'
 
-      get '/things/search' => 'things#search'
-      get '/things/find' => 'things#find'
+      resources :things, except: [:destroy, :edit, :new, :index]
 
-      resources :things, except: [:destroy, :edit, :new]
+      get '/web_things/:type/:external_id' => 'web_things#show'
+      get '/web_things/search' => 'web_things#search'
 
-      get '/scores/search' => 'scores#search'
-      resources :scores, except: [:edit, :new]
+      resources :scores, except: [:edit, :new, :index]
 
       get '/users/:id' => 'users#show'
 

@@ -4,7 +4,7 @@ class Score
   include Mongoid::Search
   include Mongoid::Token
 
-  field :points, type: Integer, default: 0
+  field :points, type: Integer, default: 75
 
   belongs_to :user
   belongs_to :score_category

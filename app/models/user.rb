@@ -49,7 +49,7 @@ class User
     if self != score.user
       raise Exceptions::UnauthorizedModificationError
     end
-    score.update_attributes(update_attrs)
+    score.update_attributes!(update_attrs)
   end
 
   def self.create_with_omniauth(auth)

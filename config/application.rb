@@ -13,7 +13,6 @@ module Scorethings
   module ThingTypes
     # Thing types
     TWITTER_ACCOUNT = 'twitter_account'
-    TWITTER_TWEET = 'twitter_tweet'
     YOUTUBE_VIDEO = 'youtube_video'
     HASHTAG = 'hashtag'
   end

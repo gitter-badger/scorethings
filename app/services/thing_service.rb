@@ -4,67 +4,54 @@ class ThingService
     @youtube_service = YoutubeService.new
   end
 
-  def self.find_or_create_by_type_and_external_id(thing_params)
-    thing = Thing.where(type: thing_params[:type], external_id: thing_params[:external_id]).first
+
+  def find_or_create_by_type_and_external_id(type, external_id)
+    thing = Thing.where(type: type, external_id: external_id).first
     if thing.nil?
-      self.load_external_thing(thing_params[:type], thing_params[:external_id])
+      unless type == Scorethings::ThingTypes::HASHTAG
+        # for things other than hashtag, check that they exist before creating them in database
+        external_thing = get_web_thing(type, external_id)
+        if external_thing.nil?
+          raise Exceptions::WebThingNotFoundError
+        end
+      end
+      thing = Thing.create!(type: type, external_id: external_id)
     end
+    return thing
   end
 
-  def search(thing_type, query)
-    Rails.cache.fetch("ThingService.search_#{thing_type}_#{query}", :expires_in => 24.hour) do
+  def search_for_web_things(thing_type, query)
+    Rails.cache.fetch("ThingService.search_for_web_things_#{thing_type}_#{query}", :expires_in => 1.hour) do
       if thing_type == Scorethings::ThingTypes::TWITTER_ACCOUNT
-        return search_twitter_account(query) || []
-      elsif thing_type == Scorethings::ThingTypes::TWITTER_TWEET
-        return search_twitter_tweet(query) || []
+        return @twitter_service.search_twitter_account_web_things(query) || []
       elsif thing_type == Scorethings::ThingTypes::YOUTUBE_VIDEO
-        return search_youtube_videos(query) || []
+        return @youtube_service.search_youtube_video_web_things(query) || []
       else
-        raise "unimplemented search for thing type: #{thing_type}"
+        raise Exceptions::ThingTypeUnknownError
       end
     end
   end
 
-  def load_external_thing(thing_type, external_id)
-    Rails.cache.fetch("ThingService.load_external_thing_#{thing_type}_#{external_id}", :expires_in => 24.hour) do
-      if thing_type == Scorethings::ThingTypes::TWITTER_ACCOUNT
-        return load_twitter_account(external_id)
-      elsif thing_type == Scorethings::ThingTypes::TWITTER_TWEET
-        return load_twitter_tweet(external_id)
-      elsif thing_type == Scorethings::ThingTypes::YOUTUBE_VIDEO
-        return load_youtube_video(external_id)
-      else
-        raise "unimplemented load for thing type: #{thing_type}"
+  def get_web_thing(thing_type, external_id)
+    Rails.cache.fetch("ThingService.get_web_thing_#{thing_type}_#{external_id}", :expires_in => 1.hour) do
+      case thing_type
+        when Scorethings::ThingTypes::HASHTAG
+          return WebThing.build_from_hashtag(external_id)
+        when Scorethings::ThingTypes::TWITTER_ACCOUNT
+          web_thing = @twitter_service.get_twitter_account_web_thing(external_id)
+          unless web_thing.nil?
+            return web_thing
+          end
+        when Scorethings::ThingTypes::YOUTUBE_VIDEO
+          web_thing = @youtube_service.get_youtube_video_web_thing(external_id)
+          unless web_thing.nil?
+            return web_thing
+          end
+        else
+          raise Exceptions::ThingTypeUnknownError
       end
+
+      raise Exceptions::WebThingNotFoundError
     end
-  end
-
-
-  private
-  def search_twitter_account(query)
-    if query[0] == '@'
-      query[0] = ''
-    end
-    @twitter_service.search_for_twitter_accounts(query)
-  end
-
-  def search_twitter_tweet(query)
-    @twitter_service.search_for_twitter_tweets(query)
-  end
-
-  def search_youtube_videos(query)
-    @youtube_service.search_for_videos(query)
-  end
-
-  def load_youtube_video(video_id)
-    @youtube_service.load_video(video_id)
-  end
-
-  def load_twitter_account(user_id)
-    @twitter_service.load_user(user_id)
-  end
-
-  def load_twitter_tweet(tweet_status_id)
-    @twitter_service.load_tweet(tweet_status_id)
   end
 end
