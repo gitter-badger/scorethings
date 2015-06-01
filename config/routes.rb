@@ -17,6 +17,11 @@ Rails.application.routes.draw do
 
       resources :scores, except: [:edit, :new, :index]
 
+      get '/me' => 'me#show'
+      put '/me' => 'me#update'
+      delete '/me' => 'me#destroy'
+
+      get '/users/search' => 'users#search'
       get '/users/:id' => 'users#show'
 
       get '/score_categories' => 'score_categories#index'

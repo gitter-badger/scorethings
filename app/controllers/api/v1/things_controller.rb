@@ -1,7 +1,7 @@
 module Api
   module V1
     class ThingsController < ApplicationController
-      skip_before_action :authenticate_request, only: [:show, :web_thing]
+      skip_before_action :authenticate_request, :current_user, only: [:show, :web_thing]
 
       def create
         thing_params = params.require(:thing).permit(:type, :external_id)

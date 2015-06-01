@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::WebThingsController do
   before do
-    @user = create(:user_alpha)
+    @user = create(:user)
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
     @web_thing = WebThing.new(

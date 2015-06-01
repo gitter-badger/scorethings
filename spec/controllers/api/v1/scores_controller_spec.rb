@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::ScoresController do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   before do
-    @user = create(:user_alpha)
+    @user = create(:user)
     @score_category = create(:score_category)
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
@@ -87,7 +87,7 @@ RSpec.describe Api::V1::ScoresController do
     end
 
     it "should not update a score points if not owner" do
-      other_user = create(:user_bravo)
+      other_user = create(:user)
       other_user_score = build(:score)
       other_user.create_score(other_user_score)
 
@@ -119,7 +119,7 @@ RSpec.describe Api::V1::ScoresController do
     end
 
     it "should not delete a score points if not owner" do
-      other_user = create(:user_bravo)
+      other_user = create(:user)
       other_user_score = build(:score)
       other_user.create_score(other_user_score)
 

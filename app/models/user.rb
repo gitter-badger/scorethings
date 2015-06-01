@@ -6,8 +6,7 @@ class User
 
   field :username, type: String
   field :description, type: String
-  field :default_points, type: Integer, default: 0
-  field :filter_obscenity, type: Boolean, default: true
+  field :default_points, type: Integer, default: 75
 
   embeds_one :auth_provider
 

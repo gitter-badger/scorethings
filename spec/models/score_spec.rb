@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe Score do
   describe "delete if user is deleted" do
     it "should delete all scores that belonged to a user when the user is deleted" do
-      user = create(:user_alpha)
-      other_user = create(:user_bravo)
+      user = create(:user)
+      other_user = create(:user)
 
       expect(Score.all.length).to eq(0)
       user.create_score(build(:score))

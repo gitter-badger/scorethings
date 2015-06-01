@@ -72,7 +72,7 @@ RSpec.describe User do
 
   describe "scoring things" do
     before do
-      @user = create(:user_alpha)
+      @user = create(:user)
       @score_category = create(:score_category)
       @score = build(:score)
     end
@@ -85,7 +85,7 @@ RSpec.describe User do
     end
 
     it "should not allow changing a score if the user doesn't own it" do
-      other_user = create(:user_bravo)
+      other_user = create(:user)
       @user.create_score(@score)
       expect {
         other_user.change_score(@score, {points: 75})

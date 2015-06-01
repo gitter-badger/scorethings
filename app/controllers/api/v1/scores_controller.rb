@@ -1,7 +1,7 @@
 module Api
   module V1
     class ScoresController < ApplicationController
-      skip_before_action :authenticate_request, only: [:show]
+      skip_before_action :authenticate_request, :current_user, only: [:show]
 
       def create
         score_params = params.require(:score).permit(:score_category_id, :thing_id, :points)
