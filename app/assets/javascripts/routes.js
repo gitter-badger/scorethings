@@ -24,12 +24,6 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     label: 'Scores'
                 }
             }).
-                state('scores.search', {
-                    url: '/search',
-                    templateUrl: 'scores/scores.search.html',
-                    controller: 'ScoresSearchCtrl',
-                    reloadOnSearch : false
-                }).
                 state('scores.scoreAThing', {
                     url: '/score_a_thing',
                     templateUrl: 'scores/scores.scoreAThing.html'
@@ -47,15 +41,10 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 url: '/things',
                 templateUrl: 'things/things.html'
             }).
-                state('things.search', {
-                    url: '/search',
-                    templateUrl: 'things/things.search.html',
-                    reloadOnSearch : false
-                }).
-                state('things.detail', {
+                state('things.show', {
                     url: '/:thingId',
-                    templateUrl: 'things/things.detail.html',
-                    controller: 'ThingsDetailCtrl'
+                    templateUrl: 'things/things.show.html',
+                    controller: 'ThingsShowCtrl'
                 }).
 
             /*
@@ -80,7 +69,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
             /*
              score categories
              */
-            state('score_categories', {
+            state('scoreCategories', {
                 url: '/score_categories',
                 templateUrl: 'scoreCategories/scoreCategories.html',
                 controller: 'ScoreCategoriesCtrl'

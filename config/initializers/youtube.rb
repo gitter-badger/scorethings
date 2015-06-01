@@ -1,1 +1,1 @@
-$youtube = $google_api_client.discovered_api('youtube', 'v3')
+$youtube ||= $google_api_client.discovered_api('youtube', 'v3')

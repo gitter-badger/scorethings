@@ -27,6 +27,7 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
     Score.get(scoreId).then(
         function successGet(score) {
             $scope.score = score;
+            console.log(score);
             updateIsOwner();
         },
         function errorGet(response) {
@@ -34,9 +35,21 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
             console.log(response);
         });
 
+    $scope.changeScore = function() {
+        scoreModalFactory.updateScore($scope.score,
+            function saveSuccessCallbackFn(updatedScore) {
+                console.log(updatedScore);
+                notifier.success('you updated the score for : ' + updatedScore.webThing.title);
+                $scope.score = updatedScore;
+            },
+            function saveErrorCallbackFn() {
+                notifier.error('failed to update score');
+                return;
+            });
+    };
+
     $scope.scoreThisThing = function() {
-        var scoreInput = {thing: $scope.score.thing};
-        scoreModalFactory.openModal(scoreInput,
+        scoreModalFactory.createNewScoreForThing($scope.score.thing,
             function saveSuccessCallbackFn(createdScore) {
                 console.log(createdScore);
                 notifier.success('you scored the thing: ' + createdScore.thing.title);

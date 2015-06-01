@@ -1,6 +1,6 @@
-<div ng-controller="ThingsSearchCtrl">
-    <h2>Search Things</h2>
-    <form ng-submit="searchThing()">
+<div ng-controller="WebThingsSearchCtrl">
+    <h2>Search Web Things</h2>
+    <form ng-submit="searchWebThings()">
         <div class="col-xs-12 col-sm-3">
             <div class="form-group">
                 <label for="type">Source</label>
@@ -13,7 +13,7 @@
         </div>
         <div class="col-xs-12 col-sm-9">
             <div class="form-group">
-                <label for="query">Thing</label>
+                <label for="query">Web Thing</label>
                 <div class="input-group">
                     <input type="text"
                            id="query"
@@ -39,30 +39,30 @@
         <h5>Sorry, no results found for "{{query}}".</h5>
     </div>
 
-    <div class="col-xs-12" ng-show="things.length">
-        <h3>Things</h3>
+    <div class="col-xs-12" ng-show="webThings.length">
+        <h3>Web Things</h3>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th></th>
                     <th>Title</th>
-                    <th class="hidden-xs">Description</th>
+                    <th class="hidden-xs">Content</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="thing in things">
+                <tr ng-repeat="webThing in webThings">
                     <td>
-                       <img ng-src="{{thing.imageUri}}">
+                       <img ng-src="{{webThing.imageUri}}">
                     </td>
                     <td>
-                        <a target="_blank" ng-href="{{thing.uri}}">{{thing.title}}</a>
+                        <a target="_blank" ng-href="{{webThing.uri}}">{{webThing.title}}</a>
                     </td>
-                    <td class="hidden-xs">{{thing.description}}</td>
+                    <td class="hidden-xs">{{webThing.content}}</td>
                     <td>
                         <button class="btn btn-primary btn-md"
                                 ng-disabled="!isLoggedIn()"
-                                ng-click="scoreThing(thing)">
+                                ng-click="scoreWebThing(webThing)">
                             <span class="hidden-xs">Score&nbsp;</span><i class="fa fa-meh-o"></i></button>
                     </td>
                 </tr>

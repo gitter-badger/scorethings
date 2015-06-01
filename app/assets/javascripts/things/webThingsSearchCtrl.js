@@ -1,4 +1,4 @@
-angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreModalFactory', 'notifier', '$stateParams', '$state', '$location', function($scope, Thing, scoreModalFactory, notifier, $stateParams, $state, $location) {
+angular.module('app').controller('WebThingsSearchCtrl', ['$scope', 'WebThing', 'scoreModalFactory', 'notifier', '$stateParams', '$state', '$location', function($scope, WebThing, scoreModalFactory, notifier, $stateParams, $state, $location) {
     $scope.showNoResultsMessage = false;
     handleQueryParams($location.$$search);
 
@@ -8,7 +8,7 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreM
         $scope.query = params.query;
         $scope.selectedType = params.type || 'twitter_account';
         if(params.query && params.type) {
-            searchThing();
+            searchWebThings();
         }
     }
 
@@ -34,24 +34,26 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreM
         $scope.showNoResultsMessage = false;
     });
 
-
-    $scope.scoreThing = function(thing) {
-        var  scoreInput = {thing: thing};
-        scoreModalFactory.openModal(scoreInput,
+    $scope.scoreWebThing = function(webThing) {
+        var thingInput = {
+            type: webThing.type,
+            webThing: webThing
+        };
+        scoreModalFactory.createNewScoreForThing(thingInput,
             function saveSuccessCallbackFn(createdScore) {
                 console.log(createdScore);
-                notifier.success('you scored the thing: ' + thing.title);
+                notifier.success('you scored the web thing: ' + webThing.title);
                 $state.go('scores.show', {scoreId: createdScore.token});
             },
-            function(response) {
-                notifier.error('failed to score the thing: ' + thing.title);
+            function saveErrorCallbackFn() {
+                notifier.error('failed to score the web thing: ' + webThing.title);
                 return;
             });
     };
 
     $scope.scoreHashtagQuery = function() {
         var hashtagExternalId = stripPrefix($scope.query);
-        $scope.scoreThing({
+        $scope.scoreWebThing({
             externalId: hashtagExternalId,
             type: 'hashtag',
             title: '#' + $scope.query
@@ -69,9 +71,8 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreM
     }
 
 
-    $scope.searchThing =  searchThing;
 
-    function searchThing() {
+    function searchWebThings() {
         $scope.query = stripPrefix($scope.query);
         if(!$scope.query.length) return;
 
@@ -86,11 +87,14 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreM
 
         $scope.showNoResultsMessage = false;
 
-        Thing.query({type: $scope.selectedType, query: $scope.query}).then(function(things) {
-            $scope.things = things;
-            if(!$scope.things.length) {
-                $scope.showNoResultsMessage = true;
-            }
-        });
+        WebThing.get('search', {type: $scope.selectedType, query: $scope.query})
+            .then(function(webThings) {
+                $scope.webThings = webThings;
+                if(!$scope.webThings.length) {
+                    $scope.showNoResultsMessage = true;
+                }
+            });
     }
+
+    $scope.searchWebThings =  searchWebThings;
 }]);

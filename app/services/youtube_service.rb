@@ -47,7 +47,7 @@ class YoutubeService
       elsif results.length > 1
         raise StandardError "There should only be one result for youtube video id #{video_id}, but there was #{results.length}"
       else
-        map_youtube_video_to_web_thing(results[0])
+        return map_youtube_video_to_web_thing(results[0])
       end
     rescue Google::APIClient::TransmissionError => e
       puts e.result.body
@@ -57,13 +57,14 @@ class YoutubeService
   private
   def map_youtube_video_to_web_thing(search_result)
     snippet = search_result['snippet']
-    WebThing.new(
+
+    return WebThing.new(
         title: snippet['title'],
         secondary_title: nil,
         external_id: search_result['id'].to_s,
         content: snippet['description'],
         image_uri: snippet['thumbnails']['default']['url'],
-        uri: "https://www.youtube.com/watch?v=#{search_result['id']['videoId']}",
+        uri: "https://www.youtube.com/watch?v=#{search_result['id'].to_s}",
         type: Scorethings::ThingTypes::YOUTUBE_VIDEO)
   end
 
@@ -71,10 +72,11 @@ class YoutubeService
     # TODO refactor this, I think the only difference between this and
     # youtube channels, is the external_id from id.videoId, check later
     snippet = search_result['snippet']
-    WebThing.new(
+
+    return WebThing.new(
         title: snippet['title'],
         secondary_title: nil,
-        external_id: search_result['id']['video_id'].to_s,
+        external_id: search_result['id']['videoId'],
         content: snippet['description'],
         image_uri: snippet['thumbnails']['default']['url'],
         uri: "https://www.youtube.com/watch?v=#{search_result['id']['videoId']}",

@@ -4,7 +4,6 @@ class ThingService
     @youtube_service = YoutubeService.new
   end
 
-
   def find_or_create_by_type_and_external_id(type, external_id)
     thing = Thing.where(type: type, external_id: external_id).first
     if thing.nil?
@@ -21,7 +20,7 @@ class ThingService
   end
 
   def search_for_web_things(thing_type, query)
-    Rails.cache.fetch("ThingService.search_for_web_things_#{thing_type}_#{query}", :expires_in => 1.hour) do
+    #Rails.cache.fetch("ThingService.search_for_web_things_#{thing_type}_#{query}", :expires_in => 1.hour) do
       if thing_type == Scorethings::ThingTypes::TWITTER_ACCOUNT
         return @twitter_service.search_twitter_account_web_things(query) || []
       elsif thing_type == Scorethings::ThingTypes::YOUTUBE_VIDEO
@@ -29,11 +28,11 @@ class ThingService
       else
         raise Exceptions::ThingTypeUnknownError
       end
-    end
+    #end
   end
 
   def get_web_thing(thing_type, external_id)
-    Rails.cache.fetch("ThingService.get_web_thing_#{thing_type}_#{external_id}", :expires_in => 1.hour) do
+    #Rails.cache.fetch("ThingService.get_web_thing_#{thing_type}_#{external_id}", :expires_in => 1.hour) do
       case thing_type
         when Scorethings::ThingTypes::HASHTAG
           return WebThing.build_from_hashtag(external_id)
@@ -52,6 +51,6 @@ class ThingService
       end
 
       raise Exceptions::WebThingNotFoundError
-    end
+    #end
   end
 end

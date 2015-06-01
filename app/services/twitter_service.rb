@@ -23,7 +23,7 @@ class TwitterService
 
   def get_twitter_account_web_thing(user_id)
     begin
-      return $twitter.user(user_id.to_i)
+      return map_twitter_account_to_web_thing($twitter.user(user_id.to_i))
     rescue Twitter::Error::NotFound
       return nil
     end
