@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       delete '/me' => 'me#destroy'
 
       get '/users/search' => 'users#search'
-      get '/users/:id' => 'users#show'
+      get '/users/:username' => 'users#show'
 
       get '/score_categories' => 'score_categories#index'
     end

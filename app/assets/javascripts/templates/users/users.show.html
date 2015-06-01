@@ -1,0 +1,15 @@
+<h3>{{user.username}}</h3>
+<div>
+    <p>
+        {{user.description}}
+    </p>
+</div>
+<div>
+    <h3>Scores</h3>
+    <ul>
+        <li ng-repeat="score in user.scores">
+            <a ui-sref="scores.show({scoreId: score.token})">Thing: {{score.thing.id}}, Points: {{score.points}}</a>
+        </li>
+    </ul>
+</div>
+

@@ -5,7 +5,7 @@ module Api
 
       def show
         begin
-          @user = User.find(params.require(:id))
+          @user = User.find_by(username: params.require(:username))
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             error: "cannot find user",

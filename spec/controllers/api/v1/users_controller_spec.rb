@@ -10,19 +10,19 @@ RSpec.describe Api::V1::UsersController do
 
   describe "GET show" do
     it "should get a user" do
-      get :show, {id: @user._id}
+      get :show, {username: @user.username}
       expect(response).to have_http_status(:ok)
       expect(assigns(:user)).to eq(@user)
     end
 
     it "should get another user" do
-      get :show, {id: @other_user._id}
+      get :show, {username: @other_user.username}
       expect(response).to have_http_status(:ok)
       expect(assigns(:user)).to eq(@other_user)
     end
 
     it "should not find a user" do
-      get :show, {id: '123notauserid'}
+      get :show, {username: '123notausername'}
       expect(response).to have_http_status(:not_found)
     end
   end

@@ -81,5 +81,5 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
 
-  gem 'fakeweb', '~> 1.3'
+  gem 'benchmark-ips'
 end

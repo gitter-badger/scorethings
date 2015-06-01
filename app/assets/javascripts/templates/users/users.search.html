@@ -1,18 +1,17 @@
 <h2>Search Users</h2>
-<h4><small>Find other users of scorethings</small></h4>
+<h4><small>Find other users on scorethings</small></h4>
 <form ng-submit="search()">
     <div class="col-xs-12">
         <div class="form-group">
-            <label for="query">User</label>
             <div class="input-group">
                 <input type="text"
                        id="query"
                        class="form-control"
-                       placeholder="Search by scorethings username or description"
+                       placeholder="username or description"
                        ng-model="query">
                 <span class="input-group-btn">
                     <button class="btn btn-default" ng-disabled="!query" type="submit">
-                        <i class="glyphicon glyphicon-search"></i>
+                        <i class="fa fa-search"></i>
                     </button>
                 </span>
             </div>
@@ -32,7 +31,7 @@
         <tbody>
             <tr ng-repeat="user in users">
                 <td>
-                    {{user.username}}
+                    <a ui-sref="users.show({username: user.username})">{{user.username}}</a>
                 </td>
                 <td>
                     {{user.description}}

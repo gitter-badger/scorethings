@@ -52,18 +52,17 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
             */
             state('users', {
                 url: '/users',
-                templateUrl: 'users/users.html',
-                controller: 'UsersMainCtrl'
+                templateUrl: 'users/users.html'
             }).
                 state('users.search', {
                     url: '/search',
                     templateUrl: 'users/users.search.html',
                     controller: 'UsersSearchCtrl'
                 }).
-                state('users.detail', {
-                    url: '/:userId',
-                    templateUrl: 'users/users.detail.html',
-                    controller: 'UsersDetailCtrl'
+                state('users.show', {
+                    url: '/:username',
+                    templateUrl: 'users/users.show.html',
+                    controller: 'UsersShowCtrl'
                 }).
 
             /*
