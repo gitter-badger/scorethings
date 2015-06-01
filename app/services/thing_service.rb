@@ -1,5 +1,3 @@
-require 'benchmark/ips'
-
 class ThingService
   def initialize
     @twitter_service = TwitterService.new
