@@ -4,6 +4,7 @@ angular.module('app').controller('ThingsShowCtrl', ['$scope', '$stateParams', 'T
     Thing.get(thingId).then(
         function successGet(thing) {
             $scope.thing = thing;
+            $scope.webThing = thing.webThing;
             console.log(thing.user)
         },
         function errorGet(response) {
@@ -12,7 +13,7 @@ angular.module('app').controller('ThingsShowCtrl', ['$scope', '$stateParams', 'T
         });
 
     $scope.scoreThisThing = function() {
-        scoreModalFactory.createNewScoreForThing($scope.thing,
+        scoreModalFactory.createNewScoreForThing($scope.thing, $scope.webThing,
             function saveSuccessCallbackFn(createdScore) {
                 notifier.success('you scored the thing: ' + createdScore.thing.title);
                 $state.go('scores.show', {scoreId: createdScore.token});

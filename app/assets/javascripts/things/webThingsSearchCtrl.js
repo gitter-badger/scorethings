@@ -35,11 +35,7 @@ angular.module('app').controller('WebThingsSearchCtrl', ['$scope', 'WebThing', '
     });
 
     $scope.scoreWebThing = function(webThing) {
-        var thingInput = {
-            type: webThing.type,
-            webThing: webThing
-        };
-        scoreModalFactory.createNewScoreForThing(thingInput,
+        scoreModalFactory.createNewScoreForThing({}, webThing,
             function saveSuccessCallbackFn(createdScore) {
                 console.log(createdScore);
                 notifier.success('you scored the web thing: ' + webThing.title);

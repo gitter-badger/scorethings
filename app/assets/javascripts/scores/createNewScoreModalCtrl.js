@@ -1,18 +1,19 @@
-angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', '$scope', '$modalInstance', 'Score', 'Thing', 'notifier', function(thingInput, $scope, $modalInstance, Score, Thing, notifier) {
+angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webThingInput', '$scope', '$modalInstance', 'Score', 'Thing', 'notifier', function(thingInput, webThingInput, $scope, $modalInstance, Score, Thing, notifier) {
     $scope.score = {
-        thing: thingInput
+        thing_id: thingInput && thingInput.id
     };
+
+    $scope.webThing = webThingInput;
 
     $scope.cancel = function() {
         $modalInstance.dismiss();
     };
 
     $scope.save = function() {
-        if($scope.score.thing.id) {
-            $scope.score.thing_id = $scope.score.thing.id;
+        if($scope.score.thing_id) {
             return createNewScore();
         } else {
-            new Thing({type: $scope.score.thing.webThing.type, externalId: $scope.score.thing.webThing.externalId})
+            new Thing({type: $scope.webThing.type, externalId: $scope.webThing.externalId})
                 .create().then(
                     function successCreateThing(thing) {
                         $scope.score.thing_id = thing.id;

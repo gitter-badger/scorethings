@@ -1,6 +1,6 @@
 angular.module('app').factory('scoreModalFactory', ['$modal', function($modal) {
     return {
-        createNewScoreForThing: function(thingInput, saveSuccessCallbackFn) {
+        createNewScoreForThing: function(thingInput, webThingInput, saveSuccessCallbackFn) {
             var modalInstance = $modal.open({
                 templateUrl: 'scores/createScoreModal.html',
                 controller: 'CreateNewScoreModalCtrl',
@@ -8,6 +8,9 @@ angular.module('app').factory('scoreModalFactory', ['$modal', function($modal) {
                 resolve: {
                     thingInput: function () {
                         return thingInput;
+                    },
+                    webThingInput: function () {
+                        return webThingInput;
                     }
                 }
             });
