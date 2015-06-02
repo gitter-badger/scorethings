@@ -21,7 +21,7 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webT
                     },
                     function errorCreateThing(response) {
                         console.log(response);
-                        return notifier.error('failed to score thing: ' + $scope.score.thing.webThing.title);
+                        return notifier.error('failed to score thing: ' + $scope.webThing.title);
                     });
         }
     };
