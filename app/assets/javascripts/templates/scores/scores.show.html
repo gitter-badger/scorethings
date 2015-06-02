@@ -27,9 +27,6 @@
             <div class="panel-body">
                 <form name="updateScoreForm" ng-submit="updateScore()">
                     <div class="form-group">
-                        <h3>{{score.scoreCategory.name}}</h3>
-                    </div>
-                    <div class="form-group">
                         <h3 ng-show="!isOwner">{{score.points}}</h3>
                         <input class="input-lg"
                                ng-show="isOwner"

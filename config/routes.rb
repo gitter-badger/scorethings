@@ -23,8 +23,6 @@ Rails.application.routes.draw do
 
       get '/users/search' => 'users#search'
       get '/users/:username' => 'users#show'
-
-      get '/score_categories' => 'score_categories#index'
     end
   end
 

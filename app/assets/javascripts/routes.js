@@ -66,15 +66,6 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 }).
 
             /*
-             score categories
-             */
-            state('scoreCategories', {
-                url: '/score_categories',
-                templateUrl: 'scoreCategories/scoreCategories.html',
-                controller: 'ScoreCategoriesCtrl'
-            }).
-
-            /*
                  about
             */
             state('about', {

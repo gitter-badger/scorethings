@@ -1,12 +1,7 @@
-angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', '$scope', '$modalInstance', 'Score', 'Thing', 'scoreCategoriesData', 'notifier', function(thingInput, $scope, $modalInstance, Score, Thing, scoreCategoriesData, notifier) {
+angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', '$scope', '$modalInstance', 'Score', 'Thing', 'notifier', function(thingInput, $scope, $modalInstance, Score, Thing, notifier) {
     $scope.score = {
         thing: thingInput
     };
-    $scope.scoreCategories = scoreCategoriesData.get();
-
-    var generalScoreCategory = scoreCategoriesData.getGeneralScoreCategory();
-    $scope.score.scoreCategory = generalScoreCategory;
-    $scope.score.scoreCategoryId = generalScoreCategory.id;
 
     $scope.cancel = function() {
         $modalInstance.dismiss();

@@ -12,6 +12,5 @@ json.user do
     json.id score.id.to_s
     json.token score.token
     json.thing score.thing.to_builder
-    json.score_category score.score_category.to_builder
   end
 end

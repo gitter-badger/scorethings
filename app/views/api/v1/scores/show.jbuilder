@@ -8,7 +8,4 @@ json.score do
   json.token @score.token
   json.created_at @score.created_at
   json.updated_at @score.updated_at
-
-  json.score_category @score.score_category.to_builder
-  json.score_category_id @score.score_category.id.to_s
 end

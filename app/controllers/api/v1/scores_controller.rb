@@ -4,24 +4,16 @@ module Api
       skip_before_action :authenticate_request, :current_user, only: [:show]
 
       def create
-        score_params = params.require(:score).permit(:score_category_id, :thing_id, :points)
+        score_params = params.require(:score).permit(:thing_id, :points)
         thing_id = score_params[:thing_id]
-        score_category_id = score_params[:score_category_id]
 
         begin
           thing = Thing.find(thing_id)
-          if score_category_id.nil?
-            # if params did not include score category, or one couldn't be found, use the general one
-            score_category = ScoreCategory.find_by(general: true)
-          else
-            score_category = ScoreCategory.find(score_category_id)
-          end
           score_params[:thing] = thing
-          score_params[:score_category] = score_category
 
           @score = Score.new(score_params)
           @current_user.create_score(@score)
-          return redirect_to action: 'show', id: @score._id.to_s
+          redirect_to action: 'show', id: @score._id.to_s
         rescue Exceptions::ScoreUniquenessError
           return render json: {
                             status: :conflict
@@ -41,8 +33,8 @@ module Api
       def update
         begin
           @score = Score.find(params.require(:id))
-          scores_params = params.require(:score).permit(:points)
-          @current_user.update_points(@score, scores_params[:points])
+          score_params = params.require(:score).permit(:points)
+          @current_user.update_points(@score, score_params[:points])
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             status: :not_found
@@ -88,12 +80,12 @@ module Api
           thing = @score.thing
           @web_thing =  $thing_service.get_web_thing(thing[:type], thing[:external_id])
         rescue Mongoid::Errors::DocumentNotFound
-            return render json: {
-                              error: "failed to score for id: #{params[:id]}",
-                              status: :not_found
-                          }, status: :not_found
+          return render json: {
+                            error: "failed to score for id: #{params[:id]}",
+                            status: :not_found
+                        }, status: :not_found
         end
       end
-   end
+    end
   end
 end

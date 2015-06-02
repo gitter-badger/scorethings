@@ -1,4 +1,4 @@
-angular.module('app').controller('MainCtrl', ['scoreCategoriesData', '$scope', '$rootScope', 'loginModalFactory', 'authService', function(scoreCategoriesData, $scope, $rootScope, loginModalFactory, authService) {
+angular.module('app').controller('MainCtrl', ['$scope', '$rootScope', 'loginModalFactory', 'authService', function($scope, $rootScope, loginModalFactory, authService) {
     $rootScope.login = function() {
         loginModalFactory.openModal();
     };
@@ -9,9 +9,5 @@ angular.module('app').controller('MainCtrl', ['scoreCategoriesData', '$scope', '
 
     $scope.isLoggedIn = function() {
         return authService.isLoggedIn();
-    };
-
-    $scope.init = function(scoreCategories) {
-        $scope.$evalAsync(scoreCategoriesData.set(scoreCategories));
     };
 }]);

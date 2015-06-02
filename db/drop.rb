@@ -1,3 +1,3 @@
-User.delete_all
-Score.delete_all
-ScoreCategory.delete_all
+User.destroy_all
+Score.destroy_all
+Thing.destroy_all

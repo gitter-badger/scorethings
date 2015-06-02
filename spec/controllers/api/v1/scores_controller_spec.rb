@@ -4,15 +4,12 @@ RSpec.describe Api::V1::ScoresController do
   # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
   before do
     @user = create(:user)
-    @score_category = create(:score_category)
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
-    @general_score_category = create(:score_category, general: true)
     @thing = create(:thing, :twitter_account)
     @params = {
         score: {
             thing_id: @thing._id,
-            score_category_id: @score_category._id,
             points: 21
         }
     }
@@ -27,7 +24,6 @@ RSpec.describe Api::V1::ScoresController do
       expect(response).to redirect_to :action => :show, id: assigns(:score)._id.to_s
       expect(Score.all.length).to eq(1)
       expect(Score.all.first.thing).to eq(@thing)
-      expect(Score.all.first.score_category).to eq(@score_category)
       expect(Score.all.first.points).to eq(21)
     end
 
@@ -54,14 +50,6 @@ RSpec.describe Api::V1::ScoresController do
       post :create, @params
       expect(response).to have_http_status(:bad_request)
       expect(Score.all.length).to eq(0)
-    end
-
-    it "should create a score with a general score category if no score_category_id provided" do
-      @params[:score][:score_category_id] = nil
-
-      post :create, @params
-      expect(assigns(:score)).to_not be_nil
-      expect(assigns(:score).score_category).to eq(@general_score_category)
     end
   end
 
@@ -136,9 +124,9 @@ RSpec.describe Api::V1::ScoresController do
     end
   end
 
-  describe "violating uniqueness of a score's user, score category, and thing" do
+  describe "violating uniqueness of a score's user and thing" do
     before do
-      @existing_score = build(:score, thing: @thing, score_category: @score_category)
+      @existing_score = build(:score, thing: @thing)
       @user.create_score(@existing_score)
     end
 

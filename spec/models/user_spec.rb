@@ -73,7 +73,6 @@ RSpec.describe User do
   describe "scoring things" do
     before do
       @user = create(:user)
-      @score_category = create(:score_category)
       @score = build(:score)
     end
 
@@ -103,7 +102,7 @@ RSpec.describe User do
 
     it "should not have more than one score with the same user, score cateogry and thing" do
       @user.create_score(@score)
-      other_score = build(:score, thing: @score.thing, score_category: @score.score_category)
+      other_score = build(:score, thing: @score.thing)
 
       expect(Score.all.length).to eq(1)
       expect {
