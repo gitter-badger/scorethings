@@ -21,7 +21,11 @@ module Api
 
           @score = Score.new(score_params)
           @current_user.create_score(@score)
-          redirect_to action: 'show', id: @score._id.to_s
+          return redirect_to action: 'show', id: @score._id.to_s
+        rescue Exceptions::ScoreUniquenessError
+          return render json: {
+                            status: :conflict
+                        }, status: :conflict
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             status: :not_found
@@ -37,9 +41,8 @@ module Api
       def update
         begin
           @score = Score.find(params.require(:id))
-          score_params = params.require(:score).permit(:points, :score_category_id)
-          @current_user.change_score(@score, score_params)
-          redirect_to action: 'show', id: @score._id.to_s
+          scores_params = params.require(:score).permit(:points)
+          @current_user.update_points(@score, scores_params[:points])
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             status: :not_found

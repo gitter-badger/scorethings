@@ -135,4 +135,16 @@ RSpec.describe Api::V1::ScoresController do
       expect(response).to have_http_status(:unauthorized)
     end
   end
+
+  describe "violating uniqueness of a score's user, score category, and thing" do
+    before do
+      @existing_score = build(:score, thing: @thing, score_category: @score_category)
+      @user.create_score(@existing_score)
+    end
+
+    it "should not allow another score to be created that is not unique" do
+      post :create, @params
+      expect(response).to have_http_status(:conflict)
+    end
+  end
 end

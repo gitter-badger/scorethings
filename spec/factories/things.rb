@@ -4,6 +4,7 @@ FactoryGirl.define do
 
   factory :thing, class: Thing do
     external_id { FactoryGirl.generate(:thing_external_id) }
+    type Scorethings::ThingTypes::TWITTER_ACCOUNT
 
     trait :twitter_account do
       type Scorethings::ThingTypes::TWITTER_ACCOUNT

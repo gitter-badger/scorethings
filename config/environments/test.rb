@@ -39,13 +39,4 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-
-  # memcached with dalli
-  # https://github.com/mperham/dalli
-  config.cache_store = :dalli_store,
-      'localhost:11211',
-      {:failover => true,
-       :socket_timeout => 1.5,
-       :socket_failure_delay => 0.2
-      }
 end

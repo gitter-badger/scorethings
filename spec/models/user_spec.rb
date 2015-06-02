@@ -84,12 +84,36 @@ RSpec.describe User do
       expect(@user.scores.first).to eq(@score)
     end
 
-    it "should not allow changing a score if the user doesn't own it" do
-      other_user = create(:user)
+    describe "updating a score" do
+      it "should update a score" do
+        @user.create_score(@score)
+        @user.update_points(@score, 33)
+        @score.reload
+        expect(@score.points).to eq(33)
+      end
+
+      it "should not allow updating a score if the user doesn't own it" do
+        other_user = create(:user)
+        @user.create_score(@score)
+        expect {
+          other_user.update_points(@score, 75)
+        }.to raise_error(Exceptions::UnauthorizedModificationError)
+      end
+    end
+
+    it "should not have more than one score with the same user, score cateogry and thing" do
       @user.create_score(@score)
+      other_score = build(:score, thing: @score.thing, score_category: @score.score_category)
+
+      expect(Score.all.length).to eq(1)
       expect {
-        other_user.change_score(@score, {points: 75})
-      }.to raise_error(Exceptions::UnauthorizedModificationError)
+        @user.create_score(other_score)
+      }.to raise_error(Exceptions::ScoreUniquenessError)
+      expect(Score.all.length).to eq(1)
+
+      other_score.thing = create(:thing)
+      @user.create_score(other_score)
+      expect(Score.all.length).to eq(2)
     end
   end
 end

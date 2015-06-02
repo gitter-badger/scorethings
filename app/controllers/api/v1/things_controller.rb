@@ -35,19 +35,6 @@ module Api
                         }, status: :failed_dependency
         end
       end
-
-      def web_thing
-        id = params.require(:id)
-        begin
-          @thing = Thing.find(id)
-          redirect_to controller: 'web_things', action: 'show', external_id: @thing[:external_id], type: @thing[:type]
-        rescue Mongoid::Errors::DocumentNotFound
-          return render json: {
-                            error: "thing was not found with thing_id: #{id}",
-                            status: :not_found
-                        }, status: :not_found
-        end
-      end
     end
   end
 end

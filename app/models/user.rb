@@ -30,11 +30,13 @@ class User
   end
 
   def create_score(score)
+    unless self.scores.where(thing: score.thing, score_category: score.score_category).first.nil?
+      raise Exceptions::ScoreUniquenessError
+    end
     score.user = self
     score.save!
     score
   end
-
 
   # TODO common logic between delete and change score
   def delete_score(score)
@@ -44,11 +46,11 @@ class User
     score.destroy
   end
 
-  def change_score(score, update_attrs)
+  def update_points(score, points)
     if self != score.user
       raise Exceptions::UnauthorizedModificationError
     end
-    score.update_attributes!(update_attrs)
+    score.update_attributes!(points: points)
   end
 
   def self.create_with_omniauth(auth)

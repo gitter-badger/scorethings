@@ -1,5 +1,16 @@
 angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Score', 'notifier', 'identity', 'scoreCategoriesData', 'scoreModalFactory', '$state', function($scope, $stateParams, Score, notifier, identity, scoreCategoriesData, scoreModalFactory, $state) {
     var scoreId = $stateParams.scoreId;
+    Score.get(scoreId).then(
+        function successGet(score) {
+            $scope.score = score;
+            console.log(score);
+            updateIsOwner();
+        },
+        function errorGet(response) {
+            notifier.error('failed to get score');
+            console.log(response);
+        });
+
     $scope.scoreCategories = scoreCategoriesData.get();
     $scope.isOwner = false;
 
@@ -19,32 +30,14 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
         console.log('userid: ', $scope.score.user.id)
     });
 
-    $scope.save = function() {
-
-    };
-
-
-    Score.get(scoreId).then(
-        function successGet(score) {
-            $scope.score = score;
-            console.log(score);
-            updateIsOwner();
-        },
-        function errorGet(response) {
-            notifier.error('failed to get score');
-            console.log(response);
-        });
-
-    $scope.changeScore = function() {
-        scoreModalFactory.updateScore($scope.score,
-            function saveSuccessCallbackFn(updatedScore) {
-                console.log(updatedScore);
+    $scope.updateScore = function() {
+        new Score($scope.score).update().then(
+            function successUpdate(updatedScore) {
                 notifier.success('you updated the score for : ' + updatedScore.webThing.title);
                 $scope.score = updatedScore;
             },
-            function saveErrorCallbackFn() {
+            function errorUpdate() {
                 notifier.error('failed to update score');
-                return;
             });
     };
 
@@ -55,7 +48,7 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
                 notifier.success('you scored the thing: ' + createdScore.thing.title);
                 $state.go('scores.show', {scoreId: createdScore.token});
             },
-            function(response) {
+            function() {
                 notifier.error('failed to score the thing: ' + $scope.score.thing.title);
                 return;
             });
