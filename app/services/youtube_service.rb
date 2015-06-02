@@ -60,9 +60,7 @@ class YoutubeService
 
     return WebThing.new(
         title: snippet['title'],
-        secondary_title: nil,
         external_id: search_result['id'].to_s,
-        content: snippet['description'],
         image_uri: snippet['thumbnails']['default']['url'],
         uri: "https://www.youtube.com/watch?v=#{search_result['id'].to_s}",
         type: Scorethings::ThingTypes::YOUTUBE_VIDEO)
@@ -75,9 +73,7 @@ class YoutubeService
 
     return WebThing.new(
         title: snippet['title'],
-        secondary_title: nil,
         external_id: search_result['id']['videoId'],
-        content: snippet['description'],
         image_uri: snippet['thumbnails']['default']['url'],
         uri: "https://www.youtube.com/watch?v=#{search_result['id']['videoId']}",
         type: Scorethings::ThingTypes::YOUTUBE_VIDEO)

@@ -8,7 +8,7 @@ module Api
         type = params.require(:type)
         begin
           @web_thing = $thing_service.get_web_thing(type, external_id)
-          @web_thing.thing = Thing.where(type: @web_thing.type, external_id: @web_thing.external_id).first
+          @thing = Thing.where(type: @web_thing.type, external_id: @web_thing.external_id).first
         rescue Exceptions::WebThingNotFoundError
           return render json: {
                             error: "web_thing was not found with external_id: #{external_id} and type: #{type}",

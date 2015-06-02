@@ -39,11 +39,7 @@ module Api
           @score = Score.find(params.require(:id))
           score_params = params.require(:score).permit(:points, :score_category_id)
           @current_user.change_score(@score, score_params)
-          #redirect_to action: 'show', id: @score._id.to_s
-          return render json: {
-                            score: @score.to_json,
-                            status: :ok
-                        }, status: :ok
+          redirect_to action: 'show', id: @score._id.to_s
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             status: :not_found
@@ -87,7 +83,7 @@ module Api
         begin
           @score = Score.find(id)
           thing = @score.thing
-          @web_thing = $thing_service.get_web_thing(thing[:type], thing[:external_id])
+          @web_thing =  $thing_service.get_web_thing(thing[:type], thing[:external_id])
         rescue Mongoid::Errors::DocumentNotFound
             return render json: {
                               error: "failed to score for id: #{params[:id]}",

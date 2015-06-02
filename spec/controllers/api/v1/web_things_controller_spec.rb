@@ -19,7 +19,7 @@ RSpec.describe Api::V1::WebThingsController do
       get :show, {type: @web_thing.type, external_id: @web_thing.external_id}
       expect(response).to have_http_status(:ok)
       expect(assigns(:web_thing).external_id).to eq(@web_thing.external_id)
-      expect(assigns(:web_thing).thing).to be_nil
+      expect(assigns(:thing)).to be_nil
     end
 
     it "should find a web_thing with a thing" do
@@ -29,7 +29,7 @@ RSpec.describe Api::V1::WebThingsController do
       get :show, {type: @web_thing.type, external_id: @web_thing.external_id}
       expect(response).to have_http_status(:ok)
       expect(assigns(:web_thing).external_id).to eq(@web_thing.external_id)
-      expect(assigns(:web_thing).thing).to eq(@thing_for_web_thing)
+      expect(assigns(:thing)).to eq(@thing_for_web_thing)
     end
 
     it "should not find a web_thing that doesn't exist" do

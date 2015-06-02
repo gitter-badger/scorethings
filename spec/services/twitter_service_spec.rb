@@ -27,7 +27,6 @@ RSpec.describe TwitterService do
       expect(search_result).to_not be_nil
       expect(search_result.external_id).to eq(11111)
       expect(search_result.title).to eq('@pattonoswalt')
-      expect(search_result.secondary_title).to eq('Patton Oswalt')
       expect(search_result.uri).to eq('https://twitter.com/pattonoswalt')
       expect(search_result.verified).to be true
     end
@@ -44,7 +43,6 @@ RSpec.describe TwitterService do
       expect(search_result).to_not be_nil
       expect(search_result.external_id).to eq(11111)
       expect(search_result.title).to eq('@pattonoswalt')
-      expect(search_result.secondary_title).to eq('Patton Oswalt')
       expect(search_result.uri).to eq('https://twitter.com/pattonoswalt')
       expect(search_result.verified).to be true
     end
