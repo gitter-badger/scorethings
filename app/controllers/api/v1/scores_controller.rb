@@ -15,7 +15,10 @@ module Api
           @current_user.create_score(@score)
           redirect_to action: 'show', id: @score._id.to_s
         rescue Exceptions::ScoreUniquenessError
+          existing_score = @current_user.scores.where(thing: thing).first
           return render json: {
+                            error: "a score for this thing has already been created by this user",
+                            existing_score: existing_score,
                             status: :conflict
                         }, status: :conflict
         rescue Mongoid::Errors::DocumentNotFound
@@ -33,8 +36,8 @@ module Api
       def update
         begin
           @score = Score.find(params.require(:id))
-          score_params = params.require(:score).permit(:points)
-          @current_user.update_points(@score, score_params[:points])
+          score_params = params.require(:score).permit(:points, :meh_floor, :meh_ceiling)
+          @current_user.update_score(@score, score_params)
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             status: :not_found

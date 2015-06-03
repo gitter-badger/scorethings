@@ -4,7 +4,7 @@ angular.module('app').factory('scoreModalFactory', ['$modal', function($modal) {
             var modalInstance = $modal.open({
                 templateUrl: 'scores/createScoreModal.html',
                 controller: 'CreateNewScoreModalCtrl',
-                size: 'md',
+                size: 'sm',
                 resolve: {
                     thingInput: function () {
                         return thingInput;

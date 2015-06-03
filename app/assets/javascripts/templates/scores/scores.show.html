@@ -13,8 +13,8 @@
                     <a target="_blank" ng-href="{{score.webThing.uri}}">Go To This {{score.webThing.type | thingType}}</a>
                 </div>
                 <a class="btn btn-primary btn-sm"
-                   ng-click="scoreThisThing()" ng-show="isLoggedIn()">
-                    <i class="fa fa-plus"></i>&nbsp;Score This Thing {{(isOwner && 'Again') || 'Yourself'}}
+                   ng-click="scoreThisThing()" ng-show="isLoggedIn() && !isOwner">
+                    Score This Yourself
                 </a>
             </div>
         </div>
@@ -27,13 +27,14 @@
             <div class="panel-body">
                 <form name="updateScoreForm" ng-submit="updateScore()">
                     <div class="form-group">
-                        <h3 ng-show="!isOwner">{{score.points}}</h3>
-                        <input class="input-lg"
-                               ng-show="isOwner"
-                               id="points"
-                               ng-model="score.points"
-                               type="number"
-                               min="0" max="100" step="1">
+                        <h3>{{score.points}}</h3>
+                        <slider ng-model="score.points"
+                                ng-show="isOwner"
+                                min="1"
+                                step="1"
+                                max="100"
+                                value="score.points">
+                        </slider>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12">
@@ -46,6 +47,22 @@
                         </div>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Score Archives</h3>
+            </div>
+            <div class="panel-body">
+                <div ng-repeat="scoreArchive in score.scoreArchives | orderBy: '-createdAt'" class="panel panel-default">
+                    <div class="panel-body">
+                        <h5>{{scoreArchive.points}}</h5>
+                        <small>{{scoreArchive.createdAt | date:'MM/dd/yyyy @ h:mma'}}</small>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

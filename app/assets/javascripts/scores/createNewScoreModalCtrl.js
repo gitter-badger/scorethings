@@ -1,7 +1,9 @@
 angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webThingInput', '$scope', '$modalInstance', 'Score', 'Thing', 'notifier', function(thingInput, webThingInput, $scope, $modalInstance, Score, Thing, notifier) {
     $scope.score = {
-        thing_id: thingInput && thingInput.id
+        thing_id: thingInput && thingInput.id,
+        points: 75 // TODO use user's default points
     };
+    $scope.warningMessage = null;
 
     $scope.webThing = webThingInput;
 
@@ -20,18 +22,34 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webT
                         return createNewScore();
                     },
                     function errorCreateThing(response) {
-                        console.log(response);
-                        return notifier.error('failed to score thing: ' + $scope.webThing.title);
+                        if(response.status == 409) {
+                            handleConflict(response);
+                        } else {
+                            return notifier.error('failed to score thing: ' + $scope.webThing.title);
+                        }
                     });
         }
     };
+
+    function handleConflict(response) {
+        // there was a conflict because a score with the same user and thing
+        // already exists, so ask user if they want to update it
+        console.log(response);
+        $scope.warningMessage = 'You already have a score for this thing.';
+
+        $scope.existingScoreId = response.data.existing_score.token;
+    }
 
     function createNewScore() {
         new Score($scope.score).create().then(function successCreate(score) {
                 console.log(score);
                 $modalInstance.close(score);
-            }, function errorCreate(errorMsg) {
-                notifier.error('failed to save score: ' + errorMsg);
+            }, function errorCreate(response) {
+                if(response.status == 409) {
+                    handleConflict(response);
+                } else {
+                    return notifier.error('failed to score thing: ' + $scope.webThing.title);
+                }
             });
     }
 }]);

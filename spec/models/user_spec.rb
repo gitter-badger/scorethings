@@ -86,7 +86,7 @@ RSpec.describe User do
     describe "updating a score" do
       it "should update a score" do
         @user.create_score(@score)
-        @user.update_points(@score, 33)
+        @user.update_score(@score, {points: 33})
         @score.reload
         expect(@score.points).to eq(33)
       end
@@ -95,7 +95,7 @@ RSpec.describe User do
         other_user = create(:user)
         @user.create_score(@score)
         expect {
-          other_user.update_points(@score, 75)
+          other_user.update_score(@score, {points: 75})
         }.to raise_error(Exceptions::UnauthorizedModificationError)
       end
     end

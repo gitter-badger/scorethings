@@ -15,6 +15,7 @@
  *= require toastr/toastr.min.css
  *= require bootstrap-social/bootstrap-social.css
  *= require angular-loading-bar/build/loading-bar.min.css
+ *= require seiyria-bootstrap-slider/dist/css/bootstrap-slider.min
  *= require_self
  */
 

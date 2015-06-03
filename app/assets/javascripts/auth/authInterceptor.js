@@ -20,7 +20,6 @@ angular.module('app').factory('AuthInterceptor', ['$q', '$injector', 'notifier',
                 }
                 return $q.reject(response);
             } else {
-                notifier.error('Error executing last action');
                 return $q.reject(response);
             }
         }

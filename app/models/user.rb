@@ -46,11 +46,11 @@ class User
     score.destroy
   end
 
-  def update_points(score, points)
+  def update_score(score, attrs)
     if self != score.user
       raise Exceptions::UnauthorizedModificationError
     end
-    score.update_attributes!(points: points)
+    score.update(attrs)
   end
 
   def self.create_with_omniauth(auth)

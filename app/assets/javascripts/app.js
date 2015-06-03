@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'rails'])
+angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'rails', 'ui.bootstrap-slider'])
     .config(['$httpProvider', 'localStorageServiceProvider', function($httpProvider, localStorageServiceProvider) {
         localStorageServiceProvider.setPrefix('scorethings');
 
