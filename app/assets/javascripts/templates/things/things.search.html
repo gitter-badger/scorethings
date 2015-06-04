@@ -22,12 +22,12 @@
                            ng-model="query">
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-disabled="!query" type="submit">
-                            <i class="fa fa-search"></i>
+                            Search
                         </button>
                     </span>
                     <span ng-show="selectedType == 'hashtag'" class="input-group-btn">
                         <button class="btn btn-primary" ng-disabled="!query" ng-click="scoreHashtagQuery()">
-                            Score&nbsp;<i class="fa fa-meh-o"></i>
+                            Score
                         </button>
                     </span>
                 </div>
@@ -61,7 +61,8 @@
                         <button class="btn btn-primary btn-md"
                                 ng-disabled="!isLoggedIn()"
                                 ng-click="scoreWebThing(webThing)">
-                            <span class="hidden-xs">Score&nbsp;</span><i class="fa fa-meh-o"></i></button>
+                            Score
+                        </button>
                     </td>
                 </tr>
             </tbody>
