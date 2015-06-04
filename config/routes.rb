@@ -17,12 +17,16 @@ Rails.application.routes.draw do
 
       resources :scores, except: [:edit, :new, :index]
 
-      get '/me' => 'me#show'
-      put '/me' => 'me#update'
-      delete '/me' => 'me#destroy'
 
-      get '/users/search' => 'users#search'
-      get '/users/:username' => 'users#show'
+      get '/settings' => 'settings#show'
+      put '/settings' => 'settings#update'
+
+      get '/users' => 'users#show'
+      get '/users' => 'users#search'
+
+      # for current user only
+      put '/users' => 'users#update'
+      delete '/users' => 'users#destroy'
     end
   end
 

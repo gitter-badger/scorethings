@@ -24,8 +24,9 @@
 //= require angularjs-rails-resource/angularjs-rails-resource.min
 //= require angular-animate/angular-animate
 //= require angular-loading-bar/build/loading-bar.min.js
-//= require seiyria-bootstrap-slider/dist/bootstrap-slider.min
-//= require angular-bootstrap-slider/slider
+//= require jquery-ui/ui/jquery-ui.js
+//= require angular-ui-slider/src/slider
+//= require humps/humps
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app

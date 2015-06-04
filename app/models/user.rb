@@ -4,26 +4,26 @@ class User
   include Mongoid::Search
   include Mongoid::Token
 
-  field :username, type: String
-  field :description, type: String
-  field :default_points, type: Integer, default: 75
-
+  embeds_one :settings
   embeds_one :auth_provider
 
-  has_many :scores, autosave: true, dependent: :delete
+  field :username, type: String
+  field :description, type: String
+
+  search_in :username, :description
 
   validates_presence_of :username
   validates_uniqueness_of :username
   validates_format_of :username, with: /\A[A-Za-z0-9_-]{3,16}\z/
   validates_length_of :description, maximum: 150
 
+  has_many :scores, autosave: true, dependent: :delete
+
   token :contains => :fixed_numeric, :length => 8
-  search_in :username, :description
 
   def to_builder
     Jbuilder.new do |user|
       user.username self.username
-      user.description self.description
       user.id self._id.to_s
       user.token self.token
     end
@@ -50,7 +50,7 @@ class User
     if self != score.user
       raise Exceptions::UnauthorizedModificationError
     end
-    score.update(attrs)
+    score.update_attributes!(attrs)
   end
 
   def self.create_with_omniauth(auth)
@@ -61,9 +61,10 @@ class User
         # raise AuthenticationFailureError "failed to create user with omniauth provider: #{provider.errors.full_message}"
         raise Exceptions::AuthenticationFailureError
       end
-      random_username = User.generate_random_username
-      user.username = random_username
+
+      user.username = User.generate_random_username
       user.auth_provider = auth_provider
+      user.settings = Settings.new
     end
   end
 
@@ -87,7 +88,8 @@ class User
   def generate_auth_token
     payload = {
         user_id: self._id.to_s,
-        username: self.username
+        username: self.username,
+        settings: self.settings
     }
     AuthToken.encode(payload)
   end

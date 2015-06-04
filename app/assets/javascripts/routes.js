@@ -47,23 +47,6 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'ThingsShowCtrl'
                 }).
 
-            /*
-                users
-            */
-            state('users', {
-                url: '/users',
-                templateUrl: 'users/users.html'
-            }).
-                state('users.search', {
-                    url: '/search',
-                    templateUrl: 'users/users.search.html',
-                    controller: 'UsersSearchCtrl'
-                }).
-                state('users.show', {
-                    url: '/:username',
-                    templateUrl: 'users/users.show.html',
-                    controller: 'UsersShowCtrl'
-                }).
 
             /*
                  about
@@ -76,6 +59,37 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     url: '/scorethings',
                     templateUrl: 'about/about.scorethings.html'
                 }).
+            /*
+             users
+             */
+            state('users', {
+                url: '/users',
+                templateUrl: 'users/users.html'
+            }).
+                state('users.edit', {
+                    url: '/edit',
+                    templateUrl: 'users/users.edit.html',
+                    controller: 'UsersEditCtrl'
+                }).
+                state('users.search', {
+                    url: '/search',
+                    templateUrl: 'users/users.search.html',
+                    controller: 'UsersSearchCtrl'
+                }).
+                state('users.profile', {
+                    url: '/profile/:username',
+                    templateUrl: 'users/users.profile.html',
+                    controller: 'UsersProfileCtrl'
+                }).
+
+            /*
+             settings
+             */
+            state('settings', {
+                url: '/settings',
+                templateUrl: 'settings/settings.html',
+                controller: 'SettingsCtrl'
+            }).
 
             /*
              Help
@@ -99,19 +113,5 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
             state('help.donate', {
                 url: '/donate',
                 templateUrl: 'help/help.donate.html'
-            }).
-
-        /*
-         account
-         */
-        state('account', {
-            url: '/account',
-            templateUrl: 'account/account.html',
-            controller: 'AccountMainCtrl'
-        }).
-            state('account.settings', {
-                url: '/settings',
-                templateUrl: 'account/account.settings.html',
-                controller: 'AccountSettingsCtrl'
             });
     }]);

@@ -1,0 +1,60 @@
+<div style="text-align: center">
+    <form ng-submit="save()">
+        <div class="modal-header">
+            <h5 class="modal-title">Score Thing</h5>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <img ng-src="{{webThing.imageUri}}">
+            </div>
+            <div>
+                <h4>{{webThing.title}}</h4>
+            </div>
+            <div ng-show="webThing.uri">
+                <a target="_blank" ng-href="{{webThing.uri}}">View {{webThing.type | thingType}}</a>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>Points:</h4>
+                            <h4>{{score.points}}</h4>
+                            <div ui-slider ng-model="score.points"
+                                 id="points"
+                                 min="1"
+                                 step="1"
+                                 max="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>Good Point:</h4>
+                            <h4>{{score.goodPoint}}</h4>
+                            <div ui-slider ng-model="score.goodPoint"
+                                 id="goodPoint"
+                                 min="2"
+                                 step="1"
+                                 max="99">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-warning" ng-show="warningMessage" role="alert">
+                {{warningMessage}}
+                <br>
+                <a ui-sref="scores.show({scoreId: existingScoreId})" ng-click="cancel()">
+                    You can see the score
+                </a>
+                or <a ng-click="changeExistingScore()">change it to this</a>.
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
+            <button ng-disabled="warningMessage" class="btn btn-primary" type="submit">Save</button>
+        </div>
+    </form>
+</div>

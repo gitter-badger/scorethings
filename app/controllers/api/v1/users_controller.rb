@@ -5,7 +5,13 @@ module Api
 
       def show
         begin
-          @user = User.find_by(username: params.require(:username))
+          username_param = params[:username]
+          if username_param.nil?
+            user_id = params.require(:id)
+            @user = User.find(user_id)
+          else
+            @user = User.find_by(username: username_param)
+          end
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             error: "cannot find user",
@@ -14,9 +20,28 @@ module Api
         end
       end
 
+      def update
+        begin
+          @current_user.update_attributes!(params.require(:user).permit(:username, :description))
+          redirect_to action: 'show', username: @current_user.username
+        rescue Mongoid::Errors::Validations
+          return render json: {
+                            error: "cannot update, errors: #{@current_users.errors.full_messages}",
+                            status: :bad_request
+                        }, status: :bad_request
+        end
+      end
+
       def search
         query = params[:query]
         @users = User.full_text_search(query)
+      end
+
+      def destroy
+        @current_user.destroy!
+        return render json: {
+                          status: :ok
+                      }, status: :ok
       end
     end
   end

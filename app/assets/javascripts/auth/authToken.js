@@ -1,4 +1,4 @@
-angular.module('app').service('AuthToken', ['localStorageService', 'jwtHelper', 'identity', function(localStorageService, jwtHelper, identity) {
+angular.module('app').service('AuthToken', ['localStorageService', 'jwtHelper', 'identity', 'settingsStorage', function(localStorageService, jwtHelper, identity, settingsStorage) {
         // TODO clean up this service
         return {
             tokenName: 'authToken',
@@ -6,6 +6,7 @@ angular.module('app').service('AuthToken', ['localStorageService', 'jwtHelper', 
                 localStorageService.set(this.tokenName, token);
                 identity.username = this.getUsername();
                 identity.userId = this.getUserId();
+                settingsStorage.set(this.getSettings());
             },
             isSet: function() {
                 return !!this.get();
@@ -19,7 +20,7 @@ angular.module('app').service('AuthToken', ['localStorageService', 'jwtHelper', 
                 return payload && payload[attr];
             },
             isExpired: function() {
-                var token = this.get()
+                var token = this.get();
                 return jwtHelper.isTokenExpired(token);
             },
             getUsername: function() {
@@ -27,6 +28,13 @@ angular.module('app').service('AuthToken', ['localStorageService', 'jwtHelper', 
             },
             getUserId: function() {
                 return this.getAttr('user_id');
+            },
+            getSettings: function() {
+                var settings = this.getAttr('settings');
+                if(settings) {
+                    return humps.camelizeKeys(settings);
+                }
+                return null;
             },
             clear: function() {
                 localStorageService.remove(this.tokenName);

@@ -10,7 +10,8 @@ RSpec.describe Api::V1::ScoresController do
     @params = {
         score: {
             thing_id: @thing._id,
-            points: 21
+            points: 21,
+            good_point: 50
         }
     }
   end
@@ -46,6 +47,16 @@ RSpec.describe Api::V1::ScoresController do
       expect(Score.all.length).to eq(0)
 
       @params[:score][:points] = 1000
+
+      post :create, @params
+      expect(response).to have_http_status(:bad_request)
+      expect(Score.all.length).to eq(0)
+    end
+
+    it "should not create a score without a good point" do
+      expect(Score.all.length).to eq(0)
+
+      @params[:score][:good_point] = nil
 
       post :create, @params
       expect(response).to have_http_status(:bad_request)

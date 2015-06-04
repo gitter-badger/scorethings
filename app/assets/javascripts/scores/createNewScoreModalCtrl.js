@@ -1,8 +1,12 @@
-angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webThingInput', '$scope', '$modalInstance', 'Score', 'Thing', 'notifier', function(thingInput, webThingInput, $scope, $modalInstance, Score, Thing, notifier) {
+angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webThingInput', '$scope', '$modalInstance', 'Score', 'Thing', 'notifier', 'settingsStorage', function(thingInput, webThingInput, $scope, $modalInstance, Score, Thing, notifier, settingsStorage) {
+    $scope.settings = settingsStorage.get();
+
     $scope.score = {
         thing_id: thingInput && thingInput.id,
-        points: 75 // TODO use user's default points
+        points: $scope.settings.defaultPoints || 75,
+        goodPoint: $scope.settings.defaultGoodPoint || 75
     };
+
     $scope.warningMessage = null;
 
     $scope.webThing = webThingInput;
@@ -29,6 +33,20 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webT
                         }
                     });
         }
+    };
+
+    $scope.changeExistingScore = function() {
+        if(!$scope.existingScoreId) {
+            notifier.error('there was a problem updating your previous score');
+            return;
+        }
+
+        $scope.score.id = $scope.existingScoreId;
+        new Score($scope.score).update().then(function successUpdate(score) {
+            $modalInstance.close(score);
+        }, function errorUpdate(response) {
+            return notifier.error('failed to score thing: ' + $scope.webThing.title);
+        });
     };
 
     function handleConflict(response) {

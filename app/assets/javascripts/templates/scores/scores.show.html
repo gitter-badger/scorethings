@@ -26,17 +26,38 @@
             </div>
             <div class="panel-body">
                 <form name="updateScoreForm" ng-submit="updateScore()">
-                    <div class="form-group">
-                        <h3>{{score.points}}</h3>
-                        <slider ng-model="score.points"
-                                ng-show="isOwner"
-                                min="1"
-                                step="1"
-                                max="100"
-                                value="score.points">
-                        </slider>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <label for="points">Points</label>
+                                <h3>{{score.points}}</h3>
+                                <div ui-slider ng-model="score.points"
+                                        id="points"
+                                        ng-show="isOwner"
+                                        min="1"
+                                        step="1"
+                                        max="100">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <label for="goodPoint">Good Point</label>
+                                <h3>{{score.goodPoint}}</h3>
+                                <div ui-slider ng-model="score.goodPoint"
+                                     ng-show="isOwner"
+                                     id="goodPoint"
+                                     min="2"
+                                     step="1"
+                                     max="99">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel form-group">
                         <div class="col-xs-12">
                             <button class="btn btn-sm btn-default" ng-show="isOwner" type="submit" ng-disabled="updateScoreForm.$pristine">
                                 Update
@@ -50,23 +71,6 @@
             </div>
         </div>
     </div>
-
-    <div class="col-xs-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Score Archives</h3>
-            </div>
-            <div class="panel-body">
-                <div ng-repeat="scoreArchive in score.scoreArchives | orderBy: '-createdAt'" class="panel panel-default">
-                    <div class="panel-body">
-                        <h5>{{scoreArchive.points}}</h5>
-                        <small>{{scoreArchive.createdAt | date:'MM/dd/yyyy @ h:mma'}}</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="col-xs-12">
         <div class="panel panel-info">
             <div class="panel-heading">

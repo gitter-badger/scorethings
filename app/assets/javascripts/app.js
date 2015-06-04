@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'rails', 'ui.bootstrap-slider'])
+angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'rails', 'ui.slider'])
     .config(['$httpProvider', 'localStorageServiceProvider', function($httpProvider, localStorageServiceProvider) {
         localStorageServiceProvider.setPrefix('scorethings');
 
@@ -9,8 +9,10 @@ angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-
             authService.logout();
             identity.username = undefined;
             identity.userId = undefined;
+            identity.settings = undefined;
             return;
         }
         identity.username = AuthToken.getUsername();
         identity.userId = AuthToken.getUserId();
+        identity.settings = AuthToken.getSettings();
     }]);

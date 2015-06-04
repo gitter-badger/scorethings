@@ -18,7 +18,7 @@ RSpec.describe Api::V1::AuthTokenController do
       expect(User.all.length).to eq(1)
 
       expect(response).to have_http_status(:ok)
-      expect(assigns[:auth_token]).to_not be_nil
+      expect(assigns(:auth_token)).to_not be_nil
       expect(response).to render_template(:authentication_success)
     end
 
