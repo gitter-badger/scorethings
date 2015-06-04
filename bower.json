@@ -32,7 +32,8 @@
     "angular-loading-bar": "~0.7.1",
     "angular-animate": "~1.3.15",
     "humps": "~0.5.2",
-    "angular-ui-slider": "~0.1.2"
+    "angular-ui-slider": "~0.1.2",
+    "jqueryui-touch-punch": "*"
   },
   "devDependencies": {
     "karma-read-json": "~1.1.0",
