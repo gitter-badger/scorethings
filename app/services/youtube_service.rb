@@ -1,5 +1,5 @@
 class YoutubeService
-  def search_youtube_video_web_things(query)
+  def search_youtube_video_things(query)
     begin
       # copied from https://github.com/youtube/api-samples/blob/master/ruby/search.rb
       # Call the search.list method to retrieve results matching the specified
@@ -17,14 +17,14 @@ class YoutubeService
       # matching videos, channels, and playlists.
 
       return search_response.data.items.map do |search_result|
-        map_youtube_video_search_result_to_web_thing(search_result)
+        map_youtube_video_search_result_to_thing(search_result)
       end
     rescue Google::APIClient::TransmissionError => e
       puts e.result.body
     end
   end
 
-  def get_youtube_video_web_thing(video_id)
+  def get_youtube_video_thing(video_id)
     begin
       # copied from https://github.com/youtube/api-samples/blob/master/ruby/search.rb
       # Call the search.list method to retrieve results matching the specified
@@ -47,7 +47,7 @@ class YoutubeService
       elsif results.length > 1
         raise StandardError "There should only be one result for youtube video id #{video_id}, but there was #{results.length}"
       else
-        return map_youtube_video_to_web_thing(results[0])
+        return map_youtube_video_to_thing(results[0])
       end
     rescue Google::APIClient::TransmissionError => e
       puts e.result.body
@@ -55,10 +55,10 @@ class YoutubeService
   end
 
   private
-  def map_youtube_video_to_web_thing(search_result)
+  def map_youtube_video_to_thing(search_result)
     snippet = search_result['snippet']
 
-    return WebThing.new(
+    return Thing.new(
         title: snippet['title'],
         external_id: search_result['id'].to_s,
         image_uri: snippet['thumbnails']['default']['url'],
@@ -66,12 +66,12 @@ class YoutubeService
         type: Scorethings::ThingTypes::YOUTUBE_VIDEO)
   end
 
-  def map_youtube_video_search_result_to_web_thing(search_result)
+  def map_youtube_video_search_result_to_thing(search_result)
     # TODO refactor this, I think the only difference between this and
     # youtube channels, is the external_id from id.videoId, check later
     snippet = search_result['snippet']
 
-    return WebThing.new(
+    return Thing.new(
         title: snippet['title'],
         external_id: search_result['id']['videoId'],
         image_uri: snippet['thumbnails']['default']['url'],

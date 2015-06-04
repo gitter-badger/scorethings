@@ -5,13 +5,13 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <img ng-src="{{webThing.imageUri}}">
+                <img ng-src="{{thing.imageUri}}">
             </div>
             <div>
-                <h4>{{webThing.title}}</h4>
+                <h4>{{thing.title}}</h4>
             </div>
-            <div ng-show="webThing.uri">
-                <a target="_blank" ng-href="{{webThing.uri}}">View {{webThing.type | thingType}}</a>
+            <div ng-show="thing.uri">
+                <a target="_blank" ng-href="{{thing.uri}}">View {{thing.type | thingType}}</a>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-6">

@@ -81,7 +81,7 @@ module Api
         begin
           @score = Score.find(id)
           thing = @score.thing_reference
-          @web_thing =  $thing_service.get_web_thing(thing[:type], thing[:external_id])
+          @thing =  $thing_service.get_thing(thing[:type], thing[:external_id])
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             error: "failed to score for id: #{params[:id]}",

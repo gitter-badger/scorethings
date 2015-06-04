@@ -7,10 +7,10 @@
                 <h3 class="panel-title">Thing</h3>
             </div>
             <div class="panel-body">
-                <h6><a ui-sref="thingReferences.show({thingReferenceId: score.thingReference.token})">{{score.webThing.type | thingType}}: {{score.webThing.title}}</a></h6>
-                <img ng-src="{{score.webThing.imageUri}}">
-                <div ng-show="score.webThing.uri" class="row">
-                    <a target="_blank" ng-href="{{score.webThing.uri}}">Go To This {{score.webThing.type | thingType}}</a>
+                <h6><a ui-sref="thingReferences.show({thingReferenceId: score.thingReference.token})">{{score.thing.type | thingType}}: {{score.thing.title}}</a></h6>
+                <img ng-src="{{score.thing.imageUri}}">
+                <div ng-show="score.thing.uri" class="row">
+                    <a target="_blank" ng-href="{{score.thing.uri}}">Go To This {{score.thing.type | thingType}}</a>
                 </div>
                 <a class="btn btn-primary btn-sm"
                    ng-click="scoreThisThing()" ng-show="isLoggedIn() && !isOwner">

@@ -1,15 +1,15 @@
-angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webThingInput', '$scope', '$modalInstance', 'Score', 'ThingReference', 'notifier', 'settingsStorage', function(thingInput, webThingInput, $scope, $modalInstance, Score, ThingReference, notifier, settingsStorage) {
+angular.module('app').controller('CreateNewScoreModalCtrl', ['thingReferenceInput', 'thingInput', '$scope', '$modalInstance', 'Score', 'ThingReference', 'notifier', 'settingsStorage', function(thingReferenceInput, thingInput, $scope, $modalInstance, Score, ThingReference, notifier, settingsStorage) {
     $scope.settings = settingsStorage.get();
 
     $scope.score = {
-        thing_id: thingInput && thingInput.id,
+        thingReferenceId: thingReferenceInput && thingReferenceInput.id,
         points: $scope.settings.defaultPoints || 75,
         goodPoint: $scope.settings.defaultGoodPoint || 75
     };
 
     $scope.warningMessage = null;
 
-    $scope.webThing = webThingInput;
+    $scope.thing = thingInput;
 
     $scope.cancel = function() {
         $modalInstance.dismiss();
@@ -19,7 +19,13 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webT
         if($scope.score.thingReferenceId) {
             return createNewScore();
         } else {
-            new ThingReference({type: $scope.webThing.type, externalId: $scope.webThing.externalId})
+            // if the score doesn't already have a thing reference id from the inputs,
+            // create a new one
+            // TODO this might be confusing, this controller is being used for
+            // when the thing reference is known (on the thing reference show view score buttton)
+            // and also when scoring a thing search result
+            // maybe split into seperate controllers
+            new ThingReference({type: $scope.thing.type, externalId: $scope.thing.externalId})
                 .create().then(
                     function successCreateThingReference(thingReference) {
                         $scope.score.thingReferenceId = thingReference.id;
@@ -29,13 +35,15 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webT
                         if(response.status == 409) {
                             handleConflict(response);
                         } else {
-                            return notifier.error('failed to score thing_reference: ' + $scope.webThing.title);
+                            return notifier.error('failed to score thing_reference: ' + $scope.thing.title);
                         }
                     });
         }
     };
 
     $scope.changeExistingScore = function() {
+        // TODO it might be easier to just send the user to the score to change it,
+        // rather than having two ways to change it
         if(!$scope.existingScoreId) {
             notifier.error('there was a problem updating your previous score');
             return;
@@ -44,8 +52,8 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webT
         $scope.score.id = $scope.existingScoreId;
         new Score($scope.score).update().then(function successUpdate(score) {
             $modalInstance.close(score);
-        }, function errorUpdate(response) {
-            return notifier.error('failed to score thing: ' + $scope.webThing.title);
+        }, function errorUpdate() {
+            return notifier.error('failed to score thing: ' + $scope.thing.title);
         });
     };
 
@@ -65,7 +73,7 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webT
                 if(response.status == 409) {
                     handleConflict(response);
                 } else {
-                    return notifier.error('failed to score thing: ' + $scope.webThing.title);
+                    return notifier.error('failed to score thing: ' + $scope.thing.title);
                 }
             });
     }

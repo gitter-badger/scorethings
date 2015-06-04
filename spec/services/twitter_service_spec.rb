@@ -19,7 +19,7 @@ RSpec.describe TwitterService do
       allow_any_instance_of(Twitter::REST::Client).to receive(:user_search).with('pattonoswalt')
                                                           .and_return([@twitter_account])
 
-      search_results = @twitter_service.search_twitter_account_web_things('pattonoswalt')
+      search_results = @twitter_service.search_twitter_account_things('pattonoswalt')
 
       expect(search_results).to_not be_nil
 
@@ -35,7 +35,7 @@ RSpec.describe TwitterService do
       allow_any_instance_of(Twitter::REST::Client).to receive(:user).with('https://twitter.com/pattonoswalt')
                                                           .and_return([@twitter_account])
 
-      search_results = @twitter_service.search_twitter_account_web_things('https://twitter.com/pattonoswalt')
+      search_results = @twitter_service.search_twitter_account_things('https://twitter.com/pattonoswalt')
 
       expect(search_results).to_not be_nil
 
@@ -50,7 +50,7 @@ RSpec.describe TwitterService do
     it "should return empty results if searching with uri with no account" do
       allow_any_instance_of(Twitter::REST::Client).to receive(:user).with('https://twitter.com/supercoolpattonoswalt')
                                                           .and_raise(Twitter::Error::NotFound)
-      search_results = @twitter_service.search_twitter_account_web_things('https://twitter.com/supercoolpattonoswalt')
+      search_results = @twitter_service.search_twitter_account_things('https://twitter.com/supercoolpattonoswalt')
       expect(search_results).to eq([])
     end
 
@@ -58,8 +58,8 @@ RSpec.describe TwitterService do
       allow_any_instance_of(Twitter::REST::Client).to receive(:user_search).with('pattonoswalt')
                                                           .and_raise(Twitter::Error::TooManyRequests)
       expect {
-        @twitter_service.search_twitter_account_web_things('pattonoswalt')
-      }.to raise_error(Exceptions::WebThingExternalError)
+        @twitter_service.search_twitter_account_things('pattonoswalt')
+      }.to raise_error(Exceptions::ThingRetrievalError)
     end
   end
 end

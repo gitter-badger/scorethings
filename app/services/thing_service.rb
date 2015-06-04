@@ -9,9 +9,9 @@ class ThingService
     if thing_reference.nil?
       unless type == Scorethings::ThingTypes::HASHTAG
         # for thingReferences other than hashtag, check that they exist before creating them in database
-        external_thing = get_web_thing(type, external_id)
+        external_thing = get_thing(type, external_id)
         if external_thing.nil?
-          raise Exceptions::WebThingNotFoundError
+          raise Exceptions::ThingNotFoundError
         end
       end
       thing_reference = ThingReference.create!(type: type, external_id: external_id)
@@ -19,13 +19,13 @@ class ThingService
     return thing_reference
   end
 
-  def search_for_web_things(type, query)
-    cache_key = "search_for_web_things_#{type}_#{query}"
+  def search_for_things(type, query)
+    cache_key = "search_for_things_#{type}_#{query}"
     return Rails.cache.fetch(cache_key, expires_in: 12.hours) do
       if type == Scorethings::ThingTypes::TWITTER_ACCOUNT
-        retrieved_search_results = @twitter_service.search_twitter_account_web_things(query) || []
+        retrieved_search_results = @twitter_service.search_twitter_account_things(query) || []
       elsif type == Scorethings::ThingTypes::YOUTUBE_VIDEO
-        retrieved_search_results = @youtube_service.search_youtube_video_web_things(query) || []
+        retrieved_search_results = @youtube_service.search_youtube_video_things(query) || []
       else
         raise Exceptions::ThingTypeUnknownError
       end
@@ -35,27 +35,27 @@ class ThingService
     end
   end
 
-  def get_web_thing(type, external_id)
+  def get_thing(type, external_id)
     if type == Scorethings::ThingTypes::HASHTAG
-      return WebThing.build_from_hashtag(external_id)
+      return Thing.build_from_hashtag(external_id)
     end
-    cache_key = "get_web_thing_#{type}_#{external_id}"
+    cache_key = "get_thing_#{type}_#{external_id}"
     return Rails.cache.fetch(cache_key, expires_in: 1.day) do
       case type
         when Scorethings::ThingTypes::TWITTER_ACCOUNT
-          retrieved_web_thing = @twitter_service.get_twitter_account_web_thing(external_id)
+          thing = @twitter_service.get_twitter_account_thing(external_id)
         when Scorethings::ThingTypes::YOUTUBE_VIDEO
-          retrieved_web_thing = @youtube_service.get_youtube_video_web_thing(external_id)
+          thing = @youtube_service.get_youtube_video_thing(external_id)
         else
           raise Exceptions::ThingTypeUnknownError
       end
 
-      if retrieved_web_thing.nil?
-        raise Exceptions::WebThingNotFoundError
+      if thing.nil?
+        raise Exceptions::ThingNotFoundError
       end
 
-      Rails.cache.write(cache_key, retrieved_web_thing)
-      return retrieved_web_thing
+      Rails.cache.write(cache_key, thing)
+      return thing
     end
   end
 end

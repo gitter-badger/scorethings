@@ -1,5 +1,5 @@
-class WebThing
-  # the WebThing is not persisted in a database, it just represents a potential thing_reference
+class Thing
+  # the Thing is not persisted in a database, it just represents a potential thing_reference
   # that exists on the internet.  It can be used to create a ThingReference.
   @title = nil
   @external_id = nil
@@ -20,13 +20,13 @@ class WebThing
   end
 
   def to_builder
-    Jbuilder.new do |web_thing|
-      web_thing.title @title
-      web_thing.external_id @external_id
-      web_thing.uri @uri
-      web_thing.image_uri @image_uri
-      web_thing.verified @verified
-      web_thing.type @type
+    Jbuilder.new do |thing|
+      thing.title @title
+      thing.external_id @external_id
+      thing.uri @uri
+      thing.image_uri @image_uri
+      thing.verified @verified
+      thing.type @type
     end
   end
 
@@ -39,7 +39,7 @@ class WebThing
       hashtag[0] = ''
     end
 
-    WebThing.new(title: "##{hashtag}",
+    Thing.new(title: "##{hashtag}",
                  external_id: hashtag,
                  type: Scorethings::ThingTypes::HASHTAG)
   end

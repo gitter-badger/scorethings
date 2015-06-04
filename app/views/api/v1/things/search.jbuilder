@@ -1,4 +1,4 @@
-json.array! @web_thing_search_results,
+json.array! @thing_search_results,
             :external_id,
             :type,
             :title,

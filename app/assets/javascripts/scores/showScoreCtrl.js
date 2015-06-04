@@ -3,7 +3,7 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
     Score.get(scoreId).then(
         function successGet(score) {
             $scope.score = score;
-            $scope.webThing = score.webThing;
+            $scope.thing = score.thing;
             updateIsOwner();
         },
         function errorGet() {
@@ -27,7 +27,7 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
     $scope.updateScore = function() {
         new Score($scope.score).update().then(
             function successUpdate(updatedScore) {
-                notifier.success('you updated the score for : ' + updatedScore.webThing.title);
+                notifier.success('you updated the score for : ' + updatedScore.thing.title);
                 $scope.score = updatedScore;
             },
             function errorUpdate() {
@@ -36,7 +36,7 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
     };
 
     $scope.scoreThisThing = function() {
-        scoreModalFactory.createNewScoreForThing($scope.score.thing, $scope.webThing,
+        scoreModalFactory.createNewScoreForThing($scope.score.thing, $scope.thing,
             function saveSuccessCallbackFn(createdScore) {
                 notifier.success('you scored the thing: ' + createdScore.thing.title);
                 $state.go('scores.show', {scoreId: createdScore.token});

@@ -4,7 +4,7 @@ angular.module('app').controller('ThingReferencesShowCtrl', ['$scope', '$statePa
     ThingReference.get(thingReferenceId).then(
         function successGet(thingReference) {
             $scope.thingReference = thingReference;
-            $scope.webThing = thingReference.webThing;
+            $scope.thing = thingReference.thing;
             console.log(thingReference.user)
         },
         function errorGet(response) {
@@ -13,13 +13,13 @@ angular.module('app').controller('ThingReferencesShowCtrl', ['$scope', '$statePa
         });
 
     $scope.scoreThisThing = function() {
-        scoreModalFactory.createNewScoreForThing($scope.thingReference, $scope.webThing,
+        scoreModalFactory.createNewScoreForThing($scope.thingReference, $scope.thing,
             function saveSuccessCallbackFn(createdScore) {
-                notifier.success('you scored the thing: ' + $scope.webThing.title);
+                notifier.success('you scored the thing: ' + $scope.thing.title);
                 $state.go('scores.show', {scoreId: createdScore.token});
             },
             function saveErrorCallbackFn() {
-                notifier.error('failed to score the thing: ' + $scope.webThing.title);
+                notifier.error('failed to score the thing: ' + $scope.thing.title);
                 return;
             });
     };

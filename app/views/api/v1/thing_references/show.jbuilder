@@ -3,7 +3,7 @@ json.thing_reference do
   json.token @thing_reference.token
   json.type @thing_reference.type
   json.external_id @thing_reference.external_id
-  json.web_thing @web_thing.to_builder
+  json.thing @thing.to_builder
   json.scores(@thing_reference.scores) do |score|
     json.id score.id.to_s
     json.token score.token

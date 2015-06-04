@@ -1,11 +1,11 @@
 class TwitterService
-  def search_twitter_account_web_things(query)
+  def search_twitter_account_things(query)
     begin
       if query =~ /https?:\/\/[\S]+/
         begin
           results = $twitter.user(query)
           unless results.empty?
-            return [map_twitter_account_to_web_thing(results[0])]
+            return [map_twitter_account_to_thing(results[0])]
           end
         rescue Twitter::Error::NotFound
           return []
@@ -13,25 +13,25 @@ class TwitterService
       else
         search_results = $twitter.user_search(query)
         return search_results.map do |search_result|
-          map_twitter_account_to_web_thing(search_result)
+          map_twitter_account_to_thing(search_result)
         end
       end
     rescue Twitter::Error::TooManyRequests
-      raise Exceptions::WebThingExternalError
+      raise Exceptions::ThingRetrievalError
     end
   end
 
-  def get_twitter_account_web_thing(user_id)
+  def get_twitter_account_thing(user_id)
     begin
-      return map_twitter_account_to_web_thing($twitter.user(user_id.to_i))
+      return map_twitter_account_to_thing($twitter.user(user_id.to_i))
     rescue Twitter::Error::NotFound
       return nil
     end
   end
 
   private
-  def map_twitter_account_to_web_thing(twitter_user)
-    WebThing.new(
+  def map_twitter_account_to_thing(twitter_user)
+    Thing.new(
         title: "@#{twitter_user.screen_name}",
         secondary_title: twitter_user.name,
         external_id: twitter_user.id,

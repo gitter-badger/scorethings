@@ -12,8 +12,8 @@ Rails.application.routes.draw do
 
       resources :thing_references, except: [:destroy, :edit, :new, :index]
 
-      get '/web_things/:type/:external_id' => 'web_things#show'
-      get '/web_things/search' => 'web_things#search'
+      get '/things/:type/:external_id' => 'things#show'
+      get '/things/search' => 'things#search'
 
       resources :scores, except: [:edit, :new, :index]
 

@@ -10,7 +10,7 @@ RSpec.describe Api::V1::ThingReferencesController do
   describe "POST create" do
     before do
       @thing_reference = build(:thing_reference, :twitter_account)
-      @web_thing = WebThing.new(
+      @thing = Thing.new(
           external_id: @thing_reference.external_id,
           type: @thing_reference.type
       )
@@ -24,8 +24,8 @@ RSpec.describe Api::V1::ThingReferencesController do
     end
 
     it "should create a thing_reference" do
-      allow_any_instance_of(ThingService).to receive(:get_web_thing).with(@thing_reference.type, @thing_reference.external_id)
-                                                 .and_return(@web_thing)
+      allow_any_instance_of(ThingService).to receive(:get_thing).with(@thing_reference.type, @thing_reference.external_id)
+                                                 .and_return(@thing)
       expect(ThingReference.all.length).to eq(0)
       post :create, @create_params
       expect(ThingReference.all.length).to eq(1)
@@ -34,9 +34,9 @@ RSpec.describe Api::V1::ThingReferencesController do
       expect(response).to redirect_to :action => :show, id: assigns(:thing_reference)._id.to_s
     end
 
-    it "should not create a thing_reference without web_thing" do
-      allow_any_instance_of(ThingService).to receive(:get_web_thing).with(@web_thing.type, @web_thing.external_id)
-                                                 .and_raise(Exceptions::WebThingNotFoundError)
+    it "should not create a thing_reference without thing" do
+      allow_any_instance_of(ThingService).to receive(:get_thing).with(@thing.type, @thing.external_id)
+                                                 .and_raise(Exceptions::ThingNotFoundError)
       post :create, @create_params
       expect(response).to have_http_status(:not_found)
     end
@@ -51,19 +51,19 @@ RSpec.describe Api::V1::ThingReferencesController do
   describe "GET show" do
     before do
       @created_thing = create(:thing_reference, :twitter_account)
-      @web_thing = WebThing.new(
+      @thing = Thing.new(
           external_id: @created_thing.external_id,
           type: @created_thing.type
       )
     end
 
-    it "should show a thing_reference with a web_thing" do
-      allow_any_instance_of(ThingService).to receive(:get_web_thing).with(@created_thing.type, @created_thing.external_id)
-                                                 .and_return(@web_thing)
+    it "should show a thing_reference with a thing" do
+      allow_any_instance_of(ThingService).to receive(:get_thing).with(@created_thing.type, @created_thing.external_id)
+                                                 .and_return(@thing)
       get :show, {id: @created_thing}
       expect(response).to have_http_status(:ok)
       expect(assigns(:thing_reference)).to eq(@created_thing)
-      expect(assigns(:web_thing)).to eq(@web_thing)
+      expect(assigns(:thing)).to eq(@thing)
     end
 
     it "should not show a thing_reference that doesn't exist" do
@@ -71,9 +71,9 @@ RSpec.describe Api::V1::ThingReferencesController do
       expect(response).to have_http_status(:not_found)
     end
 
-    it "should not show a thing_reference that doesn't have a web thing_reference" do
-      allow_any_instance_of(ThingService).to receive(:get_web_thing).with(@web_thing.type, @web_thing.external_id)
-                                                 .and_raise(Exceptions::WebThingNotFoundError)
+    it "should not show a thing_reference that doesn't have a thing" do
+      allow_any_instance_of(ThingService).to receive(:get_thing).with(@thing.type, @thing.external_id)
+                                                 .and_raise(Exceptions::ThingNotFoundError)
       get :show, {id: @created_thing}
       expect(response).to have_http_status(:failed_dependency)
     end
