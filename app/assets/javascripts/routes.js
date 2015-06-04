@@ -35,16 +35,16 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 }).
 
             /*
-                 things
+                 thing references
             */
-            state('things', {
-                url: '/things',
-                templateUrl: 'things/things.html'
+            state('thingReferences', {
+                url: '/thing_references',
+                templateUrl: 'thingReferences/thingReferences.html'
             }).
-                state('things.show', {
-                    url: '/:thingId',
-                    templateUrl: 'things/things.show.html',
-                    controller: 'ThingsShowCtrl'
+                state('thingReferences.show', {
+                    url: '/:thingReferenceId',
+                    templateUrl: 'thingReferences/thingReferences.show.html',
+                    controller: 'ThingReferencesShowCtrl'
                 }).
 
 

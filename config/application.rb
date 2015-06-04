@@ -11,7 +11,7 @@ Bundler.require(*Rails.groups)
 
 module Scorethings
   module ThingTypes
-    # Thing types
+    # ThingReference types
     TWITTER_ACCOUNT = 'twitter_account'
     YOUTUBE_VIDEO = 'youtube_video'
     HASHTAG = 'hashtag'

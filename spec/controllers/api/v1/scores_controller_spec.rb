@@ -1,15 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ScoresController do
-  # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
+  # TODO clean up similar specs to keep thingReferences DRY (Don't Repeat Yourself)
   before do
     @user = create(:user)
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
-    @thing = create(:thing, :twitter_account)
+    @thing_reference = create(:thing_reference, :twitter_account)
     @params = {
         score: {
-            thing_id: @thing._id,
+            thing_reference_id: @thing_reference._id,
             points: 21,
             good_point: 50
         }
@@ -24,7 +24,7 @@ RSpec.describe Api::V1::ScoresController do
       expect(assigns(:score)).to_not be_nil
       expect(response).to redirect_to :action => :show, id: assigns(:score)._id.to_s
       expect(Score.all.length).to eq(1)
-      expect(Score.all.first.thing).to eq(@thing)
+      expect(Score.all.first.thing_reference).to eq(@thing_reference)
       expect(Score.all.first.points).to eq(21)
     end
 
@@ -34,9 +34,9 @@ RSpec.describe Api::V1::ScoresController do
       expect(response).to have_http_status(:unauthorized)
     end
 
-    it "should not create a score for a thing that doesn't exist" do
+    it "should not create a score for a thing_reference that doesn't exist" do
       expect(Score.all.length).to eq(0)
-      @params[:score][:thing_id] = '123notathing'
+      @params[:score][:thing_reference_id] = '123notathing'
 
       post :create, @params
       expect(response).to have_http_status(:not_found)
@@ -135,9 +135,9 @@ RSpec.describe Api::V1::ScoresController do
     end
   end
 
-  describe "violating uniqueness of a score's user and thing" do
+  describe "violating uniqueness of a score's user and thing_reference" do
     before do
-      @existing_score = build(:score, thing: @thing)
+      @existing_score = build(:score, thing_reference: @thing_reference)
       @user.create_score(@existing_score)
     end
 

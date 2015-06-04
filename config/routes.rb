@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       get '/auth/:provider/callback' => 'auth_token#create'
       get '/auth/failure' => 'auth_token#failure'
 
-      resources :things, except: [:destroy, :edit, :new, :index]
+      resources :thing_references, except: [:destroy, :edit, :new, :index]
 
       get '/web_things/:type/:external_id' => 'web_things#show'
       get '/web_things/search' => 'web_things#search'

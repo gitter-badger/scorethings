@@ -43,18 +43,18 @@
                     </div>
                 </div>
             </div>
-            <div class="alert alert-warning" ng-show="warningMessage" role="alert">
-                {{warningMessage}}
+            <div class="alert alert-warning" ng-show="scoreConflictMessage" role="alert">
+                {{scoreConflictMessage}}
                 <br>
                 <a ui-sref="scores.show({scoreId: existingScoreId})" ng-click="cancel()">
-                    You can see the score
+                    You can go see that score
                 </a>
                 or <a ng-click="changeExistingScore()">change it to this</a>.
             </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
-            <button ng-disabled="warningMessage" class="btn btn-primary" type="submit">Save</button>
+            <button ng-disabled="scoreConflictMessage" class="btn btn-primary" type="submit">Save</button>
         </div>
     </form>
 </div>

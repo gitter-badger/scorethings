@@ -42,7 +42,7 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
                 $state.go('scores.show', {scoreId: createdScore.token});
             },
             function() {
-                notifier.error('failed to score the thing: ' + $scope.score.thing.title);
+                notifier.error('failed to score the thing_reference: ' + $scope.score.thing.title);
                 return;
             });
     };

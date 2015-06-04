@@ -1,4 +1,4 @@
-angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webThingInput', '$scope', '$modalInstance', 'Score', 'Thing', 'notifier', 'settingsStorage', function(thingInput, webThingInput, $scope, $modalInstance, Score, Thing, notifier, settingsStorage) {
+angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webThingInput', '$scope', '$modalInstance', 'Score', 'ThingReference', 'notifier', 'settingsStorage', function(thingInput, webThingInput, $scope, $modalInstance, Score, ThingReference, notifier, settingsStorage) {
     $scope.settings = settingsStorage.get();
 
     $scope.score = {
@@ -16,20 +16,20 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webT
     };
 
     $scope.save = function() {
-        if($scope.score.thing_id) {
+        if($scope.score.thingReferenceId) {
             return createNewScore();
         } else {
-            new Thing({type: $scope.webThing.type, externalId: $scope.webThing.externalId})
+            new ThingReference({type: $scope.webThing.type, externalId: $scope.webThing.externalId})
                 .create().then(
-                    function successCreateThing(thing) {
-                        $scope.score.thing_id = thing.id;
+                    function successCreateThingReference(thingReference) {
+                        $scope.score.thingReferenceId = thingReference.id;
                         return createNewScore();
                     },
-                    function errorCreateThing(response) {
+                    function errorCreateThingReference(response) {
                         if(response.status == 409) {
                             handleConflict(response);
                         } else {
-                            return notifier.error('failed to score thing: ' + $scope.webThing.title);
+                            return notifier.error('failed to score thing_reference: ' + $scope.webThing.title);
                         }
                     });
         }
@@ -50,10 +50,9 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingInput', 'webT
     };
 
     function handleConflict(response) {
-        // there was a conflict because a score with the same user and thing
+        // there was a conflict because a score with the same user and thing_reference
         // already exists, so ask user if they want to update it
-        console.log(response);
-        $scope.warningMessage = 'You already have a score for this thing.';
+        $scope.scoreConflictMessage = 'Sorry, you already have a score for this thing.';
 
         $scope.existingScoreId = response.data.existing_score.token;
     }

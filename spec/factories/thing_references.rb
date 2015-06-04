@@ -2,7 +2,7 @@ FactoryGirl.define do
   sequence(:thing_external_id) { |n| "10000#{n}" }
   sequence(:thing_hashtag_external_id) { |n| "SomeHashtagAboutCats#{n}" }
 
-  factory :thing, class: Thing do
+  factory :thing_reference, class: ThingReference do
     external_id { FactoryGirl.generate(:thing_external_id) }
     type Scorethings::ThingTypes::TWITTER_ACCOUNT
 

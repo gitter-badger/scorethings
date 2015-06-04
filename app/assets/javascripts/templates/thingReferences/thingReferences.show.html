@@ -1,8 +1,8 @@
 <h3>Thing</h3>
 <div>
-    <img ng-src="{{thing.webThing.imageUri}}">
+    <img ng-src="{{thingReference.webThing.imageUri}}">
     <h3>
-        {{thing.webThing.title}}&nbsp;({{thing.type | thingType}}, <a target="_blank" ng-href="{{thing.webThing.uri}}">View</a>)
+        {{thingReference.webThing.title}}&nbsp;({{thingReference.type | thingType}}, <a target="_blank" ng-href="{{thingReference.webThing.uri}}">View</a>)
     </h3>
 </div>
 <div>
@@ -11,7 +11,7 @@
 <div>
     <h3>Scores</h3>
     <ul>
-        <li ng-repeat="score in thing.scores">
+        <li ng-repeat="score in thingReference.scores">
             <a ui-sref="scores.show({scoreId: score.token})"> Score By {{score.user.username}}, Points: {{score.points}}</a>
         </li>
     </ul>

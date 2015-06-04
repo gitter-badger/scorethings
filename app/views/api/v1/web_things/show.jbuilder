@@ -5,5 +5,5 @@ json.web_thing do
   json.image_uri @web_thing.image_uri
   json.uri @web_thing.uri
   json.verified @web_thing.verified
-  json.thing @thing.to_builder unless @thing.nil?
+  json.thing_reference @thing_reference.to_builder unless @thing_reference.nil?
 end

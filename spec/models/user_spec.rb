@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User do
-  # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
+  # TODO clean up similar specs to keep thingReferences DRY (Don't Repeat Yourself)
 
   def mock_auth(provider, uid, info_attrs)
     OmniAuth.config.test_mode = true
@@ -70,13 +70,13 @@ RSpec.describe User do
     end
   end
 
-  describe "scoring things" do
+  describe "scoring thingReferences" do
     before do
       @user = create(:user)
       @score = build(:score)
     end
 
-    it "should allow the user to score a things" do
+    it "should allow the user to score a thingReferences" do
       expect(@user.scores.length).to eq(0)
       @user.create_score(@score)
       expect(@user.scores.length).to eq(1)
@@ -100,9 +100,9 @@ RSpec.describe User do
       end
     end
 
-    it "should not have more than one score with the same user, score cateogry and thing" do
+    it "should not have more than one score with the same user, score cateogry and thing_reference" do
       @user.create_score(@score)
-      other_score = build(:score, thing: @score.thing)
+      other_score = build(:score, thing_reference: @score.thing_reference)
 
       expect(Score.all.length).to eq(1)
       expect {
@@ -110,7 +110,7 @@ RSpec.describe User do
       }.to raise_error(Exceptions::ScoreUniquenessError)
       expect(Score.all.length).to eq(1)
 
-      other_score.thing = create(:thing)
+      other_score.thing_reference = create(:thing_reference)
       @user.create_score(other_score)
       expect(Score.all.length).to eq(2)
     end

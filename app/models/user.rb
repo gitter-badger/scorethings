@@ -30,7 +30,7 @@ class User
   end
 
   def create_score(score)
-    unless self.scores.where(thing: score.thing).first.nil?
+    unless self.scores.where(thing_reference: score.thing_reference).first.nil?
       raise Exceptions::ScoreUniquenessError
     end
     score.user = self

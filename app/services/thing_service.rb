@@ -5,18 +5,18 @@ class ThingService
   end
 
   def find_or_create_by_type_and_external_id(type, external_id)
-    thing = Thing.where(type: type, external_id: external_id).first
-    if thing.nil?
+    thing_reference = ThingReference.where(type: type, external_id: external_id).first
+    if thing_reference.nil?
       unless type == Scorethings::ThingTypes::HASHTAG
-        # for things other than hashtag, check that they exist before creating them in database
+        # for thingReferences other than hashtag, check that they exist before creating them in database
         external_thing = get_web_thing(type, external_id)
         if external_thing.nil?
           raise Exceptions::WebThingNotFoundError
         end
       end
-      thing = Thing.create!(type: type, external_id: external_id)
+      thing_reference = ThingReference.create!(type: type, external_id: external_id)
     end
-    return thing
+    return thing_reference
   end
 
   def search_for_web_things(type, query)

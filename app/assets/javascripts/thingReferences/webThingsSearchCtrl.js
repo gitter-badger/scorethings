@@ -38,11 +38,11 @@ angular.module('app').controller('WebThingsSearchCtrl', ['$scope', 'WebThing', '
         scoreModalFactory.createNewScoreForThing({}, webThing,
             function saveSuccessCallbackFn(createdScore) {
                 console.log(createdScore);
-                notifier.success('you scored the web thing: ' + webThing.title);
+                notifier.success('you scored the web thing_reference: ' + webThing.title);
                 $state.go('scores.show', {scoreId: createdScore.token});
             },
             function saveErrorCallbackFn() {
-                notifier.error('failed to score the web thing: ' + webThing.title);
+                notifier.error('failed to score the web thing_reference: ' + webThing.title);
                 return;
             });
     };

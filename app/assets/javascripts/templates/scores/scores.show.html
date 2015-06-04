@@ -7,7 +7,7 @@
                 <h3 class="panel-title">Thing</h3>
             </div>
             <div class="panel-body">
-                <h6><a ui-sref="things.show({thingId: score.thing.token})">{{score.webThing.type | thingType}}: {{score.webThing.title}}</a></h6>
+                <h6><a ui-sref="thingReferences.show({thingReferenceId: score.thingReference.token})">{{score.webThing.type | thingType}}: {{score.webThing.title}}</a></h6>
                 <img ng-src="{{score.webThing.imageUri}}">
                 <div ng-show="score.webThing.uri" class="row">
                     <a target="_blank" ng-href="{{score.webThing.uri}}">Go To This {{score.webThing.type | thingType}}</a>

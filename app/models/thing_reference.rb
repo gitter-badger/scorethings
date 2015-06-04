@@ -1,4 +1,4 @@
-class Thing
+class ThingReference
   include Mongoid::Document
   include Mongoid::Search
   include Mongoid::Token

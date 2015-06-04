@@ -1,6 +1,6 @@
 class WebThing
-  # the WebThing is not persisted in a database, it just represents a potential thing
-  # that exists on the internet.  It can be used to create a Thing.
+  # the WebThing is not persisted in a database, it just represents a potential thing_reference
+  # that exists on the internet.  It can be used to create a ThingReference.
   @title = nil
   @external_id = nil
   @uri = nil
