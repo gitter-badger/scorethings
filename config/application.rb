@@ -15,6 +15,8 @@ module Scorethings
     TWITTER_ACCOUNT = 'twitter_account'
     GITHUB_REPOSITORY = 'github_repository'
     SOUNDCLOUD_TRACK = 'soundcloud_track'
+    TMDB_MOVIE = 'tmdb_movie'
+    TMDB_TV = 'tmdb_tv'
     HASHTAG = 'hashtag'
   end
 

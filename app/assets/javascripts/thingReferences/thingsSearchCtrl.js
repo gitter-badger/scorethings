@@ -24,9 +24,10 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreM
         twitter_account: type('Twitter Account', 'Patton Oswalt, @pattonoswalt, pattonoswalt, or https://twitter.com/pattonoswalt'),
         github_repository: type('GitHub Repository', 'angular or user:tenderlove'),
         soundcloud_track: type('Soundcloud Track', 'dj earworm or https://soundcloud.com/mashupgermany/mashup-germany-promo-mix-2014'),
+        tmdb_movie: type('TMDb Movie', 'The Big Lebowski'),
+        tmdb_tv: type('TMDb TV Show', 'Big Time in Hollywood, Fl'),
         hashtag: type('Hashtag', '#SomethingCats or SomethingCats')
     };
-
 
     $scope.$watch('selectedType', function() {
         $scope.things = [];

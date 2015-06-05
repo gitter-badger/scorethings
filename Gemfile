@@ -54,6 +54,7 @@ gem 'api_cache'
 gem 'mongoid_search'
 gem 'mongoid_token'
 gem 'soundcloud'
+gem 'themoviedb'
 
 group :production, :staging do
   gem 'heroku_rails_deflate'

@@ -15,6 +15,8 @@ class ThingReference
                          in: [Scorethings::ThingTypes::TWITTER_ACCOUNT,
                               Scorethings::ThingTypes::GITHUB_REPOSITORY,
                               Scorethings::ThingTypes::SOUNDCLOUD_TRACK,
+                              Scorethings::ThingTypes::TMDB_MOVIE,
+                              Scorethings::ThingTypes::TMDB_TV,
                               Scorethings::ThingTypes::HASHTAG]
 
   def to_builder

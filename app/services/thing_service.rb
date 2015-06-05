@@ -3,6 +3,8 @@ class ThingService
     @twitter_service = TwitterService.new
     @github_service = GithubService.new
     @soundcloud_service = SoundcloudService.new
+    @tmdb_movie_service = TmdbMovieService.new
+    @tmdb_tv_service = TmdbTVService.new
   end
 
   def find_or_create_thing_reference_to_thing(type, external_id)
@@ -30,6 +32,10 @@ class ThingService
           retrieved_search_results = @github_service.search_github_repository_things(query) || []
         when Scorethings::ThingTypes::SOUNDCLOUD_TRACK
           retrieved_search_results = @soundcloud_service.search_soundcloud_track_things(query) || []
+        when Scorethings::ThingTypes::TMDB_MOVIE
+          retrieved_search_results = @tmdb_movie_service.search_movie_things(query) || []
+        when Scorethings::ThingTypes::TMDB_TV
+          retrieved_search_results = @tmdb_tv_service.search_tv_things(query) || []
         else
           raise Exceptions::ThingTypeUnknownError
       end
@@ -52,6 +58,10 @@ class ThingService
           thing = @github_service.get_github_repository_thing(external_id)
         when Scorethings::ThingTypes::SOUNDCLOUD_TRACK
           thing = @soundcloud_service.get_soundcloud_track_thing(external_id)
+        when Scorethings::ThingTypes::TMDB_MOVIE
+          thing = @tmdb_movie_service.get_tmdb_movie_thing(external_id)
+        when Scorethings::ThingTypes::TMDB_TV
+          thing = @tmdb_tv_service.get_tmdb_tv_thing(external_id)
         else
           raise Exceptions::ThingTypeUnknownError
       end

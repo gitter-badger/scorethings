@@ -40,7 +40,6 @@ class GithubService
   end
 
   def map_github_repository_search_result_to_thing(repository_search_result)
-    puts "\n\nrepo: #{repository_search_result}"
     full_name = "#{repository_search_result[:owner]}/#{repository_search_result[:name]}"
     Thing.new(
         title: full_name,
