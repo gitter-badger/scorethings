@@ -53,6 +53,7 @@ gem 'dalli'
 gem 'api_cache'
 gem 'mongoid_search'
 gem 'mongoid_token'
+gem 'soundcloud'
 
 group :production, :staging do
   gem 'heroku_rails_deflate'

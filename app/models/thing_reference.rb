@@ -14,6 +14,7 @@ class ThingReference
   validates_inclusion_of :type,
                          in: [Scorethings::ThingTypes::TWITTER_ACCOUNT,
                               Scorethings::ThingTypes::GITHUB_REPOSITORY,
+                              Scorethings::ThingTypes::SOUNDCLOUD_TRACK,
                               Scorethings::ThingTypes::HASHTAG]
 
   def to_builder

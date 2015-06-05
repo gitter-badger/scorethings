@@ -1,16 +1,6 @@
 require 'omniauth-oauth2'
 
 # options from https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview#openssl
-# and https://github.com/zquestz/omniauth-google-oauth2/issues/175#issuecomment-94294393
-google_options = {
-    name: 'google',
-    access_type: 'offline',
-    scope: 'https://www.googleapis.com/auth/userinfo.profile',
-    prompt: 'select_account',
-    image_aspect_ratio: 'square',
-    image_size: 50
-}
-
 ssl_options = {}
 unless Rails.env.production?
   ssl_options[:client_options] = {

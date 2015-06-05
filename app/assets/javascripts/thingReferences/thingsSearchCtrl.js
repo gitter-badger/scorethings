@@ -23,6 +23,7 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreM
     $scope.types = {
         twitter_account: type('Twitter Account', 'Patton Oswalt, @pattonoswalt, pattonoswalt, or https://twitter.com/pattonoswalt'),
         github_repository: type('GitHub Repository', 'angular or user:tenderlove'),
+        soundcloud_track: type('Soundcloud Track', 'dj earworm or https://soundcloud.com/mashupgermany/mashup-germany-promo-mix-2014'),
         hashtag: type('Hashtag', '#SomethingCats or SomethingCats')
     };
 

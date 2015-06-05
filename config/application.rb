@@ -14,6 +14,7 @@ module Scorethings
     # ThingReference types
     TWITTER_ACCOUNT = 'twitter_account'
     GITHUB_REPOSITORY = 'github_repository'
+    SOUNDCLOUD_TRACK = 'soundcloud_track'
     HASHTAG = 'hashtag'
   end
 

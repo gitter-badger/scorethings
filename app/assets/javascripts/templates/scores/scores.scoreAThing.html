@@ -1,10 +1,62 @@
 <h3>Score A Thing</h3>
-<div>
-    <ol>
-        <li>Search for a thing.</li>
-        <li>Score that thing.</li>
-        <li>....that's it, two steps.  Why?  Because <strong>scorethings</strong>.</li>
-    </ol>
-</div>
-<div ng-include="'thingReferences/thingReferences.search.html'">
+<small>Find a Thing To Score</small>
+<div ng-controller="ThingsSearchCtrl">
+    <form ng-submit="searchThings()">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <select id="type"
+                        class="form-control"
+                        ng-model="selectedType"
+                        ng-options="typeKey as typeValue.label for (typeKey, typeValue)  in types">
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-9">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text"
+                           id="query"
+                           class="form-control"
+                           placeholder="{{types[selectedType].examplePlaceholder}}"
+                           ng-model="query">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-disabled="!query" type="submit">
+                            Search
+                        </button>
+                    </span>
+                    <span ng-show="selectedType == 'hashtag'" class="input-group-btn">
+                        <button class="btn btn-primary" ng-disabled="!query" ng-click="scoreHashtagQuery()">
+                            Score
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="col-xs-12" ng-show="showNoResultsMessage">
+        <h5>Sorry, no results found for "{{query}}".</h5>
+    </div>
+
+    <div class="col-xs-12" ng-show="things.length">
+        <table class="table table-striped">
+            <tbody>
+            <tr ng-repeat="thing in things">
+                <td>
+                    <img ng-src="{{thing.imageUri}}">
+                </td>
+                <td>
+                    <a target="_blank" ng-href="{{thing.uri}}">{{thing.title}}</a>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-md"
+                            ng-disabled="!isLoggedIn()"
+                            ng-click="scoreThing(thing)">
+                        Score
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

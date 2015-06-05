@@ -2,6 +2,7 @@ class ThingService
   def initialize
     @twitter_service = TwitterService.new
     @github_service = GithubService.new
+    @soundcloud_service = SoundcloudService.new
   end
 
   def find_or_create_thing_reference_to_thing(type, external_id)
@@ -27,6 +28,8 @@ class ThingService
           retrieved_search_results = @twitter_service.search_twitter_account_things(query) || []
         when Scorethings::ThingTypes::GITHUB_REPOSITORY
           retrieved_search_results = @github_service.search_github_repository_things(query) || []
+        when Scorethings::ThingTypes::SOUNDCLOUD_TRACK
+          retrieved_search_results = @soundcloud_service.search_soundcloud_track_things(query) || []
         else
           raise Exceptions::ThingTypeUnknownError
       end
@@ -47,6 +50,8 @@ class ThingService
           thing = @twitter_service.get_twitter_account_thing(external_id)
         when Scorethings::ThingTypes::GITHUB_REPOSITORY
           thing = @github_service.get_github_repository_thing(external_id)
+        when Scorethings::ThingTypes::SOUNDCLOUD_TRACK
+          thing = @soundcloud_service.get_soundcloud_track_thing(external_id)
         else
           raise Exceptions::ThingTypeUnknownError
       end
