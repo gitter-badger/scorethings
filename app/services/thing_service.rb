@@ -1,10 +1,10 @@
 class ThingService
   def initialize
     @twitter_service = TwitterService.new
-    @youtube_service = YoutubeService.new
+    @github_service = GithubService.new
   end
 
-  def find_or_create_by_type_and_external_id(type, external_id)
+  def find_or_create_thing_reference_to_thing(type, external_id)
     thing_reference = ThingReference.where(type: type, external_id: external_id).first
     if thing_reference.nil?
       unless type == Scorethings::ThingTypes::HASHTAG
@@ -21,13 +21,14 @@ class ThingService
 
   def search_for_things(type, query)
     cache_key = "search_for_things_#{type}_#{query}"
-    return Rails.cache.fetch(cache_key, expires_in: 12.hours) do
-      if type == Scorethings::ThingTypes::TWITTER_ACCOUNT
-        retrieved_search_results = @twitter_service.search_twitter_account_things(query) || []
-      elsif type == Scorethings::ThingTypes::YOUTUBE_VIDEO
-        retrieved_search_results = @youtube_service.search_youtube_video_things(query) || []
-      else
-        raise Exceptions::ThingTypeUnknownError
+    return Rails.cache.fetch(cache_key, expires_in: 1.day) do
+      case type
+        when Scorethings::ThingTypes::TWITTER_ACCOUNT
+          retrieved_search_results = @twitter_service.search_twitter_account_things(query) || []
+        when Scorethings::ThingTypes::GITHUB_REPOSITORY
+          retrieved_search_results = @github_service.search_github_repository_things(query) || []
+        else
+          raise Exceptions::ThingTypeUnknownError
       end
 
       Rails.cache.write(cache_key, retrieved_search_results)
@@ -44,8 +45,8 @@ class ThingService
       case type
         when Scorethings::ThingTypes::TWITTER_ACCOUNT
           thing = @twitter_service.get_twitter_account_thing(external_id)
-        when Scorethings::ThingTypes::YOUTUBE_VIDEO
-          thing = @youtube_service.get_youtube_video_thing(external_id)
+        when Scorethings::ThingTypes::GITHUB_REPOSITORY
+          thing = @github_service.get_github_repository_thing(external_id)
         else
           raise Exceptions::ThingTypeUnknownError
       end

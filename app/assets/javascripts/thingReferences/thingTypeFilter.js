@@ -1,7 +1,7 @@
 angular.module('app').filter('thingType', function() {
     var typesToLabelsMap = {
         twitter_account: 'Twitter Account',
-        youtube_video: 'YouTube Video',
+        github_repository: 'GitHub Repository',
         hashtag: 'Hashtag'
     };
     return function(thingType) {

@@ -13,7 +13,7 @@ class ThingReference
   validates_presence_of :external_id, :type
   validates_inclusion_of :type,
                          in: [Scorethings::ThingTypes::TWITTER_ACCOUNT,
-                              Scorethings::ThingTypes::YOUTUBE_VIDEO,
+                              Scorethings::ThingTypes::GITHUB_REPOSITORY,
                               Scorethings::ThingTypes::HASHTAG]
 
   def to_builder

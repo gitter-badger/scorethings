@@ -11,7 +11,6 @@ class Score
   belongs_to :thing_reference
 
   token :contains => :fixed_numeric, :length => 8
-  search_in :thing_reference => [:search_terms]
 
   validates_numericality_of :points, greater_than_or_equal_to: 1, less_than_or_equal_to: 100, only_integer: true
   validates_numericality_of :good_point, greater_than_or_equal_to: 2, less_than_or_equal_to: 99, only_integer: true

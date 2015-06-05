@@ -13,7 +13,7 @@ module Scorethings
   module ThingTypes
     # ThingReference types
     TWITTER_ACCOUNT = 'twitter_account'
-    YOUTUBE_VIDEO = 'youtube_video'
+    GITHUB_REPOSITORY = 'github_repository'
     HASHTAG = 'hashtag'
   end
 

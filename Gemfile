@@ -47,6 +47,7 @@ gem 'angular-ui-bootstrap-rails'
 
 gem 'twitter'
 gem 'google-api-client'
+gem 'octokit'
 gem 'trollop'
 gem 'dalli'
 gem 'api_cache'

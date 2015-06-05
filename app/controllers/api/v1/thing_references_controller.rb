@@ -6,7 +6,7 @@ module Api
       def create
         thing_params = params.require(:thing_reference).permit(:type, :external_id)
         begin
-          @thing_reference = $thing_service.find_or_create_by_type_and_external_id(thing_params[:type], thing_params[:external_id])
+          @thing_reference = $thing_service.find_or_create_thing_reference_to_thing(thing_params[:type], thing_params[:external_id])
           redirect_to action: 'show', id: @thing_reference._id
         rescue Exceptions::ThingNotFoundError
           return render json: {

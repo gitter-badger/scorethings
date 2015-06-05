@@ -17,7 +17,7 @@ class TwitterService
         end
       end
     rescue Twitter::Error::TooManyRequests
-      raise Exceptions::ThingRetrievalError
+      raise Exceptions::ThingNotFoundError
     end
   end
 

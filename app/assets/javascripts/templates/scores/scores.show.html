@@ -8,7 +8,7 @@
             </div>
             <div class="panel-body">
                 <h6><a ui-sref="thingReferences.show({thingReferenceId: score.thingReference.token})">{{score.thing.type | thingType}}: {{score.thing.title}}</a></h6>
-                <img ng-src="{{score.thing.imageUri}}">
+                <img ng-src="{{score.thing.imageUri}}" height="150" width="150">
                 <div ng-show="score.thing.uri" class="row">
                     <a target="_blank" ng-href="{{score.thing.uri}}">Go To This {{score.thing.type | thingType}}</a>
                 </div>

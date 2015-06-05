@@ -59,7 +59,7 @@ RSpec.describe TwitterService do
                                                           .and_raise(Twitter::Error::TooManyRequests)
       expect {
         @twitter_service.search_twitter_account_things('pattonoswalt')
-      }.to raise_error(Exceptions::ThingRetrievalError)
+      }.to raise_error(Exceptions::ThingNotFoundError)
     end
   end
 end

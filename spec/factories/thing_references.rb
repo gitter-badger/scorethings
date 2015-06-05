@@ -10,8 +10,8 @@ FactoryGirl.define do
       type Scorethings::ThingTypes::TWITTER_ACCOUNT
     end
 
-    trait :youtube_video do
-      type Scorethings::ThingTypes::YOUTUBE_VIDEO
+    trait :github_repository do
+      type Scorethings::ThingTypes::GITHUB_REPOSITORY
     end
 
     trait :hashtag do |h|

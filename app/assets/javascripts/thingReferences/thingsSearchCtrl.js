@@ -18,9 +18,11 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreM
             examplePlaceholder: examplePlaceholder && ('Example: ' + examplePlaceholder)
         };
     }
+
+    // TODO retrieve list of thing types from server, bootstrapped?
     $scope.types = {
         twitter_account: type('Twitter Account', 'Patton Oswalt, @pattonoswalt, pattonoswalt, or https://twitter.com/pattonoswalt'),
-        youtube_video: type('YouTube Video', 'Cat Stuff or https://www.youtube.com/watch?v=B66feInucFY'),
+        github_repository: type('GitHub Repository', 'angular or user:tenderlove'),
         hashtag: type('Hashtag', '#SomethingCats or SomethingCats')
     };
 

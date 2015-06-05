@@ -5,7 +5,7 @@ require 'omniauth-oauth2'
 google_options = {
     name: 'google',
     access_type: 'offline',
-    scope: 'https://www.googleapis.com/auth/userinfo.profile, http://gdata.youtube.com',
+    scope: 'https://www.googleapis.com/auth/userinfo.profile',
     prompt: 'select_account',
     image_aspect_ratio: 'square',
     image_size: 50
@@ -25,7 +25,6 @@ end
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
-  provider :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'], google_options.merge!(ssl_options)
   provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
   provider :soundcloud, ENV['SOUNDCLOUD_CLIENT_ID'], ENV['SOUNDCLOUD_CLIENT_SECRET'], ssl_options
 end
