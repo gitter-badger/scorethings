@@ -1,7 +1,7 @@
 angular.module('app').directive('twitterShareScoreButton', ['$location', function($location) {
     return {
         restrict: 'E',
-        replace: 'true',
+        replace: 'false',
         templateUrl: "share/twitterShareScoreButton.html",
         scope: {
             thingTitle: '=thingTitle',
@@ -9,8 +9,8 @@ angular.module('app').directive('twitterShareScoreButton', ['$location', functio
             points: '=points',
             good: '=good'
         },
-        controller: function($scope) {
+        controller: ['$scope', function($scope) {
             $scope.url = $location.absUrl();
-        }
+        }]
     };
 }]);

@@ -118,14 +118,4 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 url: '/donate',
                 templateUrl: 'help/help.donate.html'
             });
-    $urlRouterProvider.otherwise(function($injector, $location){
-        var goto = $location.$$search.goto;
-        console.log(goto);
-        if(goto) {
-            $location.path('/' + goto);
-        } else {
-            $location.path('/');
-        }
-        return $location.path();
-    });
 }]);
