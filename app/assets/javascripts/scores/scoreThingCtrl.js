@@ -1,4 +1,4 @@
-angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreModalFactory', 'notifier', '$stateParams', '$state', '$location', function($scope, Thing, scoreModalFactory, notifier, $stateParams, $state, $location) {
+angular.module('app').controller('ScoreThingCtrl', ['$scope', 'Thing', 'scoreModalFactory', 'notifier', '$stateParams', '$state', '$location', function($scope, Thing, scoreModalFactory, notifier, $stateParams, $state, $location) {
     $scope.showNoResultsMessage = false;
     handleQueryParams($location.$$search);
 
@@ -56,7 +56,7 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreM
         $scope.scoreThing({
             externalId: hashtagExternalId,
             type: 'hashtag',
-            title: '#' + $scope.query
+            title: '#' + hashtagExternalId
         });
     };
 
@@ -73,12 +73,7 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', 'scoreM
 
 
     function searchThings() {
-        $scope.query = stripPrefix($scope.query);
         if(!$scope.query.length) return;
-
-        if($scope.selectedType == 'hashtag') {
-            return;
-        }
 
         $location.search({
             query: $scope.query,

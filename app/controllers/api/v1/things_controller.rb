@@ -20,6 +20,10 @@ module Api
       def search
         type = params.require(:type)
         query = params.require(:query)
+        if type == Scorethings::ThingTypes::HASHTAG
+          return @thing_search_results = ThingReference.find_hashtag_thing_by_external_id(query)
+        end
+
         begin
           @thing_search_results = $thing_service.search_for_things(type, query)
         rescue Exceptions::ThingTypeUnknownError

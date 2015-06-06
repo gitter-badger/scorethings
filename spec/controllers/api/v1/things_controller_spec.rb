@@ -55,5 +55,18 @@ RSpec.describe Api::V1::ThingsController do
       get :search, {type: 'funnycatsthing', query: 'somequery'}
       expect(response).to have_http_status(:bad_request)
     end
+
+    it "should search thing reference hashtags" do
+      create(:thing_reference, :hashtag, external_id: 'ApplePie')
+      create(:thing_reference, :hashtag, external_id: 'BananaCake')
+      create(:thing_reference, :hashtag, external_id: 'CherriePie')
+
+      get :search, {type: 'hashtag', query: 'Banana'}
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:thing_search_results).length).to eq(1)
+
+      get :search, {type: 'hashtag', query: 'Pie'}
+      expect(assigns(:thing_search_results).length).to eq(2)
+    end
   end
 end

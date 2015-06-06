@@ -16,5 +16,4 @@ end
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
-  provider :soundcloud, ENV['SOUNDCLOUD_CLIENT_ID'], ENV['SOUNDCLOUD_CLIENT_SECRET'], ssl_options
 end

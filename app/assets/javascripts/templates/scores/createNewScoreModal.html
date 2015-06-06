@@ -4,11 +4,16 @@
             <h5 class="modal-title">Score Thing</h5>
         </div>
         <div class="modal-body">
-            <div class="row">
-                <img ng-src="{{thing.imageUri}}" height="150" width="150">
+            <div ng-show="thing.type != 'hashtag'">
+                <div class="row">
+                    <img ng-src="{{thing.imageUri}}" height="150">
+                </div>
+                <div>
+                    <h4>{{thing.title}}</h4>
+                </div>
             </div>
-            <div>
-                <h4>{{thing.title}}</h4>
+            <div ng-show="thing.type == 'hashtag'">
+                <h1>{{thing.title}}</h1>
             </div>
             <div ng-show="thing.uri">
                 <a target="_blank" ng-href="{{thing.uri}}">View {{thing.type | thingType}}</a>

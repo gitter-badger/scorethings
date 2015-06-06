@@ -36,7 +36,6 @@ gem 'omniauth-oauth2'
 gem 'omniauth-twitter'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-github'
-gem 'omniauth-soundcloud'
 
 gem 'jwt'
 gem 'angular-rails-templates', '~> 0.1.4'

@@ -1,9 +1,10 @@
 <h3>Thing</h3>
 <div>
-    <img ng-src="{{thingReference.thing.imageUri}}" height="150" width="150">
-    <h3>
-        {{thingReference.thing.title}}&nbsp;({{thingReference.type | thingType}}, <a target="_blank" ng-href="{{thingReference.thing.uri}}">View</a>)
-    </h3>
+    <h3>{{thingReference.type | thingType}}: {{thingReference.thing.title}}</h3>
+    <div ng-show="thingReference.type != 'hashtag'">
+        <img ng-src="{{thingReference.thing.imageUri}}" height="154">
+        <a target="_blank" ng-href="{{thingReference.thing.uri}}">View {{thingReference.type | thingType}}</a>
+    </div>
 </div>
 <div>
     <button class="btn btn-primary btn-sm" ng-click="scoreThisThing()">Score This</button>
@@ -16,4 +17,3 @@
         </li>
     </ul>
 </div>
-
