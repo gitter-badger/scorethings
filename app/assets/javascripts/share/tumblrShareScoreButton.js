@@ -1,4 +1,4 @@
-angular.module('app').directive('tumblrShareScoreButton', function($location) {
+angular.module('app').directive('tumblrShareScoreButton', ['$location', function($location) {
     return {
         restrict: 'E',
         replace: 'true',
@@ -13,4 +13,4 @@ angular.module('app').directive('tumblrShareScoreButton', function($location) {
             $scope.url = $location.absUrl();
         }
     };
-});
+}]);
