@@ -5,7 +5,7 @@
         </div>
         <div class="modal-body">
             <div ng-show="thing.type != 'hashtag'">
-                <div class="row">
+                <div class="row" ng-show="thing.imageUri">
                     <img ng-src="{{thing.imageUri}}" height="150">
                 </div>
                 <div>
@@ -36,10 +36,10 @@
                 <div class="col-xs-12 col-sm-6">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <h4>Good Point:</h4>
-                            <h4>{{score.goodPoint}}</h4>
-                            <div ui-slider ng-model="score.goodPoint"
-                                 id="goodPoint"
+                            <h4>Good:</h4>
+                            <h4>{{score.good}}</h4>
+                            <div ui-slider ng-model="score.good"
+                                 id="good"
                                  min="2"
                                  step="1"
                                  max="99">

@@ -7,7 +7,7 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
             updateIsOwner();
         },
         function errorGet() {
-            notifier.error('failed to get score');
+            $scope.notFound = true;
         });
 
     $scope.isOwner = false;
@@ -29,6 +29,7 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
             function successUpdate(updatedScore) {
                 notifier.success('you updated the score for : ' + updatedScore.thing.title);
                 $scope.score = updatedScore;
+                $scope.updateScoreForm.$setPristine();
             },
             function errorUpdate() {
                 notifier.error('failed to update score');

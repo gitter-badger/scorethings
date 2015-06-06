@@ -6,9 +6,12 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 //instead of returning a new url string, I'll just change the $location.path directly so I don't have to worry about constructing a new url string and so a new state change is not triggered
                 $location.replace().path(normalized);
             }
-            // because we've returned nothing, no state change occurs
+            var goto = $location.$$search.goto;
+            if(goto) {
+                $location.path('/' + goto);
+                $location.search('goto', null);
+            }
         });
-        $urlRouterProvider.otherwise('/');
         $stateProvider.
             state('home', {
                 url: '/',
@@ -115,4 +118,14 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 url: '/donate',
                 templateUrl: 'help/help.donate.html'
             });
-    }]);
+    $urlRouterProvider.otherwise(function($injector, $location){
+        var goto = $location.$$search.goto;
+        console.log(goto);
+        if(goto) {
+            $location.path('/' + goto);
+        } else {
+            $location.path('/');
+        }
+        return $location.path();
+    });
+}]);

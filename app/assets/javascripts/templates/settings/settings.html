@@ -23,19 +23,19 @@
             </div>
             <div class="panel-body">
                 <small>What's the minimum points where you start to say something is good?</small>
-                <h1>{{settings.defaultGoodPoint}}</h1>
-                <div ui-slider ng-model="settings.defaultGoodPoint"
-                     id="defaultGoodPoint"
+                <h1>{{settings.defaultGood}}</h1>
+                <div ui-slider ng-model="settings.defaultGood"
+                     id="defaultGood"
                      min="2"
                      step="1"
                      max="99">
                 </div>
                 <ul>
                     <li>
-                        <span class="points-bad"><strong>BAD:</strong> under {{settings.defaultGoodPoint}}</span>
+                        <span class="points-bad"><strong>BAD:</strong> under {{settings.defaultGood}}</span>
                     </li>
                     <li>
-                        <span class="points-good"><strong>GOOD:</strong>  {{settings.defaultGoodPoint}} or above</span>
+                        <span class="points-good"><strong>GOOD:</strong>  {{settings.defaultGood}} or above</span>
                     </li>
                 </ul>
             </div>

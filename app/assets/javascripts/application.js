@@ -28,6 +28,7 @@
 //= require angular-ui-slider/src/slider
 //= require humps/humps
 //= require jqueryui-touch-punch/jquery.ui.touch-punch.min
+//= require angular-socialshare/angular-socialshare.js
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app

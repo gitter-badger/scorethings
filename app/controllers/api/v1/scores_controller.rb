@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate_request, :current_user, only: [:show]
 
       def create
-        score_params = params.require(:score).permit(:thing_reference_id, :points, :good_point)
+        score_params = params.require(:score).permit(:thing_reference_id, :points, :good)
         thing_reference_id = score_params[:thing_reference_id]
 
         begin
@@ -36,7 +36,7 @@ module Api
       def update
         begin
           @score = Score.find(params.require(:id))
-          score_params = params.require(:score).permit(:points, :good_point)
+          score_params = params.require(:score).permit(:points, :good)
           @current_user.update_score(@score, score_params)
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {

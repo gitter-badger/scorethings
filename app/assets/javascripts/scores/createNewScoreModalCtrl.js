@@ -4,7 +4,7 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingReferenceInpu
     $scope.score = {
         thingReferenceId: thingReferenceInput && thingReferenceInput.id,
         points: $scope.settings.defaultPoints || 75,
-        goodPoint: $scope.settings.defaultGoodPoint || 75
+        good: $scope.settings.defaultGood || 75
     };
 
     $scope.warningMessage = null;
@@ -67,7 +67,6 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingReferenceInpu
 
     function createNewScore() {
         new Score($scope.score).create().then(function successCreate(score) {
-                console.log(score);
                 $modalInstance.close(score);
             }, function errorCreate(response) {
                 if(response.status == 409) {
