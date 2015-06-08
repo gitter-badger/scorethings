@@ -5,7 +5,7 @@
     <h3 ng-show="!isOwner">Score by <a ui-sref="users.show({userId: score.user.token})">{{score.user.username}}</a></h3>
     <h3 ng-show="isOwner">Your Score</h3>
     <div style="text-align: center">
-        <div class="col-xs-12 col-sm-5">
+        <div class="col-xs-12 col-sm-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Thing</h3>
@@ -28,7 +28,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-5">
+        <div class="col-xs-12 col-sm-6">
             <form name="updateScoreForm" ng-submit="updateScore()">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -37,37 +37,8 @@
                         </h3>
                     </div>
                     <div class="panel-body">
-                            <div class="col-sm-12 col-md-6">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <label for="points">Points</label>
-                                        <h3>{{score.points}}</h3>
-                                        <div ui-slider ng-model="score.points"
-                                             id="points"
-                                             ng-show="isOwner"
-                                             min="1"
-                                             step="1"
-                                             max="100">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <label for="good">Good</label>
-                                        <h3>{{score.good}}</h3>
-                                        <div ui-slider ng-model="score.good"
-                                             ng-show="isOwner"
-                                             id="good"
-                                             min="2"
-                                             step="1"
-                                             max="99">
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
+                        <score-points-input score="score" is-owner="isOwner">
+                        </score-points-input>
                         <div>
                             <twitter-share-score-button
                                     thing-title="score.thing.title"

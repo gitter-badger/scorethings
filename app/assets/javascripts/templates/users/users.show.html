@@ -1,0 +1,10 @@
+<h3>User: {{user.username}}</h3>
+<div>
+    <h5>Description</h5>
+    <p>
+        {{user.description}}
+    </p>
+    <button ui-sref="users.edit({userName: user.username})"
+            ng-show="user.id == identity.userId"
+            class="btn btn-default btn-sm">Edit</button>
+</div>

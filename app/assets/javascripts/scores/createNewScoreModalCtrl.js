@@ -1,10 +1,9 @@
-angular.module('app').controller('CreateNewScoreModalCtrl', ['thingReferenceInput', 'thingInput', '$scope', '$modalInstance', 'Score', 'ThingReference', 'notifier', 'settingsStorage', function(thingReferenceInput, thingInput, $scope, $modalInstance, Score, ThingReference, notifier, settingsStorage) {
-    $scope.settings = settingsStorage.get();
+angular.module('app').controller('CreateNewScoreModalCtrl', ['thingReferenceInput', 'thingInput', '$scope', '$modalInstance', 'Score', 'ThingReference', 'notifier', function(thingReferenceInput, thingInput, $scope, $modalInstance, Score, ThingReference, notifier) {
+    var DEFAULT_POINTS = 70;
 
     $scope.score = {
         thingReferenceId: thingReferenceInput && thingReferenceInput.id,
-        points: $scope.settings.defaultPoints || 75,
-        good: $scope.settings.defaultGood || 75
+        points: DEFAULT_POINTS
     };
 
     $scope.warningMessage = null;

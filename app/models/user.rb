@@ -4,7 +4,6 @@ class User
   include Mongoid::Search
   include Mongoid::Token
 
-  embeds_one :settings
   embeds_one :auth_provider
 
   field :username, type: String
@@ -15,7 +14,7 @@ class User
   validates_presence_of :username
   validates_uniqueness_of :username
   validates_format_of :username, with: /\A[A-Za-z0-9_-]{3,16}\z/
-  validates_length_of :description, maximum: 150
+  validates_length_of :description, maximum: 300
 
   has_many :scores, autosave: true, dependent: :delete
 
@@ -64,7 +63,6 @@ class User
 
       user.username = User.generate_random_username
       user.auth_provider = auth_provider
-      user.settings = Settings.new
     end
   end
 
@@ -89,7 +87,6 @@ class User
     payload = {
         user_id: self._id.to_s,
         username: self.username,
-        settings: self.settings
     }
     AuthToken.encode(payload)
   end

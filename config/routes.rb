@@ -22,9 +22,8 @@ Rails.application.routes.draw do
       put '/settings' => 'settings#update'
 
       get '/users' => 'users#show'
-      get '/users' => 'users#search'
-
-      # for current user only
+      get '/users/search' => 'users#search'
+      get '/users/current' => 'users#current'
       put '/users' => 'users#update'
       delete '/users' => 'users#destroy'
     end

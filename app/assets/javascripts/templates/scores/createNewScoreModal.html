@@ -19,34 +19,8 @@
                 <a target="_blank" ng-href="{{thing.uri}}">View {{thing.type | thingType}}</a>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-6">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h4>Points:</h4>
-                            <h4>{{score.points}}</h4>
-                            <div ui-slider ng-model="score.points"
-                                 id="points"
-                                 min="1"
-                                 step="1"
-                                 max="100">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h4>Good:</h4>
-                            <h4>{{score.good}}</h4>
-                            <div ui-slider ng-model="score.good"
-                                 id="good"
-                                 min="2"
-                                 step="1"
-                                 max="99">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <score-points-input score="score" is-owner="true">
+                </score-points-input>
             </div>
             <div class="alert alert-warning" ng-show="scoreConflictMessage" role="alert">
                 {{scoreConflictMessage}}

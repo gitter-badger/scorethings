@@ -1,4 +1,4 @@
-angular.module('app').factory('loginModalFactory', ['$modal', 'AUTH_PROVIDERS', function($modal, AUTH_PROVIDERS) {
+angular.module('app').factory('loginModalFactory', ['$modal', '$rootScope', 'AUTH_PROVIDERS', function($modal, $rootScope, AUTH_PROVIDERS) {
     return {
         openModal: function() {
             $modal.open({
@@ -16,6 +16,7 @@ angular.module('app').factory('loginModalFactory', ['$modal', 'AUTH_PROVIDERS', 
                         $scope.$apply(function() {
                             authService.storeAuthToken(token);
                             $modalInstance.close();
+                            $rootScope.$broadcast('userLoggedIn');
                         });
                     };
                 }]

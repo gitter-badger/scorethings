@@ -20,10 +20,17 @@ module Api
         end
       end
 
+      def current
+
+      end
+
       def update
         begin
           @current_user.update_attributes!(params.require(:user).permit(:username, :description))
-          redirect_to action: 'show', username: @current_user.username
+           return render json: {
+                             user: @current_user.to_builder,
+                             status: :ok
+                         }, status: :ok
         rescue Mongoid::Errors::Validations
           return render json: {
                             error: "cannot update, errors: #{@current_users.errors.full_messages}",

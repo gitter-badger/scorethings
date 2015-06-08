@@ -80,20 +80,11 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'users/users.search.html',
                     controller: 'UsersSearchCtrl'
                 }).
-                state('users.profile', {
-                    url: '/profile/:username',
-                    templateUrl: 'users/users.profile.html',
-                    controller: 'UsersProfileCtrl'
+                state('users.show', {
+                    url: '/:username',
+                    templateUrl: 'users/users.show.html',
+                    controller: 'UsersShowCtrl'
                 }).
-
-            /*
-             settings
-             */
-            state('settings', {
-                url: '/settings',
-                templateUrl: 'settings/settings.html',
-                controller: 'SettingsCtrl'
-            }).
 
             /*
              Help
