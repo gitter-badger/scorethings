@@ -6,7 +6,6 @@ json.score do
   json.thing_id @score.thing_reference.id.to_s
   json.thing @thing.to_builder unless @thing.nil?
   json.points @score.points
-  json.good @score.good
 
   json.created_at @score.created_at
   json.updated_at @score.updated_at

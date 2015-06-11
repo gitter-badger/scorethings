@@ -1,31 +1,14 @@
-
-<div>
-    <h3>This is a directive</h3>
-    <div class="col-sm-12 col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h4>Points: {{score.points}}</h4>
-                <div ui-slider ng-model="score.points"
-                     id="points"
-                     ng-show="isOwner"
-                     min="1"
-                     step="1"
-                     max="100">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-12 col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h4>Good: {{score.good}}</h4>
-                <div ui-slider ng-model="score.good"
-                     ng-show="isOwner"
-                     id="good"
-                     min="2"
-                     step="1"
-                     max="99">
-                </div>
+<div class="col-xs-12">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h4>Points: {{score.points}}</h4>
+            <br>
+            <div ui-slider ng-model="score.points"
+                 id="points"
+                 ng-show="isOwner"
+                 min="1"
+                 step="1"
+                 max="100">
             </div>
         </div>
     </div>

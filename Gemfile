@@ -54,6 +54,10 @@ gem 'mongoid_search'
 gem 'mongoid_token'
 gem 'soundcloud'
 gem 'themoviedb'
+gem 'dbpedia'
+gem 'sparql-client'
+gem 'google-search'
+gem 'httpclient'
 
 group :production, :staging do
   gem 'heroku_rails_deflate'

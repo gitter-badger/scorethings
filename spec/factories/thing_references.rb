@@ -1,22 +1,8 @@
 FactoryGirl.define do
-  sequence(:thing_external_id) { |n| "10000#{n}" }
-  sequence(:thing_hashtag_external_id) { |n| "SomeHashtagAboutCats#{n}" }
+  sequence(:thing_hashtag_dbpedia_uri) { |n| "http://dbpedia.org/resource/Batman_#{n}" }
 
-  factory :thing_reference, class: ThingReference do
-    external_id { FactoryGirl.generate(:thing_external_id) }
+  factory :thing_reference, class: Thing do
+    dbpedia_uri { FactoryGirl.generate(:thing_dbpedia_uri) }
     type Scorethings::ThingTypes::TWITTER_ACCOUNT
-
-    trait :twitter_account do
-      type Scorethings::ThingTypes::TWITTER_ACCOUNT
-    end
-
-    trait :github_repository do
-      type Scorethings::ThingTypes::GITHUB_REPOSITORY
-    end
-
-    trait :hashtag do |h|
-      h.type Scorethings::ThingTypes::HASHTAG
-      h.external_id {FactoryGirl.generate(:thing_hashtag_external_id)}
-    end
   end
 end

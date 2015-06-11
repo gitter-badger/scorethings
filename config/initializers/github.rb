@@ -1,1 +1,0 @@
-$github = Octokit::Client.new

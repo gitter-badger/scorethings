@@ -1,5 +1,5 @@
 json.array! @thing_search_results,
-            :external_id,
+            :dbpedia_uri,
             :type,
             :title,
             :image_uri,

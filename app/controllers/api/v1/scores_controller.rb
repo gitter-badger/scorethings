@@ -4,20 +4,20 @@ module Api
       skip_before_action :authenticate_request, :current_user, only: [:show]
 
       def create
-        score_params = params.require(:score).permit(:thing_reference_id, :points, :good)
-        thing_reference_id = score_params[:thing_reference_id]
+        score_params = params.require(:score).permit(:thing_id, :points)
+        thing_id = score_params[:thing_id]
 
         begin
-          thing_reference = ThingReference.find(thing_reference_id)
-          score_params[:thing_reference] = thing_reference
+          thing = Thing.find(thing_id)
+          score_params[:thing] = thing
 
           @score = Score.new(score_params)
           @current_user.create_score(@score)
           redirect_to action: 'show', id: @score._id.to_s
         rescue Exceptions::ScoreUniquenessError
-          existing_score = @current_user.scores.where(thing_reference: thing_reference).first
+          existing_score = @current_user.scores.where(thing: thing).first
           return render json: {
-                            error: "a score for this thing_reference has already been created by this user",
+                            error: "a score for this thing has already been created by this user",
                             existing_score: existing_score,
                             status: :conflict
                         }, status: :conflict
@@ -36,7 +36,7 @@ module Api
       def update
         begin
           @score = Score.find(params.require(:id))
-          score_params = params.require(:score).permit(:points, :good)
+          score_params = params.require(:score).permit(:points)
           @current_user.update_score(@score, score_params)
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
@@ -80,8 +80,6 @@ module Api
         id = params.require(:id)
         begin
           @score = Score.find(id)
-          thing = @score.thing_reference
-          @thing =  $thing_service.get_thing(thing[:type], thing[:external_id])
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             error: "failed to score for id: #{params[:id]}",

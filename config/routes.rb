@@ -10,21 +10,18 @@ Rails.application.routes.draw do
       get '/auth/:provider/callback' => 'auth_token#create'
       get '/auth/failure' => 'auth_token#failure'
 
-      resources :thing_references, except: [:destroy, :edit, :new, :index]
+      resources :things, only: [:create, :show]
 
-      get '/things/:type/:external_id' => 'things#show'
-      get '/things/search' => 'things#search'
+      get '/potential_things/search' => 'potential_things#search'
+      get '/potential_things/search_images' => 'potential_things#search_images'
+      get '/potential_things/:resource_name' => 'potential_things#show'
 
-      resources :scores, except: [:edit, :new, :index]
-
-
-      get '/settings' => 'settings#show'
-      put '/settings' => 'settings#update'
+      resources :scores, only: [:create, :show, :update, :destroy]
 
       get '/users' => 'users#show'
       get '/users/search' => 'users#search'
       get '/users/current' => 'users#current'
-      put '/users' => 'users#update'
+      put '/users/:id' => 'users#update'
       delete '/users' => 'users#destroy'
     end
   end

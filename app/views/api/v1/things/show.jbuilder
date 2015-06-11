@@ -1,5 +1,5 @@
 json.thing do
-  json.external_id @thing.external_id
+  json.dbpedia_uri @thing.dbpedia_uri
   json.title @thing.title
   json.type @thing.type
   json.image_uri @thing.image_uri

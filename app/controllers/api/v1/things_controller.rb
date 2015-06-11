@@ -1,36 +1,37 @@
 module Api
   module V1
-    class ThingsController < ApplicationController
-      skip_before_action :authenticate_request
+    class ThingController < ApplicationController
+      skip_before_action :authenticate_request, :current_user, only: [:show]
 
-      def show
-        external_id = params.require(:external_id)
-        type = params.require(:type)
+      def create
+        thing_params = params.require(:thing).permit(:resource_name)
         begin
-          @thing = $thing_service.get_thing(type, external_id)
-          @thing_reference = ThingReference.where(type: @thing.type, external_id: @thing.external_id).first
-        rescue Exceptions::ThingNotFoundError
+          @thing = ThingService.find_or_create_by_resource_name(thing_params[:resource_name])
           return render json: {
-                            error: "thing was not found with external_id: #{external_id} and type: #{type}",
+                            thing: @thing.to_builder,
+                            status: :created
+                        }, status: :created
+        rescue Exceptions::PotentialThingNotFoundError
+          return render json: {
+                            error: "thing for thing was not found",
                             status: :not_found
                         }, status: :not_found
         end
+
       end
 
-      def search
-        type = params.require(:type)
-        query = params.require(:query)
-        if type == Scorethings::ThingTypes::HASHTAG
-          return @thing_search_results = ThingReference.find_hashtag_thing_by_external_id(query)
-        end
-
+      def show
         begin
-          @thing_search_results = $thing_service.search_for_things(type, query)
-        rescue Exceptions::ThingTypeUnknownError
+          @thing = Thing.find(params.require(:id))
           return render json: {
-                            error: "unknown thing_reference type: #{type}",
-                            status: :bad_request
-                        }, status: :bad_request
+                            thing: @thing.to_builder,
+                            status: :ok
+                        }, status: :ok
+        rescue Mongoid::Errors::DocumentNotFound
+          return render json: {
+                            error: "thing was not found",
+                            status: :not_found
+                        }, status: :not_found
         end
       end
     end

@@ -1,13 +1,16 @@
-angular.module('app').factory('scoreModalFactory', ['$modal', function($modal) {
+angular.module('app').factory('createNewScoreModalFactory', ['$modal', function($modal) {
     return {
-        createNewScoreForThing: function(thingReferenceInput, thingInput, saveSuccessCallbackFn) {
+        createNewScoreForThing: function(thingReferenceInput, thingInput, imagesInput, saveSuccessCallbackFn) {
             var modalInstance = $modal.open({
                 templateUrl: 'scores/createNewScoreModal.html',
                 controller: 'CreateNewScoreModalCtrl',
-                size: 'md',
+                size: 'sm',
                 resolve: {
                     thingReferenceInput: function () {
                         return thingReferenceInput;
+                    },
+                    imagesInput: function () {
+                        return imagesInput;
                     },
                     thingInput: function () {
                         return thingInput;

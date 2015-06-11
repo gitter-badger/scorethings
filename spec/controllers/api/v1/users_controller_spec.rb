@@ -42,14 +42,14 @@ RSpec.describe Api::V1::UsersController do
     end
 
     it "should search for a single user with username" do
-      get :search, {query: 'alpha'}
+      get :search_image, {query: 'alpha'}
 
       expect(response).to have_http_status(:ok)
       expect(assigns(:users)).to eq([@user_a])
     end
 
     it "should search for a several users with description" do
-      get :search, {query: 'eating'}
+      get :search_image, {query: 'eating'}
 
       expect(response).to have_http_status(:ok)
       expect(assigns(:users)).to eq([@user_a, @user_b, @user_c])

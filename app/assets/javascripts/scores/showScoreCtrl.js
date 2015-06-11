@@ -1,4 +1,4 @@
-angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Score', 'notifier', 'identity', 'scoreModalFactory', '$state', function($scope, $stateParams, Score, notifier, identity, scoreModalFactory, $state) {
+angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Score', 'notifier', 'identity', 'createNewScoreModalFactory', '$state', function($scope, $stateParams, Score, notifier, identity, createNewScoreModalFactory, $state) {
     var scoreId = $stateParams.scoreId;
     Score.get(scoreId).then(
         function successGet(score) {
@@ -37,7 +37,7 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', '$stateParams', 'Sc
     };
 
     $scope.scoreThisThing = function() {
-        scoreModalFactory.createNewScoreForThing($scope.score.thing, $scope.thing,
+        createNewScoreModalFactory.createNewScoreForThing($scope.score.thing, $scope.thing,
             function saveSuccessCallbackFn(createdScore) {
                 notifier.success('you scored the thing: ' + createdScore.thing.title);
                 $state.go('scores.show', {scoreId: createdScore.token});

@@ -1,77 +1,62 @@
+require 'httpclient'
+
 class ThingService
   def initialize
-    @twitter_service = TwitterService.new
-    @github_service = GithubService.new
-    @soundcloud_service = SoundcloudService.new
-    @tmdb_movie_service = TmdbMovieService.new
-    @tmdb_tv_service = TmdbTVService.new
+    @client = HTTPClient.new
   end
 
-  def find_or_create_thing_reference_to_thing(type, external_id)
-    thing_reference = ThingReference.where(type: type, external_id: external_id).first
-    if thing_reference.nil?
-      unless type == Scorethings::ThingTypes::HASHTAG
-        # for thingReferences other than hashtag, check that they exist before creating them in database
-        external_thing = get_thing(type, external_id)
-        if external_thing.nil?
-          raise Exceptions::ThingNotFoundError
-        end
+  def search(query)
+    cache_key = "thing_search(#{query})"
+    cached_result = Rails.cache.fetch(cache_key, expires_in: 7.day) do
+      search_results = Dbpedia.search(query)
+      search_results = search_results.map do |search_result|
+        {
+            label: search_result.label,
+            uri: search_result.uri,
+            resource_name: search_result.uri.split('/').last,
+            description: search_result.description
+        }
       end
-      thing_reference = ThingReference.create!(type: type, external_id: external_id)
+
+      Rails.cache.write(cache_key, search_results)
+      return search_results
     end
-    return thing_reference
+    return cached_result
   end
 
-  def search_for_things(type, query)
-    cache_key = "search_for_things_#{type}_#{query}"
-    return Rails.cache.fetch(cache_key, expires_in: 1.day) do
-      case type
-        when Scorethings::ThingTypes::TWITTER_ACCOUNT
-          retrieved_search_results = @twitter_service.search_twitter_account_things(query) || []
-        when Scorethings::ThingTypes::GITHUB_REPOSITORY
-          retrieved_search_results = @github_service.search_github_repository_things(query) || []
-        when Scorethings::ThingTypes::SOUNDCLOUD_TRACK
-          retrieved_search_results = @soundcloud_service.search_soundcloud_track_things(query) || []
-        when Scorethings::ThingTypes::TMDB_MOVIE
-          retrieved_search_results = @tmdb_movie_service.search_movie_things(query) || []
-        when Scorethings::ThingTypes::TMDB_TV
-          retrieved_search_results = @tmdb_tv_service.search_tv_things(query) || []
-        else
-          raise Exceptions::ThingTypeUnknownError
-      end
-
-      Rails.cache.write(cache_key, retrieved_search_results)
-      return retrieved_search_results
+  def find(resource_name)
+    cache_key = "thing_#{resource_name})"
+    cached_result = Rails.cache.fetch(cache_key, expires_in: 7.day) do
+      resource = describe(resource_name)
+      Rails.cache.write(cache_key, resource)
+      return resource
     end
+    return cached_result
   end
 
-  def get_thing(type, external_id)
-    if type == Scorethings::ThingTypes::HASHTAG
-      return Thing.build_from_hashtag(external_id)
-    end
-    cache_key = "get_thing_#{type}_#{external_id}"
-    return Rails.cache.fetch(cache_key, expires_in: 1.day) do
-      case type
-        when Scorethings::ThingTypes::TWITTER_ACCOUNT
-          thing = @twitter_service.get_twitter_account_thing(external_id)
-        when Scorethings::ThingTypes::GITHUB_REPOSITORY
-          thing = @github_service.get_github_repository_thing(external_id)
-        when Scorethings::ThingTypes::SOUNDCLOUD_TRACK
-          thing = @soundcloud_service.get_soundcloud_track_thing(external_id)
-        when Scorethings::ThingTypes::TMDB_MOVIE
-          thing = @tmdb_movie_service.get_tmdb_movie_thing(external_id)
-        when Scorethings::ThingTypes::TMDB_TV
-          thing = @tmdb_tv_service.get_tmdb_tv_thing(external_id)
-        else
-          raise Exceptions::ThingTypeUnknownError
-      end
-
-      if thing.nil?
-        raise Exceptions::ThingNotFoundError
-      end
-
-      Rails.cache.write(cache_key, thing)
+  def find_or_create_by_resource_name(resource_name)
+    thing = Thing.where(resource_name: resource_name).first
+    unless thing.nil?
       return thing
     end
+
+    potential_thing = find(resource_name)
+    if potential_thing.nil?
+      raise Exceptions::PotentialThingNotFoundError
+    end
+
+    raise "Oh man, you've totally got to figure out how to get a thing from this json bullshit"
+  end
+
+  private
+  def describe(resource_name)
+    resource_uri = "http://dbpedia.org/resource/#{resource_name}"
+    # FIXME this is a quick hack until I can figure out how to use dbpedia and sparql client ruby api gems
+    resource_uri["http://"] = "http%3A%2F%2F"
+    resource_uri = "#{resource_uri}%3E"
+    uri = "http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=DESCRIBE+%3C#{resource_uri}&output=application%2Fld%2Bjson"
+
+    response = @client.get(uri)
+    return response.content
   end
 end

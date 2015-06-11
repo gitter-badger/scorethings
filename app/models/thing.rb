@@ -1,46 +1,27 @@
 class Thing
-  # the Thing is not persisted in a database, it just represents a potential thing_reference
-  # that exists on the internet.  It can be used to create a ThingReference.
-  @title = nil
-  @external_id = nil
-  @uri = nil
-  @image_uri = nil
-  @verified = nil
-  @type = nil
+  include Mongoid::Document
+  include Mongoid::Search
+  include Mongoid::Token
 
-  attr_accessor :title, :secondary_title, :external_id, :uri, :image_uri, :verified, :type
+  field :resource_name, type: String
+  field :label, type: String
+  field :description, type: String
 
-  def initialize(attrs)
-    @title = attrs[:title]
-    @external_id = attrs[:external_id]
-    @uri = attrs[:uri]
-    @image_uri = attrs[:image_uri]
-    @verified = attrs[:verified] || false
-    @type = attrs[:type]
-  end
+  has_many :scores, autosave: true, dependent: :delete
+
+  token :contains => :fixed_numeric, :length => 8
+
+  search_in :resource_name, :label, :description
+
+  validates_presence_of :resource_name, :label
 
   def to_builder
     Jbuilder.new do |thing|
-      thing.title @title
-      thing.external_id @external_id
-      thing.uri @uri
-      thing.image_uri @image_uri
-      thing.verified @verified
-      thing.type @type
+      thing.id self.id.to_s
+      thing.token self.token
+      thing.resource_name self.resource_name
+      thing.label self.label
+      thing.description self.description
     end
-  end
-
-  def self.build_from_hashtag(hashtag)
-    if hashtag.nil?
-      raise "cannot build hashtag with nil value"
-    end
-
-    if hashtag[0] == '#'
-      hashtag[0] = ''
-    end
-
-    Thing.new(title: "##{hashtag}",
-                 external_id: hashtag,
-                 type: Scorethings::ThingTypes::HASHTAG)
   end
 end

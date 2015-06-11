@@ -1,4 +1,4 @@
-angular.module('app').controller('CreateNewScoreModalCtrl', ['thingReferenceInput', 'thingInput', '$scope', '$modalInstance', 'Score', 'ThingReference', 'notifier', function(thingReferenceInput, thingInput, $scope, $modalInstance, Score, ThingReference, notifier) {
+angular.module('app').controller('CreateNewScoreModalCtrl', ['thingReferenceInput', 'thingInput', 'imagesInput', '$scope', '$modalInstance', 'Score', 'ThingReference', 'notifier', function(thingReferenceInput, thingInput, imagesInput, $scope, $modalInstance, Score, ThingReference, notifier) {
     var DEFAULT_POINTS = 70;
 
     $scope.score = {
@@ -9,6 +9,7 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingReferenceInpu
     $scope.warningMessage = null;
 
     $scope.thing = thingInput;
+    $scope.imagesInput = imagesInput;
 
     $scope.cancel = function() {
         $modalInstance.dismiss();
@@ -16,19 +17,13 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingReferenceInpu
 
     $scope.save = function() {
         if($scope.score.thingReferenceId) {
-            return createNewScore();
+            return createNewScoreWithExistingThingReference();
         } else {
-            // if the score doesn't already have a thing reference id from the inputs,
-            // create a new one
-            // TODO this might be confusing, this controller is being used for
-            // when the thing reference is known (on the thing reference show view score buttton)
-            // and also when scoring a thing search result
-            // maybe split into seperate controllers
-            new ThingReference({type: $scope.thing.type, externalId: $scope.thing.externalId})
+            new ThingReference({dbpedia_uri: $scope.thing.uri})
                 .create().then(
                     function successCreateThingReference(thingReference) {
                         $scope.score.thingReferenceId = thingReference.id;
-                        return createNewScore();
+                        return createNewScoreWithExistingThingReference();
                     },
                     function errorCreateThingReference(response) {
                         if(response.status == 409) {
@@ -64,7 +59,7 @@ angular.module('app').controller('CreateNewScoreModalCtrl', ['thingReferenceInpu
         $scope.existingScoreId = response.data.existing_score.token;
     }
 
-    function createNewScore() {
+    function createNewScoreWithExistingThingReference() {
         new Score($scope.score).create().then(function successCreate(score) {
                 $modalInstance.close(score);
             }, function errorCreate(response) {
