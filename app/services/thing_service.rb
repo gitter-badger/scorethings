@@ -63,7 +63,8 @@ class ThingService
 
     solutions.each do |solution|
       subject = solution.to_hash[:subject].to_s
-      thing.thing_categories << ThingCategory.new(resource_name: subject.to_s.split('/').last, label: "NO LABEL YET")
+      subject_label = solution.to_hash[:subject_label].to_s
+      thing.thing_categories << ThingCategory.new(resource_name: subject.to_s.split('/').last, label: subject_label)
     end
 
     thing
@@ -87,11 +88,13 @@ class ThingService
 
   def build_query_string(resource_name)
     """
-    SELECT ?subject ?label ?abstract
+    SELECT ?subject ?subject_label ?label ?abstract
   WHERE {
     #{resource(resource_name)} #{label} ?label ;
      #{abstract} ?abstract ;
      #{subject} ?subject.
+      ?subject #{label} ?subject_label.
+
      FILTER(langMatches(lang(?label), 'EN'))
      FILTER(langMatches(lang(?abstract), 'EN'))
   }
