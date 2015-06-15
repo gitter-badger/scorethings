@@ -7,56 +7,94 @@ class ThingService
 
   def search(query)
     cache_key = "thing_search(#{query})"
-    cached_result = Rails.cache.fetch(cache_key, expires_in: 7.day) do
+    cached_dbpedia_things_from_search = Rails.cache.fetch(cache_key, expires_in: 1.day) do
       search_results = Dbpedia.search(query)
-      search_results = search_results.map do |search_result|
-        {
+      dbpedia_things_from_search = search_results.map do |search_result|
+        DbpediaSearchResult.new(
             label: search_result.label,
-            uri: search_result.uri,
             resource_name: search_result.uri.split('/').last,
             description: search_result.description
-        }
+        )
       end
 
-      Rails.cache.write(cache_key, search_results)
-      return search_results
+      Rails.cache.write(cache_key, dbpedia_things_from_search)
+      return dbpedia_things_from_search
     end
-    return cached_result
+    return cached_dbpedia_things_from_search
   end
 
-  def find(resource_name)
-    cache_key = "thing_#{resource_name})"
-    cached_result = Rails.cache.fetch(cache_key, expires_in: 7.day) do
-      resource = describe(resource_name)
-      Rails.cache.write(cache_key, resource)
-      return resource
-    end
-    return cached_result
-  end
-
-  def find_or_create_by_resource_name(resource_name)
+  def find_or_create_from_dbpedia(resource_name)
     thing = Thing.where(resource_name: resource_name).first
-    unless thing.nil?
-      return thing
+    return thing unless thing.nil?
+
+    thing = find_from_dbpedia(resource_name)
+    if thing.nil?
+      raise Exceptions::DbpediaThingNotFoundError
     end
 
-    potential_thing = find(resource_name)
-    if potential_thing.nil?
-      raise Exceptions::PotentialThingNotFoundError
-    end
+    thing.save!
+    thing
+  end
 
-    raise "Oh man, you've totally got to figure out how to get a thing from this json bullshit"
+  def find_from_dbpedia(resource_name)
+    cache_key = "find_from_dbpedia(#{resource_name})"
+    cached_dbpedia_thing = Rails.cache.fetch(cache_key, expires_in: 1.day) do
+      dbpedia_thing = query_dbpedia_thing(resource_name)
+
+      if dbpedia_thing.nil?
+        raise Exceptions::DbpediaThingNotFoundError
+      end
+
+      Rails.cache.write(cache_key, dbpedia_thing)
+
+      return dbpedia_thing
+    end
+    return cached_dbpedia_thing
   end
 
   private
-  def describe(resource_name)
-    resource_uri = "http://dbpedia.org/resource/#{resource_name}"
-    # FIXME this is a quick hack until I can figure out how to use dbpedia and sparql client ruby api gems
-    resource_uri["http://"] = "http%3A%2F%2F"
-    resource_uri = "#{resource_uri}%3E"
-    uri = "http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=DESCRIBE+%3C#{resource_uri}&output=application%2Fld%2Bjson"
+  def query_dbpedia_thing(resource_name)
+    solutions = Dbpedia.sparql.query(build_query_string(resource_name)).distinct
+    # TODO check of one returned
 
-    response = @client.get(uri)
-    return response.content
+    thing = Thing.new(resource_name: resource_name)
+    thing.label = solutions.first[:label].to_s
+    thing.description = solutions.first[:abstract].to_s unless solutions.first[:abstract].nil?
+
+    solutions.each do |solution|
+      subject = solution.to_hash[:subject].to_s
+      thing.thing_categories << ThingCategory.new(resource_name: subject.to_s.split('/').last, label: "NO LABEL YET")
+    end
+
+    thing
+  end
+
+  def resource(resource_name)
+    "<http://dbpedia.org/resource/#{resource_name}>"
+  end
+
+  def abstract
+    "<http://dbpedia.org/ontology/abstract>"
+  end
+
+  def subject
+    "<http://purl.org/dc/terms/subject>"
+  end
+
+  def label
+    "<http://www.w3.org/2000/01/rdf-schema#label>"
+  end
+
+  def build_query_string(resource_name)
+    """
+    SELECT ?subject ?label ?abstract
+  WHERE {
+    #{resource(resource_name)} #{label} ?label ;
+     #{abstract} ?abstract ;
+     #{subject} ?subject.
+     FILTER(langMatches(lang(?label), 'EN'))
+     FILTER(langMatches(lang(?abstract), 'EN'))
+  }
+  """
   end
 end

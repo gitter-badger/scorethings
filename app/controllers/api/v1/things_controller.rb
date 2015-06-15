@@ -11,7 +11,7 @@ module Api
                             thing: @thing.to_builder,
                             status: :created
                         }, status: :created
-        rescue Exceptions::PotentialThingNotFoundError
+        rescue Exceptions::DbpediaThingNotFoundError
           return render json: {
                             error: "thing for thing was not found",
                             status: :not_found

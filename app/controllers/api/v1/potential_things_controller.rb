@@ -8,7 +8,7 @@ module Api
         begin
           @potential_thing = $thing_service.find(resource_name)
           @thing = Thing.where(resource_name: resource_name).first
-        rescue Exceptions::PotentialThingNotFoundError
+        rescue Exceptions::DbpediaThingNotFoundError
           return render json: {
                             error: "thing was not found with resource_name: #{resource_name}",
                             status: :not_found

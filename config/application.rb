@@ -10,17 +10,6 @@ require "rails/test_unit/railtie"
 Bundler.require(*Rails.groups)
 
 module Scorethings
-  module ThingTypes
-    # ThingReference types
-    TWITTER_ACCOUNT = 'twitter_account'
-    GITHUB_REPOSITORY = 'github_repository'
-    SOUNDCLOUD_TRACK = 'soundcloud_track'
-    TMDB_MOVIE = 'tmdb_movie'
-    TMDB_TV = 'tmdb_tv'
-    HASHTAG = 'hashtag'
-  end
-
   class Application < Rails::Application
-
   end
 end

@@ -8,10 +8,11 @@ class Thing
   field :description, type: String
 
   has_many :scores, autosave: true, dependent: :delete
+  embeds_many :thing_categories
 
   token :contains => :fixed_numeric, :length => 8
 
-  search_in :resource_name, :label, :description
+  search_in :label, :description, :thing_categories => [:label]
 
   validates_presence_of :resource_name, :label
 

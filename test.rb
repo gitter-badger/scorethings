@@ -1,10 +1,16 @@
 require 'dbpedia'
-require 'httpclient'
 
-resource_uri = "http://dbpedia.org/resource/Patton_Oswalt"
-resource_uri["http://"] = "http%3A%2F%2F"
-resource_uri = "#{resource_uri}%3E"
-client = HTTPClient.new
-
-uri = "http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=DESCRIBE+%3C#{resource_uri}&output=application%2Fld%2Bjson"
-puts uri
+def build_query_string(query)
+  """
+  PREFIX search: <http://rdf.opensahara.com/search#>
+  SELECT ?record
+  WHERE {
+    ?record a <http://dbpedia.org/resource> .
+    ?record ?predicate ?match .
+    FILTER(search:text(?match, \"#{query}\"))
+  }
+  LIMIT 10
+  """
+end
+response = Dbpedia.sparql.query(build_query_string('Comic'))
+puts "response: #{response}"
