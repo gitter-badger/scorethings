@@ -1,45 +1,16 @@
 <h1>scorethings</h1>
+<h5>Helping users score things.</h5>
+
+<h3>Wanna score something?</h3>
+<ol>
+    <li><a ui-sref="things.search">Search for a thing.</a></li>
+    <li>When you find the thing you want to score, score it.</li>
+</ol>
+
 <div>
-    <h3>Helping people score things.</h3>
-    <h4>What are things you can score?:</h4>
-
-
-    <div class="row">
-        <div class="col-sm-6 col-xs-12 panel panel-default thing-source-panel">
-            <div class="panel-body">
-                <br>
-                Twitter accounts
-            </div>
-        </div>
-        <div class="col-sm-6 col-xs-12 panel panel-default thing-source-panel">
-            <div class="panel-body">
-                <br>
-                Hashtags
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6 col-xs-12 panel panel-default thing-source-panel">
-            <div class="panel-body">
-                <br>
-                GitHub repositories
-            </div>
-        </div>
-        <div class="col-sm-6 col-xs-12 panel panel-default thing-source-panel">
-            <div class="panel-body">
-                <br>
-                SoundCloud tracks
-            </div>
-        </div>
-    </div>
-</div>
-<div style="padding: 1em" class="container-fluid">
-    <h4 style="text-align: center">Try it out:</h4>
-    <div class="row">
-        <div style="text-align: center">
-            <a class="btn btn-primary btn-lg" ui-sref="scores.scoreThing">
-                Score Thing
-            </a>
-        </div>
-    </div>
+    For example: To score Patton Oswalt the comedian,
+    <a ui-sref="things.show.scores.new({dbpediaResourceName: 'Patton_Oswalt'})">click here</a>.
+    <p>
+        <small>Don't worry, Patton Oswalt's off Twitter for Summer 2015, so he'll never know.</small>
+    </p>
 </div>

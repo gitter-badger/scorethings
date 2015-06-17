@@ -8,11 +8,13 @@ class Thing
   field :description, type: String
 
   has_many :scores, autosave: true, dependent: :delete
-  embeds_many :thing_categories
+  has_and_belongs_to_many :thing_categories, autosave: true
+
+  index({ resource_name: 1 }, { unique: true, name: 'thing_resource_name_index' })
 
   token :contains => :fixed_numeric, :length => 8
 
-  search_in :label, :description, :thing_categories => [:label]
+  search_in :label, :thing_categories => [:label]
 
   validates_presence_of :resource_name, :label
 

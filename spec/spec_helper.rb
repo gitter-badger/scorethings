@@ -142,6 +142,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner[:mongoid].start
+    Rails.cache.clear
   end
 
   config.after(:each) do

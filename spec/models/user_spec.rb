@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User do
-  # TODO clean up similar specs to keep thingReferences DRY (Don't Repeat Yourself)
+  # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
 
   def mock_auth(provider, uid, info_attrs)
     OmniAuth.config.test_mode = true
@@ -70,13 +70,13 @@ RSpec.describe User do
     end
   end
 
-  describe "scoring thingReferences" do
+  describe "scoring things" do
     before do
       @user = create(:user)
       @score = build(:score)
     end
 
-    it "should allow the user to score a thingReferences" do
+    it "should allow the user to score a things" do
       expect(@user.scores.length).to eq(0)
       @user.create_score(@score)
       expect(@user.scores.length).to eq(1)

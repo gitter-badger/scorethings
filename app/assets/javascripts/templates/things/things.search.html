@@ -1,6 +1,6 @@
-<h3>Score Thing</h3>
+<h3>Search</h3>
 <small>Find a Thing To Score</small>
-<form ng-submit="searchThings()">
+<form ng-submit="search()">
     <div class="col-xs-12">
         <div class="form-group">
             <div class="input-group">
@@ -23,15 +23,15 @@
     <h5>Sorry, no results found for "{{query}}".</h5>
 </div>
 
-<div class="col-xs-12" ng-show="things.length">
-    <div ng-repeat="thing in things track by $index" ng-controller="ThingCtrl">
-        <h3>{{thing.label}}</h3>
+<div class="col-xs-12" ng-show="searchResults.length">
+    <div ng-repeat="searchResult in searchResults track by $index" ng-controller="ThingCtrl">
+        <h3>{{searchResult.label}}</h3>
         <span ng-repeat="imageUrl in imageUrls">
             <img ng-src="{{imageUrl}}" height="90">
         </span>
         <button class="btn btn-primary btn-md"
                 ng-disabled="!isLoggedIn()"
-                ng-click="scoreThisThing(thing)">
+                ng-click="scoreThisThing(searchResult)">
             Score
         </button>
     </div>

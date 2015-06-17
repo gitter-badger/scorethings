@@ -1,14 +1,14 @@
 module Api
   module V1
-    class ThingController < ApplicationController
+    class ThingsController < ApplicationController
       skip_before_action :authenticate_request, :current_user, only: [:show]
 
       def create
         thing_params = params.require(:thing).permit(:resource_name)
         begin
-          @thing = ThingService.find_or_create_by_resource_name(thing_params[:resource_name])
+          @thing = $thing_service.find_or_create_thing_from_dbpedia(thing_params[:resource_name])
           return render json: {
-                            thing: @thing.to_builder,
+                            thing: @thing,
                             status: :created
                         }, status: :created
         rescue Exceptions::DbpediaThingNotFoundError
@@ -22,9 +22,9 @@ module Api
 
       def show
         begin
-          @thing = Thing.find(params.require(:id))
+          @thing = Thing.find_by(resource_name: params.require(:resource_name))
           return render json: {
-                            thing: @thing.to_builder,
+                            thing: @thing,
                             status: :ok
                         }, status: :ok
         rescue Mongoid::Errors::DocumentNotFound

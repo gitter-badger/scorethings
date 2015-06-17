@@ -1,0 +1,15 @@
+<h3>Things#show#scores#new</h3>
+<form ng-submit="save()">
+    <div>
+        <h4>{{thing.label}}</h4>
+    </div>
+    <div ng-show="imagesInput">
+        <h5>Images:</h5>
+        ({{imagesInput}})
+    </div>
+    <div class="row">
+        <score-points-input score="score" is-owner="true">
+        </score-points-input>
+    </div>
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
