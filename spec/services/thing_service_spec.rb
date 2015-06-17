@@ -6,7 +6,7 @@ RSpec.describe ThingService do
   end
 
   describe "searching" do
-    xit "should search for a thing" do
+    it "should search for a thing" do
       expected_search_results = [
           DbpediaSearchResult.new(
               resource_name: 'Patton_Oswalt',
@@ -44,14 +44,14 @@ RSpec.describe ThingService do
           ]
       }
 
-      puts "\t\t\THIS IS HAPPENNING"
       @existing_thing_categories = create_list(:thing_category, 2)
       @existing_thing = create(:thing,
                                resource_name: 'Patton_Oswalt',
+                               label: 'Patton Oswalt',
                                thing_categories: @existing_thing_categories)
     end
 
-    xit "should find" do
+    it "should find" do
       expect_any_instance_of(DbpediaService).to receive(:find).with('Patton_Oswalt')
                                                    .and_return(@dbpedia_resource)
 
@@ -59,7 +59,7 @@ RSpec.describe ThingService do
       expect(result).to eq(@dbpedia_resource)
     end
 
-    xit "should raise exception when nothing found" do
+    it "should raise exception when nothing found" do
       expect_any_instance_of(DbpediaService).to receive(:find).with('Patton_Oswalt')
                                                    .and_return(nil)
       expect {
@@ -67,39 +67,58 @@ RSpec.describe ThingService do
       }.to raise_error(Exceptions::DbpediaThingNotFoundError)
     end
 
-    end
 
     it "should create when finding or creating and thing doesn't exist in database" do
-      expect_any_instance_of(DbpediaService).to receive(:find).with('Patton_Oswalt')
-                                                   .and_return(@dbpedia_resource)
-
       expect(Thing.all.length).to eq(1)
-      expect(ThingCategory.all.length).to eq(1)
+      expect(ThingCategory.all.length).to eq(2)
 
       thing = @thing_service.find_or_create_thing_from_dbpedia('Patton_Oswalt')
 
-      expect(Thing.all.length).to eq(2)
-      expect(ThingCategory.all.length).to eq(4)
+      expect(Thing.all.length).to eq(1)
+      expect(ThingCategory.all.length).to eq(2)
 
       expect(thing.label).to eq('Patton Oswalt')
       expect(thing.resource_name).to eq('Patton_Oswalt')
       expect(thing.thing_categories.length).to eq(2)
     end
 
-    xit "should find when finding or creating and thing exists in database" do
+    it "should find when finding or creating and thing exists in database" do
       expect(Thing.all.length).to eq(1)
-      expect(ThingCategory.all.length).to eq(1)
+      expect(ThingCategory.all.length).to eq(2)
       thing = @thing_service.find_or_create_thing_from_dbpedia('Patton_Oswalt')
       expect(Thing.all.length).to eq(1)
-      expect(ThingCategory.all.length).to eq(1)
+      expect(ThingCategory.all.length).to eq(2)
       expect(thing).to eq(@existing_thing)
     end
 
-    xit "should create with thing categories" do
-      expect_any_instance_of(DbpediaService).to receive(:find).with('Patton_Oswalt')
-                                                    .and_return(@dbpedia_resource)
+    it "should create with thing categories" do
+      another_dbpedia_resource = {
+          resource_name: 'Matt_Oswalt',
+          label: 'Matt Oswalt',
+          categories: [
+              {
+                  label: @existing_thing_categories.first.label,
+                  resource_name: @existing_thing_categories.first.resource_name
+              },
+              {
+                  label: 'Cool Dude',
+                  resource_name: 'Category:Cool_Dude'
+              }
+          ]
+      }
+      expect_any_instance_of(DbpediaService).to receive(:find).with('Matt_Oswalt')
+                                                    .and_return(another_dbpedia_resource)
 
-      thing = @thing_service.find_or_create_thing_from_dbpedia('Patton_Oswalt')
+      expect(Thing.all.length).to eq(1)
+      expect(ThingCategory.all.length).to eq(2)
 
+      thing = @thing_service.find_or_create_thing_from_dbpedia('Matt_Oswalt')
+
+      expect(Thing.all.length).to eq(2)
+      expect(ThingCategory.all.length).to eq(3)
+      expect(thing.label).to eq('Matt Oswalt')
+      expect(thing.resource_name).to eq('Matt_Oswalt')
+      expect(thing.thing_categories.length).to eq(2)
     end
+  end
 end
