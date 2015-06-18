@@ -6,23 +6,24 @@ module Api
       def show
         resource_name = params.require(:resource_name)
         begin
-          @dbpediaThing = $thing_service.find_from_dbpedia(resource_name)
+          @dbpedia_thing = $thing_service.find_from_dbpedia(resource_name)
           return render json: {
-                            dbpediaThing: @dbpediaThing,
+                            dbpedia_thing: @dbpedia_thing,
                             status: :ok
                         }, status: :ok
         rescue Exceptions::DbpediaThingNotFoundError
           return render json: {
-                            error: "thing was not found with resource_name: #{resource_name}",
+                            error: "dbpedia thing not found",
                             status: :not_found
                         }, status: :not_found
         end
       end
 
       def search
-        @dbpedia_search_results = $thing_service.search(params.require(:query))
+        query = params.require(:query)
+        @search_results = $thing_service.search(query)
         return render json: {
-                          search_results: @dbpedia_search_results,
+                          search_results: @search_results,
                           status: :ok
                       }, status: :ok
       end

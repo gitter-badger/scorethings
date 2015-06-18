@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       get '/auth/failure' => 'auth_token#failure'
 
       get '/things/:resource_name' => 'things#show'
-      post '/things/:resource_name' => 'things#create'
+      post '/things' => 'things#create'
 
       get '/dbpedia_things/search' => 'dbpedia_things#search'
       get '/dbpedia_things/:resource_name' => 'dbpedia_things#show'

@@ -13,7 +13,7 @@ module Api
                         }, status: :created
         rescue Exceptions::DbpediaThingNotFoundError
           return render json: {
-                            error: "thing for thing was not found",
+                            error: "thing was not found",
                             status: :not_found
                         }, status: :not_found
         end
