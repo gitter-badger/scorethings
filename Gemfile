@@ -37,7 +37,7 @@ gem 'omniauth-twitter'
 
 gem 'jwt'
 gem 'angular-rails-templates', '~> 0.1.4'
-gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
+gem 'mongoid', '~> 4.0.0'
 gem 'mongoid-embedded-errors'
 
 gem 'angular-ui-bootstrap-rails'
@@ -78,7 +78,7 @@ group :development, :test do
   gem 'guard-spork'
   gem 'childprocess'
   gem 'rspec-mocks'
-  gem 'mongoid-rspec', '~> 2.1.0'
+  gem 'mongoid-rspec', '~> 2.2.0'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
 end
