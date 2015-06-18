@@ -9,7 +9,7 @@ class Score
   belongs_to :user
   belongs_to :thing
 
-  search_in thing: [:resource_name, :label, :description]
+  search_in thing: [:label, :description]
 
   token :contains => :fixed_numeric, :length => 8
 

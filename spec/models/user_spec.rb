@@ -100,9 +100,9 @@ RSpec.describe User do
       end
     end
 
-    it "should not have more than one score with the same user, score cateogry and thing_reference" do
+    it "should not have more than one score with the same user and thing" do
       @user.create_score(@score)
-      other_score = build(:score, thing_reference: @score.thing_reference)
+      other_score = build(:score, thing: @score.thing)
 
       expect(Score.all.length).to eq(1)
       expect {
@@ -110,7 +110,7 @@ RSpec.describe User do
       }.to raise_error(Exceptions::ScoreUniquenessError)
       expect(Score.all.length).to eq(1)
 
-      other_score.thing_reference = create(:thing_reference)
+      other_score.thing = create(:thing)
       @user.create_score(other_score)
       expect(Score.all.length).to eq(2)
     end

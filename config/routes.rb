@@ -23,7 +23,7 @@ Rails.application.routes.draw do
       get '/users' => 'users#show'
       get '/users/search' => 'users#search'
       get '/users/current' => 'users#current'
-      put '/users/:id' => 'users#update'
+      put '/users' => 'users#update'
       delete '/users' => 'users#destroy'
     end
   end
