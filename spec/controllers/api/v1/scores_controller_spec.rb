@@ -10,8 +10,7 @@ RSpec.describe Api::V1::ScoresController do
     @params = {
         score: {
             thing: {
-                title: @thing.title,
-                pageid: @thing.pageid
+                wikidata_item_id: @thing.wikidata_item_id
             },
             points: 21
         }
@@ -38,11 +37,10 @@ RSpec.describe Api::V1::ScoresController do
 
     it "should not create a score for a thing that doesn't exist in wikipedia or database" do
       @params[:score][:thing] = {
-          pageid: 1111,
-          title: 'Not There'
+          wikidata_item_id: 'Q9283'
       }
-      expect_any_instance_of(WikipediaService).to receive(:find).with('Not There')
-                                                  .and_raise(Exceptions::WikipediaPageInfoNotFoundError)
+      expect_any_instance_of(WikidataService).to receive(:find).with('Q9283')
+                                                  .and_raise(Exceptions::WikidataItemNotFoundError)
       expect(Score.all.length).to eq(0)
       post :create, @params
       expect(response).to have_http_status(:not_found)
@@ -138,18 +136,6 @@ RSpec.describe Api::V1::ScoresController do
       @request.env['HTTP_AUTHORIZATION'] = ''
       delete :destroy, @delete_params
       expect(response).to have_http_status(:unauthorized)
-    end
-  end
-
-  describe "violating uniqueness of a score's user and thing" do
-    before do
-      @existing_score = build(:score, thing: @thing)
-      @user.create_score(@existing_score)
-    end
-
-    it "should not allow another score to be created that is not unique" do
-      post :create, @params
-      expect(response).to have_http_status(:conflict)
     end
   end
 end

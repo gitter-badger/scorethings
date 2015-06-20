@@ -2,6 +2,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
         $urlRouterProvider.rule(function ($injector, $location) {
             //what this function returns will be set as the $location.url
             var goto = $location.$$search.goto;
+            console.log($location.$$search);
             if(goto) {
                 $location.path('/' + goto);
                 $location.search('goto', null);
@@ -39,26 +40,26 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
              things
             */
             state('things', {
-                url: '/things', // example: /things
+                url: '/things',
                 templateUrl: 'things/things.html'
             }).
                 state('things.search', {
-                    url: '/search', // example: /things/search
+                    url: '/search',
                     templateUrl: 'things/things.search.html',
                     controller: 'ThingsSearchCtrl'
                 }).
                 state('things.show', {
-                    url: '/t/:dbpediaResourceName', // example: /things/t/Patton_Oswalt
+                    url: '/:wikipediaPageName',
                     templateUrl: 'things/things.show.html',
                     controller: 'ThingsShowCtrl'
                 }).
                     state('things.show.scores', {
-                        url: '/scores', // example: /things/t/Patton_Oswalt/scores
+                        url: '/scores',
                         templateUrl: 'things/things.show.scores.html',
                         controller: 'ThingsScoresCtrl'
                     }).
                         state('things.show.scores.new', {
-                            url: '/new', // example: /things/t/Patton_Oswalt/scores/new
+                            url: '/new',
                             templateUrl: 'things/things.scores.new.html',
                             controller: 'ThingsNewScoreCtrl'
                         }).

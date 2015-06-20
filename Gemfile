@@ -50,7 +50,7 @@ gem 'api_cache'
 gem 'mongoid_search'
 gem 'mongoid_token'
 gem 'google-search'
-gem 'wikipedia-client', git: 'https://github.com/manuisfunny/wikipedia-client.git', branch: 'open_uri_redirection_patch_topic'
+gem 'wikidata-client', '~> 0.0.7', require: 'wikidata'
 
 group :production, :staging do
   gem 'heroku_rails_deflate'

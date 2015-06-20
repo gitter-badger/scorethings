@@ -7,50 +7,30 @@ RSpec.describe ThingService do
 
   describe "finding Patton Oswalt" do
     before do
-      @wikipedia_page_info = {
-          pageid: 1234,
-          image_urls: [
-              'https://upload.wikimedia.org/wikipedia/image1.jpg',
-              'http://images.fandango.com/image2.jpg'
-          ],
+      @wikidata_item = {
           title: 'Patton Oswalt',
-          full_url: 'https://en.wikipedia.org/wiki/Patton_Oswalt',
-          categories: [
-            'Category:Characters created by Bob Kane',
-            'Category:Mayors_of_Burlington,_Vermont'
+          id: 'Q374065',
+          official_websites: [
+              'http://www.pattonoswalt.com/'
           ]
       }
     end
 
     it "should create a new thing" do
-      expect_any_instance_of(WikipediaService).to receive(:find).with('Patton Oswalt')
-                                                  .and_return(@wikipedia_page_info)
+      expect_any_instance_of(WikidataService).to receive(:find).with('Q374065')
+                                                  .and_return(@wikidata_item)
 
       expect(Thing.all.length).to eq(0)
-      expect(ThingCategory.all.length).to eq(0)
-      @thing_service.find_thing_or_create_from_wikipedia(1234, 'Patton Oswalt')
+      @thing_service.find_thing_or_create_from_wikidata('Q374065')
       expect(Thing.all.length).to eq(1)
-      expect(ThingCategory.all.length).to eq(2)
-      expect(Thing.all.first.pageid).to eq(@wikipedia_page_info[:pageid])
-      expect(Thing.all.first.image_urls).to eq(@wikipedia_page_info[:image_urls])
+      expect(Thing.all.first.wikidata_item_id).to eq('Q374065')
+      expect(Thing.all.first.title).to eq('Patton Oswalt')
     end
 
-    it "should create a new thing with existing thing categories" do
-      expect_any_instance_of(WikipediaService).to receive(:find).with('Patton Oswalt')
-                                                      .and_return(@wikipedia_page_info)
-
-      create(:thing_category, title: @wikipedia_page_info[:categories].first)
-      expect(ThingCategory.all.length).to eq(1)
-
-      @thing_service.find_thing_or_create_from_wikipedia(1234, 'Patton Oswalt')
-      expect(ThingCategory.all.length).to eq(2)
-    end
-
-    it "should find a thing" do
+    it "should find a thing and not create from wikidata" do
       existing_thing = create(:thing)
       expect(Thing.all.length).to eq(1)
-      thing = @thing_service.find_thing_or_create_from_wikipedia(existing_thing.pageid,
-                                                                 existing_thing.title)
+      thing = @thing_service.find_thing_or_create_from_wikidata(existing_thing.wikidata_item_id)
       expect(Thing.all.length).to eq(1)
       expect(thing).to eq(existing_thing)
     end

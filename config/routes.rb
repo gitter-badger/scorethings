@@ -12,7 +12,8 @@ Rails.application.routes.draw do
 
       get '/things/:id' => 'things#show'
 
-      get '/wikipedia_pages/search' => 'wikipedia_pages#search'
+      get '/wikidata_items/search' => 'wikidata_items#search'
+      get '/wikidata_items/:wikidata_item_id' => 'wikidata_items#find'
 
       resources :scores, only: [:create, :show, :update, :destroy]
 

@@ -4,10 +4,10 @@ module Api
       skip_before_action :authenticate_request, :current_user, only: [:show]
 
       def create
-        score_params = params.require(:score).permit(:points, thing: [:title, :pageid])
+        score_params = params.require(:score).permit(:points, thing: [:wikidata_item_id])
 
         begin
-          thing = $thing_service.find_thing_or_create_from_wikipedia(score_params[:thing][:pageid], score_params[:thing][:title])
+          thing = $thing_service.find_thing_or_create_from_wikidata(score_params[:thing][:wikidata_item_id])
           score_params[:thing] = thing
 
           @score = Score.new(score_params)
@@ -27,7 +27,7 @@ module Api
           return render json: {
                             status: :not_found
                         }, status: :not_found
-        rescue Exceptions::WikipediaPageInfoNotFoundError
+        rescue Exceptions::WikidataItemNotFoundError
           return render json: {
                             status: :not_found
                         }, status: :not_found

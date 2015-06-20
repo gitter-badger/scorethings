@@ -3,24 +3,25 @@ class Thing
   include Mongoid::Search
   include Mongoid::Token
 
-  field :full_url, type: String
-  field :pageid, type: Integer
-  field :image_urls, type: Array
+  field :wikidata_item_id, type: String
+  field :description, type: String
+  field :official_websites, type: Array
   field :title, type: String
 
-
   has_many :scores, autosave: true, dependent: :delete
-  has_and_belongs_to_many :thing_categories, autosave: true
 
-  index({ pageid: 1 }, { unique: true, name: 'thing_pageid_index' })
+  index({ wikidata_item_id: 1 }, { unique: true, name: 'thing_wikidata_item_id_index' })
 
   token :contains => :fixed_numeric, :length => 8
 
-  search_in :title, :thing_categories => [:title]
+  search_in :title, :description, :official_websites
 
-  validates_presence_of :full_url, :pageid, :title
+  validates_presence_of :title, :wikidata_item_id
 
-  def self.build_from_wikipedia_page_info(info)
-    Thing.new(pageid: info[:pageid], full_url: info[:full_url], title: info[:title], image_urls: info[:image_urls] || [])
+  def self.build_from_wikidata_item(wikidata_item)
+    Thing.new(title: wikidata_item[:title],
+              wikidata_item_id: wikidata_item[:id],
+              official_websites: wikidata_item[:official_websites],
+              description: wikidata_item[:description])
   end
 end
