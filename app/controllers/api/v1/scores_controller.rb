@@ -4,16 +4,18 @@ module Api
       skip_before_action :authenticate_request, :current_user, only: [:show]
 
       def create
-        score_params = params.require(:score).permit(:thing_id, :points)
-        thing_id = score_params[:thing_id]
+        score_params = params.require(:score).permit(:points, thing: [:title, :pageid])
 
         begin
-          thing = Thing.find(thing_id)
+          thing = $thing_service.find_thing_or_create_from_wikipedia(score_params[:thing][:pageid], score_params[:thing][:title])
           score_params[:thing] = thing
 
           @score = Score.new(score_params)
           @current_user.create_score(@score)
-          redirect_to action: 'show', id: @score._id.to_s
+          return render json: {
+                            score: @score,
+                            status: :created
+                        }, status: :created
         rescue Exceptions::ScoreUniquenessError
           existing_score = @current_user.scores.where(thing: thing).first
           return render json: {
@@ -22,6 +24,10 @@ module Api
                             status: :conflict
                         }, status: :conflict
         rescue Mongoid::Errors::DocumentNotFound
+          return render json: {
+                            status: :not_found
+                        }, status: :not_found
+        rescue Exceptions::WikipediaPageInfoNotFoundError
           return render json: {
                             status: :not_found
                         }, status: :not_found

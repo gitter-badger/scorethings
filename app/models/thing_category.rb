@@ -1,15 +1,15 @@
 class ThingCategory
   include Mongoid::Document
   include Mongoid::Search
+  include Mongoid::Token
 
-  field :resource_name, type: String # example: Category:20th-century_American_male_actors
-  field :label, type: String # example: 20th-century American male actors
+  field :title, type: String
 
   has_and_belongs_to_many :things
+  index({ title: 1 }, { unique: true, name: 'thing_category_title' })
+  validates_presence_of :title
+  search_in :title
 
-  index({ resource_name: 1 }, { unique: true, name: 'thing_category_resource_name_index' })
+  token :contains => :fixed_numeric, :length => 8
 
-  validates_presence_of :resource_name, :label
-
-  search_in :label
 end

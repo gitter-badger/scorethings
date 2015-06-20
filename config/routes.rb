@@ -10,13 +10,9 @@ Rails.application.routes.draw do
       get '/auth/:provider/callback' => 'auth_token#create'
       get '/auth/failure' => 'auth_token#failure'
 
-      get '/things/:resource_name' => 'things#show'
-      post '/things' => 'things#create'
+      get '/things/:id' => 'things#show'
 
-      get '/dbpedia_things/search' => 'dbpedia_things#search'
-      get '/dbpedia_things/:resource_name' => 'dbpedia_things#show'
-
-      get '/thing_images/:resource_name' => 'thing_images#show'
+      get '/wikipedia_pages/search' => 'wikipedia_pages#search'
 
       resources :scores, only: [:create, :show, :update, :destroy]
 

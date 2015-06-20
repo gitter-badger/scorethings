@@ -3,28 +3,24 @@ class Thing
   include Mongoid::Search
   include Mongoid::Token
 
-  field :resource_name, type: String
-  field :label, type: String
-  field :description, type: String
+  field :full_url, type: String
+  field :pageid, type: Integer
+  field :image_urls, type: Array
+  field :title, type: String
+
 
   has_many :scores, autosave: true, dependent: :delete
   has_and_belongs_to_many :thing_categories, autosave: true
 
-  index({ resource_name: 1 }, { unique: true, name: 'thing_resource_name_index' })
+  index({ pageid: 1 }, { unique: true, name: 'thing_pageid_index' })
 
   token :contains => :fixed_numeric, :length => 8
 
-  search_in :label, :thing_categories => [:label]
+  search_in :title, :thing_categories => [:title]
 
-  validates_presence_of :resource_name, :label
+  validates_presence_of :full_url, :pageid, :title
 
-  def to_builder
-    Jbuilder.new do |thing|
-      thing.id self.id.to_s
-      thing.token self.token
-      thing.resource_name self.resource_name
-      thing.label self.label
-      thing.description self.description
-    end
+  def self.build_from_wikipedia_page_info(info)
+    Thing.new(pageid: info[:pageid], full_url: info[:full_url], title: info[:title], image_urls: info[:image_urls] || [])
   end
 end

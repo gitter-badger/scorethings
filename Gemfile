@@ -49,10 +49,8 @@ gem 'dalli'
 gem 'api_cache'
 gem 'mongoid_search'
 gem 'mongoid_token'
-gem 'dbpedia'
-gem 'sparql-client'
 gem 'google-search'
-gem 'httpclient'
+gem 'wikipedia-client', git: 'https://github.com/manuisfunny/wikipedia-client.git', branch: 'open_uri_redirection_patch_topic'
 
 group :production, :staging do
   gem 'heroku_rails_deflate'

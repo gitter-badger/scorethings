@@ -9,7 +9,10 @@ RSpec.describe Api::V1::ScoresController do
     @thing = create(:thing)
     @params = {
         score: {
-            thing_id: @thing._id,
+            thing: {
+                title: @thing.title,
+                pageid: @thing.pageid
+            },
             points: 21
         }
     }
@@ -21,7 +24,7 @@ RSpec.describe Api::V1::ScoresController do
 
       post :create, @params
       expect(assigns(:score)).to_not be_nil
-      expect(response).to redirect_to :action => :show, id: assigns(:score)._id.to_s
+      expect(response).to have_http_status(:created)
       expect(Score.all.length).to eq(1)
       expect(Score.all.first.thing).to eq(@thing)
       expect(Score.all.first.points).to eq(21)
@@ -33,10 +36,14 @@ RSpec.describe Api::V1::ScoresController do
       expect(response).to have_http_status(:unauthorized)
     end
 
-    it "should not create a score for a thing that doesn't exist" do
+    it "should not create a score for a thing that doesn't exist in wikipedia or database" do
+      @params[:score][:thing] = {
+          pageid: 1111,
+          title: 'Not There'
+      }
+      expect_any_instance_of(WikipediaService).to receive(:find).with('Not There')
+                                                  .and_raise(Exceptions::WikipediaPageInfoNotFoundError)
       expect(Score.all.length).to eq(0)
-      @params[:score][:thing_id] = '123notathing'
-
       post :create, @params
       expect(response).to have_http_status(:not_found)
       expect(Score.all.length).to eq(0)
