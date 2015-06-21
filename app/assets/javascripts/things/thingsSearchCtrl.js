@@ -1,18 +1,17 @@
-angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'WikipediaPage', function($scope, WikipediaPage) {
+angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'WikidataItem', function($scope, WikidataItem) {
     $scope.notFound = false;
-    $scope.title = '';
+    $scope.query = '';
 
     $scope.search = function() {
         $scope.notFound = false;
-        delete $scope.wikipediaPage;
-        var wikipediaPageName = $scope.wikipediaPageTitle.replace(' ', '_');
+        delete $scope.searchResults;
 
-        WikipediaPage.get(wikipediaPageName).then(
-            function successfulGetWikipediaPage(wikipediaPage) {
-                console.log(wikipediaPage);
-                $scope.wikipediaPage = wikipediaPage;
+        WikidataItem.get('search', {query: $scope.query}).then(
+            function successfulGetWikidataItem(response) {
+                $scope.searchResults = response.searchResults;
+                $scope.notFound = !$scope.searchResults;
             },
-            function unsuccessfulGetWikipediaPage(response) {
+            function unsuccessfulGetWikidataItem(response) {
                 if(response.status == 404) {
                     $scope.notFound = true;
                 }

@@ -6,10 +6,11 @@
                 <input type="text"
                        id="query"
                        class="form-control"
-                       placeholder="Wikipedia Page Title like Batman or Patton Oswalt"
-                       ng-model="wikipediaPageTitle">
+                       placeholder="A thing, like Batman or Patton Oswalt"
+                       ng-change="notFound = false"
+                       ng-model="query">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" ng-disabled="!wikipediaPageTitle" type="submit">
+                    <button class="btn btn-default" ng-disabled="!query" type="submit">
                         Search
                     </button>
                 </span>
@@ -19,12 +20,25 @@
 </form>
 
 <div class="col-xs-12" ng-show="notFound">
-    <h5>Sorry, no results found for "{{wikipediaPageTitle}}".</h5>
+    <h5>Sorry, no results found for "{{query}}".</h5>
 </div>
-
-<div ng-show="wikipediaPage">
-    <h3>{{wikipediaPage.title}}</h3>
-    <img ng-repeat="imageUrl in wikipediaPage.imageUrls | limitTo:3" ng-src="{{imageUrl}}" height="150">
-    <a ui-sref="things.show.scores.new({wikipediaPageName: wikipediaPage.pageName})">Score This Thing</a>
-</div>
-
+<table class="table table-hover" ng-show="searchResults.length">
+    <thead>
+        <tr>
+            <td>Title</td>
+            <td>Description</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="searchResult in searchResults">
+            <td>
+                <a ui-sref="scores.new({wikidataItemId: searchResult.id})">
+                    {{searchResult.title}}
+                </a>
+            </td>
+            <td>
+                {{searchResult.description}}
+            </td>
+        </tr>
+    </tbody>
+</table>

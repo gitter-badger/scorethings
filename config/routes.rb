@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       get '/users/current' => 'users#current'
       put '/users' => 'users#update'
       delete '/users' => 'users#destroy'
+
+      get '/images/search' => 'images#search'
     end
   end
 

@@ -1,0 +1,11 @@
+<h3>scores#new</h3>
+({{score}})
+({{wikidataItem}})
+<div class="panel panel-default" ng-show="imageUrls.length">
+    <div class="panel-heading">
+        <h3 class="panel-title">Pictures</h3>
+    </div>
+    <div class="panel-body">
+        <img ng-repeat="imageUrl in imageUrls" ng-src="{{imageUrl}}" height="120">
+    </div>
+</div>

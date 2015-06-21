@@ -1,9 +1,9 @@
 module Api
   module V1
-    class ThingImagesController < ApplicationController
+    class ImagesController < ApplicationController
       skip_before_action :authenticate_request
 
-      def show
+      def search
         query = params.require(:query)
         @image_uris = $image_service.search_image(query)
         return render json: {

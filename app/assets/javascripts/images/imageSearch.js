@@ -5,16 +5,12 @@ angular.module('app').service('imageSearch', ['$http', function($http) {
                 console.error('image search query null');
                 return;
             }
-            // return 3 image urls
-            $http.get('/api/v1/things/search_images', {
-                params: {
-                    query: query,
-                    size: 'small'
-                },
+            $http.get('/api/v1/images/search', {
+                params: { query: query },
                 cache: true
             }).then(function(result) {
                 var imageUrls = result.data.image_urls;
-                return successCallback(imageUrls.slice(0, 3));
+                return successCallback(imageUrls);
             });
 
         }

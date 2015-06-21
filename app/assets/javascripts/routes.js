@@ -25,6 +25,11 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'scores/scores.search.html',
                     controller: 'SearchScoresCtrl'
                 }).
+                state('scores.new', {
+                    url: '/new?wikidataItemId',
+                    templateUrl: 'scores/scores.new.html',
+                    controller: 'NewScoreCtrl'
+                }).
                 state('scores.show', {
                     url: '/:scoreId',
                     templateUrl: 'scores/scores.show.html',
@@ -49,7 +54,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'ThingsSearchCtrl'
                 }).
                 state('things.show', {
-                    url: '/:wikipediaPageName',
+                    url: '/:wikidataItemId',
                     templateUrl: 'things/things.show.html',
                     controller: 'ThingsShowCtrl'
                 }).
@@ -58,11 +63,6 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                         templateUrl: 'things/things.show.scores.html',
                         controller: 'ThingsScoresCtrl'
                     }).
-                        state('things.show.scores.new', {
-                            url: '/new',
-                            templateUrl: 'things/things.scores.new.html',
-                            controller: 'ThingsNewScoreCtrl'
-                        }).
 
             /*
                  about
