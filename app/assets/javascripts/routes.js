@@ -1,13 +1,4 @@
 angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.rule(function ($injector, $location) {
-            //what this function returns will be set as the $location.url
-            var goto = $location.$$search.goto;
-            console.log($location.$$search);
-            if(goto) {
-                $location.path('/' + goto);
-                $location.search('goto', null);
-            }
-        });
         $stateProvider.
             state('home', {
                 url: '/',
@@ -49,7 +40,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 templateUrl: 'things/things.html'
             }).
                 state('things.search', {
-                    url: '/search',
+                    url: '/search?query',
                     templateUrl: 'things/things.search.html',
                     controller: 'ThingsSearchCtrl'
                 }).

@@ -1,10 +1,17 @@
-angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'WikidataItem', function($scope, WikidataItem) {
+angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'WikidataItem', '$location', '$state', function($scope, WikidataItem, $location, $state) {
     $scope.notFound = false;
-    $scope.query = '';
+    console.log($state.params);
+    $scope.query = $state.params.query;
+    if(!!$scope.query) {
+        search();
+    }
 
-    $scope.search = function() {
+
+    function search() {
         $scope.notFound = false;
         delete $scope.searchResults;
+
+        $location.search({query: $scope.query});
 
         WikidataItem.get('search', {query: $scope.query}).then(
             function successfulGetWikidataItem(response) {
@@ -17,5 +24,7 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'WikidataItem', 
                 }
             }
         );
-    };
+    }
+
+    $scope.search = search;
 }]);

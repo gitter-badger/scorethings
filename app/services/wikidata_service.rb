@@ -1,10 +1,9 @@
 require 'wikidata/client'
 
 class WikidataService
-  def search(query)
-    cache_key = "wikidata_service_search#{query})"
 
-    cached_search_results = Rails.cache.fetch(cache_key, expires_in: 1.day) do
+  def search(query)
+    cached_search_results = Rails.cache.fetch(wikidata_search_cache_key(query), expires_in: 1.hour) do
       response = Wikidata::Item.search(query)
 
       if response.empty?
@@ -13,48 +12,54 @@ class WikidataService
 
       search_results = response.results.map do |wikidata_item|
         map_item(wikidata_item)
-
       end
 
-      Rails.cache.write(cache_key, search_results)
+      search_results.each do |search_result|
+        # write the wikidata item to cache, so when finding it, it hits cache (probably happens soon after search)
+        Rails.cache.write(wikidata_item_cache_key(search_result[:id]), search_result, expires_in: 1.hour)
+      end
+
       return search_results
     end
 
     return cached_search_results
   end
 
-  def find(wiki_data_item_id)
-    cache_key = "wikidata_service_find#{wiki_data_item_id})"
+  def find(wikidata_item_id)
+    cached_wikidata_item = Rails.cache.fetch(wikidata_item_cache_key(wikidata_item_id), expires_in: 1.hour) do
+      full_wikidata_item = Wikidata::Item.find(wikidata_item_id)
 
-    cached_wiki_data_item = Rails.cache.fetch(cache_key, expires_in: 1.day) do
-      wiki_data_item = Wikidata::Item.find(wiki_data_item_id)
-
-      if wiki_data_item.nil?
+      if full_wikidata_item.nil?
         raise Exceptions::WikidataItemNotFoundError
       end
 
-      wiki_data_item = map_item(wiki_data_item)
-
-      Rails.cache.write(cache_key, wiki_data_item)
-      return wiki_data_item
+      return map_item(full_wikidata_item)
     end
 
-    return cached_wiki_data_item
+    return cached_wikidata_item
   end
 
   private
-  def map_item(wikidata_item)
-    official_websites_values = wikidata_item.official_websites.map do |official_website|
+  def wikidata_item_cache_key(wikidata_item_id)
+    "wikidata_item(#{wikidata_item_id})"
+  end
+
+  def wikidata_search_cache_key(query)
+    "wikidata_search(#{query})"
+  end
+
+  def map_item(full_wikidata_item)
+    official_websites_values = full_wikidata_item.official_websites.map do |official_website|
       official_website.value
     end
 
-    unless wikidata_item.descriptions.nil?
-      wikidata_en_description = wikidata_item.descriptions.to_hash.fetch('en', {}).fetch('value', nil)
+    unless full_wikidata_item.descriptions.nil?
+      wikidata_en_description = full_wikidata_item.descriptions.to_hash.fetch('en', {}).fetch('value', nil)
     end
 
     return {
-        title: wikidata_item.title,
-        id: wikidata_item.id,
+        title: full_wikidata_item.title,
+        id: full_wikidata_item.id,
         official_websites: official_websites_values,
         description: wikidata_en_description
     }

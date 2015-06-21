@@ -13,7 +13,7 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
         function successfulGetWikidataPage(wikidataItem) {
             $scope.wikidataItem = wikidataItem;
             $scope.score.thing.wikidataItemId = wikidataItem.id;
-            var imageQuery = wikidataItem.title + ' ' + wikidataItem.description;
+            var imageQuery = wikidataItem.title + ' ' + (wikidataItem.description || '');
             imageSearch.search(imageQuery, function(imageUrls) {
                 $scope.imageUrls = imageUrls;
             });

@@ -27,8 +27,11 @@ Rails.application.routes.draw do
     end
   end
 
-  get "api" => proc { [404, {}, ['Invalid API endpoint']] }
-  get "api/*path" => proc { [404, {}, ['Invalid API endpoint']] }
-  get "/*path" => redirect("/?goto=%{path}")
+  get 'api' => proc { [404, {}, ['Invalid API endpoint']] }
+  get 'api/*path' => proc { [404, {}, ['Invalid API endpoint']] }
+
+  get '*path' => 'dashboard#index'
+
   root 'dashboard#index'
+
 end
