@@ -1,4 +1,4 @@
-angular.module('app').controller('WikidataItemSearchCtrl', ['$scope', 'WikidataItem', '$location', '$state', function($scope, WikidataItem, $location, $state) {
+angular.module('app').controller('WikidataItemsSearchCtrl', ['$scope', 'WikidataItem', '$location', '$state', function($scope, WikidataItem, $location, $state) {
     $scope.notFound = false;
     console.log($state.params);
     $scope.query = $state.params.query;

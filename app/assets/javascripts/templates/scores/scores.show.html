@@ -18,6 +18,10 @@
                         <h5>Description</h5>
                         {{score.thing.description}}
                     </div>
+                    <a ui-sref="scores.new({wikidataItemId: score.thing.wikidataItemId})"
+                            class="btn btn-default">Create New Score For This Thing</a>
+                    <a ui-sref="things.show.scores({thingId: score.thing.token})"
+                       class="btn btn-default">View All Scores For Thing</a>
                 </div>
             </div>
         </div>

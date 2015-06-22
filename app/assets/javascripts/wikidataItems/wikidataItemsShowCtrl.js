@@ -1,4 +1,4 @@
-angular.module('app').controller('WikidataItemShowCtrl', ['$scope', '$stateParams', 'Thing', 'WikidataItem', 'notifier', function($scope, $stateParams, Thing, WikidataItem, notifier) {
+angular.module('app').controller('WikidataItemsShowCtrl', ['$scope', '$stateParams', 'Thing', 'WikidataItem', 'notifier', function($scope, $stateParams, Thing, WikidataItem, notifier) {
     var wikidataItemId = $stateParams.wikidataItemId;
 
     WikidataItem.get(wikidataItemId).then(

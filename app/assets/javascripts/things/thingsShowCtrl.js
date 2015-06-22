@@ -1,33 +1,11 @@
-angular.module('app').controller('ThingsShowCtrl', ['$scope', '$stateParams', 'Thing', 'WikidataItem', function($scope, $stateParams, Thing, WikidataItem) {
-    var wikidataItemId = $stateParams.wikidataItemId;
+angular.module('app').controller('ThingsShowCtrl', ['$scope', '$stateParams', 'Thing', 'notifier', function($scope, $stateParams, Thing, notifier) {
+    var thingId = $stateParams.thingId;
 
-    var NOT_FOUND_STATUS = 404;
-
-    Thing.get(wikidataItemId).then(
-        function successfulGetThing(thing) {
-            $scope.onlyInWikidata = false;
-            $scope.officialWebsites = thing.officialWebsites;
-            $scope.title = thing.title;
-            $scope.description = thing.description;
-
-            $scope.score.thing.wikidataItemId = thing.wikidataItemId;
+    Thing.get(thingId).then(
+        function successfulGetThing(response) {
+            $scope.thing = response.thing;
         },
         function unsuccessfulGetThing(response) {
-            if(response.status == NOT_FOUND_STATUS) {
-                WikidataItem.get(wikidataItemId).then(
-                    function successfulGetWikidataPage(wikidataItem) {
-                        $scope.onlyInWikidata = true;
-                        $scope.wikidataItemId = wikidataItem.wikidataItemId;
-                        $scope.officialWebsites = wikidataItem.officialWebsites;
-                        $scope.title = wikidataItem.title;
-                        $scope.description = wikidataItem.description;
-
-                        $scope.score.thing.wikidataItemId = wikidataItem.id;
-                    },
-                    function unsuccessfulGetWikidataPage(response) {
-                        console.error('failed to get wikidata item');
-                    }
-                );
-            }
+            notifier.error('failed to get thing');
         });
 }]);

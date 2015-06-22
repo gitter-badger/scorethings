@@ -2,10 +2,9 @@ json.score do
   json.id @score._id.to_s
   json.token @score.token
   json.user @score.user.to_builder
-  json.thing_reference @score.thing_reference.to_builder
-  json.thing_id @score.thing_reference.id.to_s
-  json.thing @thing.to_builder unless @thing.nil?
+  json.thing @score.thing.to_builder
   json.points @score.points
+  json.criterion @score.criterion
 
   json.created_at @score.created_at
   json.updated_at @score.updated_at

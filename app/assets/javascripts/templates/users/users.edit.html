@@ -4,12 +4,6 @@
         <label for="username">Username</label>
         <input type="text" class="form-control" ng-model="user.username" id="username" placeholder="3 to 16 characters (numbers, letters, _, -)">
     </div>
-    <div class="form-group">
-        <label for="description">Description</label>
-        <textarea class="form-control" ng-model="user.description" id="description" rows="4">
-        </textarea>
-        <small>Max 300 letters ({{300 - (user.description.length || '')}} remaining)</small>
-    </div>
     <button type="submit" class="btn btn-default">Submit</button>
 </form>
 <br>

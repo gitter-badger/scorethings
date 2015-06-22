@@ -97,10 +97,6 @@ module Api
         id = params.require(:id)
         begin
           @score = Score.find(id)
-          return render json: {
-                            score: @score,
-                            status: :ok
-                        }, status: :ok
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             error: "failed to score for id: #{params[:id]}",

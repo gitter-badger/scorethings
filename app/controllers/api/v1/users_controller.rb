@@ -26,7 +26,7 @@ module Api
 
       def update
         begin
-          @current_user.update_attributes!(params.require(:user).permit(:username, :description))
+          @current_user.update_attributes!(params.require(:user).permit(:username))
            return render json: {
                              user: @current_user.to_builder,
                              status: :ok

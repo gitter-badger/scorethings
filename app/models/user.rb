@@ -7,14 +7,12 @@ class User
   embeds_one :auth_provider
 
   field :username, type: String
-  field :description, type: String
 
-  search_in :username, :description
+  search_in :username
 
   validates_presence_of :username
   validates_uniqueness_of :username
   validates_format_of :username, with: /\A[A-Za-z0-9_-]{3,16}\z/
-  validates_length_of :description, maximum: 300
 
   has_many :scores, autosave: true, dependent: :delete
 

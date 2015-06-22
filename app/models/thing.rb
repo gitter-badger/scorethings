@@ -18,6 +18,17 @@ class Thing
 
   validates_presence_of :title, :wikidata_item_id
 
+  def to_builder
+    Jbuilder.new do |thing|
+      thing.token self.token
+      thing.id self.id.to_s
+      thing.title self.title
+      thing.description self.description
+      thing.wikidata_item_id self.wikidata_item_id
+      thing.official_websites self.official_websites
+    end
+  end
+
   def self.build_from_wikidata_item(wikidata_item)
     Thing.new(title: wikidata_item[:title],
               wikidata_item_id: wikidata_item[:id],

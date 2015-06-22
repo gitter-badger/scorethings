@@ -4,9 +4,9 @@ angular.module('app').controller('UsersEditCtrl', ['$scope', 'User', 'identity',
         return;
     }
 
-    var userId = identity.userId;
 
-    User.query({id: userId}).then(
+    console.log(identity);
+    User.query({id: identity.userId}).then(
         function successGet(user) {
             $scope.user = user;
         },
@@ -15,7 +15,7 @@ angular.module('app').controller('UsersEditCtrl', ['$scope', 'User', 'identity',
         });
 
     $scope.save = function() {
-        new User($scope.user).update().then(
+        new User({username: $scope.user.username}).update().then(
             function saveSuccess(user) {
                 $scope.user = user;
                 identity.username = user.username;

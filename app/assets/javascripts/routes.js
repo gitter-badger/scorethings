@@ -33,10 +33,29 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     }).
 
             /*
+             wikidataItems
+             */
+            state('wikidataItems', {
+                url: '/wikidataItems',
+                abstract: true,
+                templateUrl: 'wikidataItems/wikidataItems.html'
+            }).
+                state('wikidataItems.search', {
+                    url: '/search?query',
+                    templateUrl: 'wikidataItems/wikidataItems.search.html',
+                    controller: 'WikidataItemsSearchCtrl'
+                }).
+                state('wikidataItems.show', {
+                    url: '/:wikidataItemId',
+                    templateUrl: 'wikidataItems/wikidataItems.show.html',
+                    controller: 'WikidataItemsShowCtrl'
+                }).
+            /*
              things
             */
             state('things', {
                 url: '/things',
+                abstract: true,
                 templateUrl: 'things/things.html'
             }).
                 state('things.search', {
@@ -45,7 +64,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'ThingsSearchCtrl'
                 }).
                 state('things.show', {
-                    url: '/:wikidataItemId',
+                    url: '/:thingId',
                     templateUrl: 'things/things.show.html',
                     controller: 'ThingsShowCtrl'
                 }).
