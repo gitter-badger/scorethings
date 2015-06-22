@@ -11,5 +11,6 @@ Bundler.require(*Rails.groups)
 
 module Scorethings
   class Application < Rails::Application
+    config.assets.paths << Rails.root.join('bower_components')
   end
 end
