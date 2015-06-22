@@ -1,10 +1,17 @@
 module Api
   module V1
     class ScoresController < ApplicationController
-      skip_before_action :authenticate_request, :current_user, only: [:show]
+      skip_before_action :authenticate_request, :current_user, only: [:show, :valid_criteria]
+
+      def valid_criteria
+        return render json: {
+                          valid_criteria: Score.valid_criteria,
+                          status: :ok
+                      }, status: :ok
+      end
 
       def create
-        score_params = params.require(:score).permit(:points, thing: [:wikidata_item_id])
+        score_params = params.require(:score).permit(:points, :criterion, thing: [:wikidata_item_id])
 
         begin
           thing = $thing_service.find_thing_or_create_from_wikidata(score_params[:thing][:wikidata_item_id])
@@ -16,11 +23,11 @@ module Api
                             score: @score,
                             status: :created
                         }, status: :created
-        rescue Exceptions::ScoreUniquenessError
-          existing_score = @current_user.scores.where(thing: thing).first
+        rescue Exceptions::ScoreNotUniqueError => e
+          @existing_score = e.existing_score
           return render json: {
-                            error: "a score for this thing has already been created by this user",
-                            existing_score: existing_score,
+                            error: "New score conflicts with existing score.  You should update points instead.",
+                            existing_score: @existing_score,
                             status: :conflict
                         }, status: :conflict
         rescue Mongoid::Errors::DocumentNotFound
@@ -43,7 +50,11 @@ module Api
         begin
           @score = Score.find(params.require(:id))
           score_params = params.require(:score).permit(:points)
-          @current_user.update_score(@score, score_params)
+          @current_user.update_points(@score, score_params[:points])
+          return render json: {
+                            score: @score,
+                            status: :ok
+                        }, status: :ok
         rescue Mongoid::Errors::DocumentNotFound
           return render json: {
                             status: :not_found

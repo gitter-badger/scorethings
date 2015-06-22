@@ -1,4 +1,4 @@
-angular.module('app').controller('MainCtrl', ['$scope', '$rootScope', 'identity', 'authService', 'currentUser', function($scope, $rootScope, identity, authService, currentUser) {
+angular.module('app').controller('MainCtrl', ['$scope', '$rootScope', 'identity', 'authService', 'currentUser', 'Score', function($scope, $rootScope, identity, authService, currentUser, Score) {
     $scope.logout = function() {
         authService.logout();
     };
@@ -27,4 +27,14 @@ angular.module('app').controller('MainCtrl', ['$scope', '$rootScope', 'identity'
             $rootScope.$broadcast('userLoggedIn');
         });
     };
+
+    Score.get('valid_criteria').then(
+        function success(response) {
+            console.log(response);
+            $scope.validCriteria = response.validCriteria;
+        },
+        function error(response) {
+            console.error('failed to load valid criteria');
+            console.error(response);
+        });
 }]);

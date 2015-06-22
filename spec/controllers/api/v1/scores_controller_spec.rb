@@ -12,6 +12,7 @@ RSpec.describe Api::V1::ScoresController do
             thing: {
                 wikidata_item_id: @thing.wikidata_item_id
             },
+            criterion: 'Funny',
             points: 21
         }
     }
@@ -33,6 +34,25 @@ RSpec.describe Api::V1::ScoresController do
       @request.env['HTTP_AUTHORIZATION'] = ''
       post :create, @params
       expect(response).to have_http_status(:unauthorized)
+    end
+
+    it "should not create a score if a score exists for user, thing, and criterion" do
+      existing_score = create(:score, user: @user)
+      expect(Score.all.length).to eq(1)
+      params_with_conflict = {
+          score: {
+              thing: {
+                  wikidata_item_id: existing_score.thing.wikidata_item_id
+              },
+              criterion: existing_score.criterion,
+              points: 21
+          }
+      }
+
+      post :create, params_with_conflict
+      expect(assigns(:score)).to_not be_nil
+      expect(response).to have_http_status(:conflict)
+      expect(assigns(:existing_score)).to eq(existing_score)
     end
 
     it "should not create a score for a thing that doesn't exist in wikipedia or database" do

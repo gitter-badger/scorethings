@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       get '/wikidata_items/search' => 'wikidata_items#search'
       get '/wikidata_items/:wikidata_item_id' => 'wikidata_items#find'
 
+      get '/scores/valid_criteria' => 'scores#valid_criteria'
       resources :scores, only: [:create, :show, :update, :destroy]
 
       get '/users' => 'users#show'

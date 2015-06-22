@@ -1,0 +1,19 @@
+<div class="select-criterion">
+    <div class="modal-header">
+        <h3 class="modal-title">Select a criterion</h3>
+    </div>
+    <div class="modal-body">
+        <div ng-repeat="criterion in validCriteria"
+             class="panel panel-default criterion"
+             ng-class="{'selected': criterion.name == scoreCriterion}"
+             ng-click="selectCriterion(criterion.name)">
+            <div class="panel-body">
+                <h5>{{criterion.name}}</h5>
+                {{criterion.definition}}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</div>

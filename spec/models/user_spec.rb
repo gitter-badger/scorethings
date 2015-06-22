@@ -73,7 +73,7 @@ RSpec.describe User do
   describe "scoring things" do
     before do
       @user = create(:user)
-      @score = build(:score)
+      @score = build(:score, criterion: 'General')
     end
 
     it "should allow the user to score a things" do
@@ -86,7 +86,7 @@ RSpec.describe User do
     describe "updating a score" do
       it "should update a score" do
         @user.create_score(@score)
-        @user.update_score(@score, {points: 33})
+        @user.update_points(@score, 33)
         @score.reload
         expect(@score.points).to eq(33)
       end
@@ -95,22 +95,31 @@ RSpec.describe User do
         other_user = create(:user)
         @user.create_score(@score)
         expect {
-          other_user.update_score(@score, {points: 75})
+          other_user.update_points(@score, 75)
         }.to raise_error(Exceptions::UnauthorizedModificationError)
       end
     end
 
-    it "should not have more than one score with the same user and thing" do
+    it "should have more than one score with the same user and thing but different criterion" do
       @user.create_score(@score)
-      other_score = build(:score, thing: @score.thing)
+      other_score = build(:score, thing: @score.thing, criterion: 'Funny')
+
+      expect(Score.all.length).to eq(1)
+      @user.create_score(other_score)
+      expect(Score.all.length).to eq(2)
+    end
+
+    it "should not have more than one score with the same user and thing and criterion" do
+      @user.create_score(@score)
+      other_score = build(:score, thing: @score.thing, criterion: 'General')
 
       expect(Score.all.length).to eq(1)
       expect {
         @user.create_score(other_score)
-      }.to raise_error(Exceptions::ScoreUniquenessError)
+      }.to raise_error(Exceptions::ScoreNotUniqueError)
       expect(Score.all.length).to eq(1)
 
-      other_score.thing = create(:thing)
+      other_score.criterion = 'Funny'
       @user.create_score(other_score)
       expect(Score.all.length).to eq(2)
     end

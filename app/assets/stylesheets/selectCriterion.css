@@ -1,0 +1,23 @@
+/*
+    copied from http://stackoverflow.com/a/25874635/4694250
+*/
+.select-criterion .modal {
+    display: block !important;
+}
+
+.select-criterion .modal-dialog {
+    overflow-y: initial !important
+}
+
+.select-criterion .modal-body {
+    height: 250px;
+    overflow-y: auto;
+}
+
+.criterion.selected {
+    background-color: #c4e3f3;
+}
+
+.criterion:hover {
+    background-color: #c4e3f3;
+}

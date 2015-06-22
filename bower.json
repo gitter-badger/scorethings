@@ -34,8 +34,7 @@
     "humps": "~0.5.2",
     "angular-ui-slider": "~0.1.2",
     "jqueryui-touch-punch": "*",
-    "angular-socialshare": "~1.4.1",
-    "angular-charlimit": "~0.1.0"
+    "angular-socialshare": "~1.4.1"
   },
   "devDependencies": {
     "karma-read-json": "~1.1.0",
