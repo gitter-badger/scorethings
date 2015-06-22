@@ -35,10 +35,10 @@ RSpec.describe Api::V1::UsersController do
 
   describe "GET search" do
     before do
-      @user_a = create(:user, username: 'alpha', description: 'I like eating apples')
-      @user_b = create(:user, username: 'bravo', description: 'I like eating bananas')
-      @user_c = create(:user, username: 'charlie', description: 'I like eating cherries')
-      @user_d = create(:user, username: 'delta', description: 'I like drinking smoothies')
+      @user_a = create(:user, username: 'alpha')
+      @user_b = create(:user, username: 'bravo')
+      @user_c = create(:user, username: 'charlie')
+      @user_d = create(:user, username: 'delta')
     end
 
     it "should search for a single user with username" do
@@ -47,24 +47,15 @@ RSpec.describe Api::V1::UsersController do
       expect(response).to have_http_status(:ok)
       expect(assigns(:users)).to eq([@user_a])
     end
-
-    it "should search for a several users with description" do
-      get :search, {query: 'eating'}
-
-      expect(response).to have_http_status(:ok)
-      expect(assigns(:users)).to eq([@user_a, @user_b, @user_c])
-    end
   end
 
   describe "PUT update" do
     it "should update account" do
       expect(@user.username).to_not eq('diggity')
-      expect(@user.description).to_not eq('shorty get down, good lord')
 
-      put :update, {user: {username: 'diggity', description: 'shorty get down, good Lord'}}
+      put :update, {user: {username: 'diggity'}}
       @user.reload
       expect(@user.username).to eq('diggity')
-      expect(@user.description).to eq('shorty get down, good Lord')
     end
 
     it "should not update account if unauthorized" do

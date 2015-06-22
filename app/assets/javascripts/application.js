@@ -29,7 +29,6 @@
 //= require humps/humps
 //= require jqueryui-touch-punch/jquery.ui.touch-punch.min
 //= require angular-socialshare/angular-socialshare.min.js
-//= require angular-charlimit/dist/igCharLimit.min
 // AngularJS templates location in app/assets/javascripts/templates
 //= require_tree ./templates
 //= require app

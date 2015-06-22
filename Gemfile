@@ -43,7 +43,6 @@ gem 'mongoid-embedded-errors'
 gem 'angular-ui-bootstrap-rails'
 
 gem 'twitter'
-gem 'google-api-client'
 gem 'trollop'
 gem 'dalli'
 gem 'api_cache'
