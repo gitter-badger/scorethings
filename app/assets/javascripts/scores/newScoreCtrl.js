@@ -1,4 +1,4 @@
-angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'WikidataItem', 'Score', '$modal', function($scope, $location, WikidataItem, Score, $modal) {
+angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'WikidataItem', 'Score', '$modal', '$state', function($scope, $location, WikidataItem, Score, $modal, $state) {
     var wikidataItemId = $location.search()['wikidataItemId'];
 
     $scope.score = {
@@ -24,6 +24,7 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
         new Score($scope.score).create().then(
             function successCreate(score) {
                 console.log(score);
+                $state.go('scores.show', {scoreId: score.token});
             },
             function errorCreate(response) {
                 console.log(response);
@@ -37,6 +38,7 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
                     new Score(existingScore).update().then(
                         function successUpdate(score) {
                             console.log(score);
+                            $state.go('scores.show', {scoreId: score.token});
                         },
                         function errorUpdate(response) {
                             console.error(response);
