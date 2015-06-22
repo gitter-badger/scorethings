@@ -51,6 +51,7 @@ gem 'mongoid_search'
 gem 'mongoid_token'
 gem 'google-search'
 gem 'wikidata-client', '~> 0.0.7', require: 'wikidata'
+gem 'connection_pool'
 
 group :production, :staging do
   gem 'heroku_rails_deflate'

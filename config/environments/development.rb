@@ -41,5 +41,5 @@ Rails.application.configure do
   # memcached with dalli
   # https://github.com/mperham/dalli
   config.perform_caching = true
-  config.cache_store = :dalli_store
+  config.cache_store = :dalli_store, 'localhost', { :pool_size => 5 }
 end

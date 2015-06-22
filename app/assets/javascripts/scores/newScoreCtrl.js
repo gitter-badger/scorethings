@@ -1,7 +1,5 @@
-angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'WikidataItem', 'Score', 'imageSearch', function($scope, $location, WikidataItem, Score, imageSearch) {
+angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'WikidataItem', 'Score', function($scope, $location, WikidataItem, Score) {
     var wikidataItemId = $location.search()['wikidataItemId'];
-    $scope.imageUrls = [];
-
     $scope.score = {
         points: 70,
         thing: {
@@ -13,10 +11,6 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
         function successfulGetWikidataPage(wikidataItem) {
             $scope.wikidataItem = wikidataItem;
             $scope.score.thing.wikidataItemId = wikidataItem.id;
-            var imageQuery = wikidataItem.title + ' ' + (wikidataItem.description || '');
-            imageSearch.search(imageQuery, function(imageUrls) {
-                $scope.imageUrls = imageUrls;
-            });
         },
         function unsuccessfulGetWikidataPage(response) {
             console.error('failed to get wikidata item');

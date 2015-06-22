@@ -19,6 +19,8 @@ class WikidataService
         Rails.cache.write(wikidata_item_cache_key(search_result[:id]), search_result, expires_in: 1.hour)
       end
 
+      Rails.cache.write(wikidata_search_cache_key(query), search_results, expires_in: 1.hour)
+
       return search_results
     end
 
@@ -33,7 +35,10 @@ class WikidataService
         raise Exceptions::WikidataItemNotFoundError
       end
 
-      return map_item(full_wikidata_item)
+      wikidata_item = map_item(full_wikidata_item)
+      Rails.cache.write(wikidata_item_cache_key(wikidata_item_cache_key(wikidata_item_id)), wikidata_item, expires_in: 1.hour)
+
+      return wikidata_item
     end
 
     return cached_wikidata_item
