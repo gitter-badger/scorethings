@@ -18,7 +18,7 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
         }
     );
 
-    $scope.scoreThing = function() {
+    $scope.save = function() {
         new Score($scope.score).create(
             function successCreate(score) {
                 console.log(score);
