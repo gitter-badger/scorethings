@@ -23,9 +23,9 @@
                 <h3 class="panel-title">Score</h3>
             </div>
             <div class="panel-body">
-                <h3 ng-class="{'no': score.points < 60, 'meh': score.points >= 60 && score.points < 80, 'yes': score.points >= 80}">
-                    <a ng-click="selectACriterion()">{{score.criterion}}</a>: {{score.points | pointsDescription}} ({{score.points}})
-                </h3>
+                <h4 ng-class="{'no': score.points < 60, 'meh': score.points >= 60 && score.points < 80, 'yes': score.points >= 80}">
+                    <button class="btn btn-default" ng-click="selectACriterion()">{{score.criterion}}</button>: {{score.points | pointsDescription}} ({{score.points}})
+                </h4>
                 <br>
                 <div ui-slider ng-model="score.points"
                      id="points"

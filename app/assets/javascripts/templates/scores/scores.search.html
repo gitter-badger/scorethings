@@ -1,1 +1,53 @@
-<h3>scores#search</h3>
+<form ng-submit="search()">
+    <div class="col-xs-12">
+        <h3>Search Scores</h3>
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text"
+                       id="query"
+                       class="form-control"
+                       placeholder="A thing or user:JohnDoe"
+                       ng-change="notFound = false"
+                       ng-model="query">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" ng-disabled="!query" type="submit">
+                        Search
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="col-xs-12" ng-show="notFound">
+    <h5>Sorry, no results found for "{{query}}".</h5>
+</div>
+<table class="table table-hover" ng-show="scores.length">
+    <thead>
+        <tr>
+            <td>Thing</td>
+            <td>Score</td>
+            <td>User</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="score in scores">
+            <td>
+                <a ui-sref="things.show({thingId: score.thing.token})">
+                    {{score.thing.title}}
+                </a>
+            </td>
+            <td>
+                <a ng-class="{'no': score.points < 60, 'meh': score.points >= 60 && score.points < 80, 'yes': score.points >= 80}"
+                   ui-sref="scores.show({scoreId: score.token})">
+                    {{score.criterion}}: {{score.points | pointsDescription}} ({{score.points}})
+                </a>
+            </td>
+            <td>
+                <a ui-sref="users.show({username: score.user.username})">
+                    {{score.user.username}}
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

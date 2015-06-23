@@ -1,13 +1,18 @@
 module Api
   module V1
     class ScoresController < ApplicationController
-      skip_before_action :authenticate_request, :current_user, only: [:show, :valid_criteria]
+      skip_before_action :authenticate_request, :current_user, only: [:search, :show, :valid_criteria]
 
       def valid_criteria
         return render json: {
                           valid_criteria: Score.valid_criteria,
                           status: :ok
                       }, status: :ok
+      end
+
+      def search
+        query = params.require(:query)
+        @scores = Score.full_text_search(query).to_a
       end
 
       def create

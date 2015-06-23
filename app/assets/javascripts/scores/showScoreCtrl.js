@@ -1,4 +1,5 @@
-angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', '$stateParams', function($scope, Score, $stateParams) {
+angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', '$stateParams', 'identity', function($scope, Score, $stateParams, identity) {
+    $scope.identity = identity;
     var scoreId = $stateParams.scoreId;
     $scope.notFound = false;
 

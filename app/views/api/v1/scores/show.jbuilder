@@ -8,4 +8,9 @@ json.score do
 
   json.created_at @score.created_at
   json.updated_at @score.updated_at
+  json.old_points @score.old_points.each do |old_points|
+    json.points old_points.points
+    json.started_at old_points.started_at
+    json.ended_at old_points.ended_at
+  end
 end
