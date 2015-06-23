@@ -11,8 +11,28 @@ module Api
       end
 
       def search
-        query = params.require(:query)
-        @scores = Score.full_text_search(query).to_a
+        # TODO add pagination when necessary
+        query = params[:query]
+        if query.nil?
+          # TODO maybe require filter if ever too many scores
+          return @scores = Score.all.to_a
+        end
+
+        parsed_search_query = parse_search_query(query)
+
+        if parsed_search_query[:username].nil?
+          return @scores = Score.full_text_search(parsed_search_query[:non_username_query_terms], allow_empty_search: true).to_a
+        else
+          begin
+            user = User.find_by(username: parsed_search_query[:username])
+            return @scores = user.scores.full_text_search(parsed_search_query[:non_username_query_terms], allow_empty_search: true).to_a
+          rescue Mongoid::Errors::DocumentNotFound
+            return render json: {
+                              error: "user with username #{parsed_search_query[:username]} was not found",
+                              status: :not_found
+                          }, status: :not_found
+          end
+        end
       end
 
       def create
@@ -108,6 +128,24 @@ module Api
                             status: :not_found
                         }, status: :not_found
         end
+      end
+
+    private
+      def parse_search_query(query)
+        # TODO figure out how to do this with regexp
+        result = {
+            non_username_query_terms: '',
+            username: nil
+        }
+        query_terms = query.split(' ')
+        query_terms.each do |query_term|
+          if query_term.include? 'username:'
+            result[:username] = query_term.split(':')[1]
+          else
+            result[:non_username_query_terms] += ' ' + query_term
+          end
+        end
+        return result
       end
     end
   end

@@ -1,6 +1,5 @@
 angular.module('app').controller('ScoresSearchCtrl', ['$scope', 'Score', '$location', '$state', function($scope, Score, $location, $state) {
     $scope.notFound = false;
-    console.log($state.params);
     $scope.query = $state.params.query;
     if(!!$scope.query) {
         search();
@@ -9,6 +8,7 @@ angular.module('app').controller('ScoresSearchCtrl', ['$scope', 'Score', '$locat
     function search() {
         $scope.notFound = false;
         delete $scope.searchResults;
+        delete $scope.error;
 
         $location.search({query: $scope.query});
 
@@ -19,6 +19,12 @@ angular.module('app').controller('ScoresSearchCtrl', ['$scope', 'Score', '$locat
             },
             function unsuccessfulSearchScore(response) {
                 $scope.notFound = true;
+                console.log(response);
+                if(response.status == 404) {
+                    // this could be because the username filter in response
+                    // had no user
+                    $scope.error = response.data.error;
+                }
             }
         );
     }

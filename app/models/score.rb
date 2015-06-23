@@ -12,7 +12,7 @@ class Score
 
   embeds_many :old_points
 
-  search_in thing: [:title, :description]
+  search_in thing: [:title, :description, :instance_of_values], user: [:username]
 
   token :contains => :fixed_numeric, :length => 8
 

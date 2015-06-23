@@ -18,6 +18,46 @@ RSpec.describe Api::V1::ScoresController do
     }
   end
 
+  describe "GET search" do
+
+    before do
+      @batman_thing = create(:thing, title: 'Batman')
+      @seattle_thing = create(:thing, title: 'Seattle')
+
+      @batman_score = create(:score, thing: @batman_thing, user: @user)
+      @seattle_score = create(:score, thing: @seattle_thing, user: @user)
+    end
+
+    it "should search for scores" do
+      get :search, {query: 'Batman'}
+      expect(assigns(:scores)).to eq([@batman_score])
+
+      get :search, {query: 'Seattle'}
+      expect(assigns(:scores)).to eq([@seattle_score])
+    end
+
+    it "should search by username" do
+      other_user = create(:user)
+      other_users_batman_score = create(:score, thing: @batman_thing, user: other_user)
+      other_users_seattle_score = create(:score, thing: @seattle_thing, user: other_user)
+
+      get :search, {query: 'Batman'}
+      expect(assigns(:scores)).to eq([@batman_score, other_users_batman_score])
+
+      get :search, {query: "Batman username:#{other_user.username}"}
+      expect(assigns(:scores)).to eq([other_users_batman_score])
+
+      get :search, {query: "username:#{other_user.username}"}
+      expect(assigns(:scores)).to eq([other_users_batman_score, other_users_seattle_score])
+
+      get :search
+      expect(assigns(:scores)).to eq(Score.all)
+
+      get :search, {query: "username:this_user_does_not_exist"}
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "POST create" do
     it "should create a new score" do
       expect(Score.all.length).to eq(0)
