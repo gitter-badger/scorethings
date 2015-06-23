@@ -58,6 +58,10 @@ class WikidataService
       official_website.value
     end
 
+    instance_of_values = full_wikidata_item.instance_of.map do |instance_of|
+      instance_of.title
+    end
+
     unless full_wikidata_item.descriptions.nil?
       wikidata_en_description = full_wikidata_item.descriptions.to_hash.fetch('en', {}).fetch('value', nil)
     end
@@ -66,6 +70,7 @@ class WikidataService
         title: full_wikidata_item.title,
         id: full_wikidata_item.id,
         official_websites: official_websites_values,
+        instance_of_values: instance_of_values,
         description: wikidata_en_description
     }
   end

@@ -20,6 +20,13 @@
                         <h5>Description</h5>
                         {{score.thing.description}}
                     </div>
+                    <div ng-show="score.thing.instanceOfValues">
+                        <ul style="list-style-type: none; padding:0; margin:0;">
+                            <li ng-repeat="instanceOf in score.thing.instanceOfValues">
+                                {{instanceOf}}
+                            </li>
+                        </ul>
+                    </div>
                     <a ui-sref="scores.new({wikidataItemId: score.thing.wikidataItemId})"
                             class="btn btn-default">New Score For {{score.thing.title}}</a>
                 </div>
@@ -34,7 +41,16 @@
                     <h3 ng-class="{'no': score.points < 60, 'meh': score.points >= 60 && score.points < 80, 'yes': score.points >= 80}">
                         {{score.criterion}}: {{score.points | pointsDescription}} ({{score.points}})
                     </h3>
-                    <button ng-show="score.user.id == identity.userId" class="btn btn-default">Update Points</button>
+                    <div ng-show="score.user.id == identity.userId">
+                        <div ui-slider ng-model="score.points"
+                             id="points"
+                             min="0"
+                             step="1"
+                             max="100">
+                        </div>
+                        <br>
+                        <button class="btn btn-default" ng-click="updatePoints()">Update Points</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,7 +59,7 @@
         <div class="col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Old Points For This Score</h3>
+                    <h3 class="panel-title">{{score.user.username}}'s old points for "{{score.thing.title}}" being {{score.criterion}}</h3>
                 </div>
                 <div class="panel-body">
                     <h3 ng-show="!score.oldPoints.length">No Old Points Yet</h3>

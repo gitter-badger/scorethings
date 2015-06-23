@@ -1,41 +1,22 @@
-<h2>Score A Thing</h2>
-<div class="row">
-    <div class="col-xs-12 col-sm-6">
-        <div ng-show="wikidataItem" class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Thing</h3>
-            </div>
-            <div class="panel-body">
-                <div>
-                    <h5>Title</h5>
-                    {{wikidataItem.title}}
-                </div>
-                <div ng-show="wikidataItem.description">
-                    <h5>Description</h5>
-                    {{wikidataItem.description}}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Score</h3>
-            </div>
-            <div class="panel-body">
-                <h4 ng-class="{'no': score.points < 60, 'meh': score.points >= 60 && score.points < 80, 'yes': score.points >= 80}">
-                    <button class="btn btn-default" ng-click="selectACriterion()">{{score.criterion}}</button>: {{score.points | pointsDescription}} ({{score.points}})
-                </h4>
-                <br>
-                <div ui-slider ng-model="score.points"
-                     id="points"
-                     min="0"
-                     step="1"
-                     max="100">
-                </div>
-                <br>
-                <button ng-click="save()" class="btn btn-primary">Save</button>
-            </div>
-        </div>
-    </div>
+<h3>
+    Question:  {{wikidataItem.title}},
+    <a class="criterion"
+       ng-click="selectACriterion()"
+       tooltip="click to change criterion">
+        {{(score.criterion == 'General' && 'In General, Yes/No') || score.criterion}}
+    </a>?
+</h3>
+<br>
+<h2 style="text-align: center">
+    <points-display points="score.points">
+    </points-display>
+</h2>
+<br>
+<div ui-slider ng-model="score.points"
+     id="points"
+     min="0"
+     step="1"
+     max="100">
 </div>
+<br>
+<button ng-click="save()" class="btn btn-primary">Save</button>

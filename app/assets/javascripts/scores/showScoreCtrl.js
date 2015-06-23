@@ -10,4 +10,16 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', '$statePar
         function errorGet() {
             $scope.notFound = true;
         });
+
+    $scope.updatePoints = function() {
+        new Score($scope.score).update().then(
+            function successUpdate(updatedScore) {
+                $scope.score = updatedScore;
+            },
+            function errorUpdate(response) {
+                notifier.error('failed to update points');
+                console.error(response);
+            }
+        )
+    };
 }]);

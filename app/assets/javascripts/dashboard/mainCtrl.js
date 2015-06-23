@@ -30,7 +30,6 @@ angular.module('app').controller('MainCtrl', ['$scope', '$rootScope', 'identity'
 
     Score.get('valid_criteria').then(
         function success(response) {
-            console.log(response);
             $scope.validCriteria = response.validCriteria;
         },
         function error(response) {

@@ -1,3 +1,3 @@
-<span ng-class="{'no': points < 60, 'meh': points >= 60 && points < 80, 'yes': points >= 80}">
+<span class="criterion" ng-class="{'no': points < 60, 'meh': points >= 60 && points < 80, 'yes': points >= 80}">
     {{points | pointsDescription}} ({{points}})
 </span>

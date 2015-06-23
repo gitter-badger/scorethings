@@ -26,6 +26,7 @@
     <thead>
         <tr>
             <td>Title</td>
+            <td>Instance Of</td>
             <td>Description</td>
         </tr>
     </thead>
@@ -35,6 +36,13 @@
                 <a ui-sref="scores.new({wikidataItemId: searchResult.id})">
                     {{searchResult.title}}
                 </a>
+            </td>
+            <td>
+                <ul style="list-style-type: none; padding:0; margin:0;">
+                    <li ng-repeat="instanceOf in searchResult.instanceOfValues">
+                        {{instanceOf}}
+                    </li>
+                </ul>
             </td>
             <td>
                 {{searchResult.description}}

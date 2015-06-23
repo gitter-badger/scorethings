@@ -6,6 +6,7 @@ class Thing
   field :wikidata_item_id, type: String
   field :description, type: String
   field :official_websites, type: Array
+  field :instance_of_values, type: Array
   field :title, type: String
 
   has_many :scores, autosave: true, dependent: :delete
@@ -24,6 +25,7 @@ class Thing
       thing.id self.id.to_s
       thing.title self.title
       thing.description self.description
+      thing.instance_of_values self.instance_of_values
       thing.wikidata_item_id self.wikidata_item_id
       thing.official_websites self.official_websites
     end
@@ -33,6 +35,7 @@ class Thing
     Thing.new(title: wikidata_item[:title],
               wikidata_item_id: wikidata_item[:id],
               official_websites: wikidata_item[:official_websites],
+              instance_of_values: wikidata_item[:instance_of_values],
               description: wikidata_item[:description])
   end
 end

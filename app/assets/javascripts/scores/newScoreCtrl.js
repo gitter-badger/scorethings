@@ -63,7 +63,7 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
                     $modalInstance.close(criterion);
                 };
             }],
-            size: 'md',
+            size: 'lg',
             resolve: {
                 scoreCriterion: function() {
                     return $scope.score.criterion;
