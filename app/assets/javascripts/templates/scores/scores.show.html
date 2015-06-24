@@ -38,18 +38,19 @@
                     <h3 class="panel-title">Score</h3>
                 </div>
                 <div class="panel-body">
-                    <h3 ng-class="{'no': score.points < 60, 'meh': score.points >= 60 && score.points < 80, 'yes': score.points >= 80}">
-                        {{score.criterion}}: {{score.points | pointsDescription}} ({{score.points}})
-                    </h3>
-                    <div ng-show="score.user.id == identity.userId">
-                        <div ui-slider ng-model="score.points"
-                             id="points"
+                    <h3 style="text-align: center;">{{score.criterion}}</h3>
+                    <points-progressbar points="score.points">
+                    </points-progressbar>
+                    <br>
+                    <div ng-show="identity.userId == score.user.id" ng-form="updateScoreForm">
+                        <div ui-slider
+                             ng-model="score.points"
                              min="0"
                              step="1"
                              max="100">
                         </div>
                         <br>
-                        <button class="btn btn-default" ng-click="updatePoints()">Update Points</button>
+                        <button ng-disabled="updateScoreForm.$pristine" class="btn btn-default" ng-click="updatePoints()">Update Points</button>
                     </div>
                 </div>
             </div>
@@ -74,8 +75,8 @@
                         <tbody>
                         <tr ng-repeat="oldPoints in score.oldPoints | orderBy:'-startedAt'">
                             <td>
-                                <points-display points="oldPoints.points">
-                                </points-display>
+                                <points-progressbar points="oldPoints.points">
+                                </points-progressbar>
                             </td>
                             <td>
                                 {{oldPoints.startedAt | date:'medium'}}

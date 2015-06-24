@@ -1,22 +1,19 @@
-<h3>
-    Question:  {{wikidataItem.title}},
-    <a class="criterion"
-       ng-click="selectACriterion()"
-       tooltip="click to change criterion">
-        {{(score.criterion == 'General' && 'In General, Yes/No') || score.criterion}}
-    </a>?
-</h3>
-<br>
-<h2 style="text-align: center">
-    <points-display points="score.points">
-    </points-display>
-</h2>
-<br>
-<div ui-slider ng-model="score.points"
-     id="points"
-     min="0"
-     step="1"
-     max="100">
+<div style="text-align: center">
+    <h2>Score For {{wikidataItem.title}}</h2>
+    <h2>
+        <a class="criterion" ng-click="showCriterionSelectionModal()">Criteiron: {{score.criterion}}</a>
+    </h2>
+    <br>
+    <h2>No, Yes, or Meh?</h2>
+
+    <points-progressbar points="score.points">
+    </points-progressbar>
+    <div ui-slider ng-model="score.points"
+         id="points"
+         min="0"
+         step="1"
+         max="100">
+    </div>
+    <br>
+    <button ng-click="save()" class="btn btn-primary btn-lg">Save</button>
 </div>
-<br>
-<button ng-click="save()" class="btn btn-primary">Save</button>

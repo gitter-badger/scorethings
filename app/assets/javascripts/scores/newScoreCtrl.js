@@ -48,7 +48,7 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
             });
     };
 
-    $scope.selectACriterion = function() {
+    $scope.showCriterionSelectionModal = function() {
         var modalInstance = $modal.open({
             templateUrl: 'scores/selectCriterion.html',
             controller: ['$scope', '$modalInstance', 'scoreCriterion', 'validCriteria', function($scope, $modalInstance, scoreCriterion, validCriteria) {

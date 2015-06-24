@@ -27,7 +27,8 @@
     <thead>
         <tr>
             <td>Thing</td>
-            <td>Score</td>
+            <td>Criterion</td>
+            <td>Points</td>
             <td>User</td>
         </tr>
     </thead>
@@ -39,9 +40,12 @@
                 </a>
             </td>
             <td>
-                <a ng-class="{'no': score.points < 60, 'meh': score.points >= 60 && score.points < 80, 'yes': score.points >= 80}"
-                   ui-sref="scores.show({scoreId: score.token})">
-                    {{score.criterion}}: {{score.points | pointsDescription}} ({{score.points}})
+                {{score.criterion}}
+            </td>
+            <td>
+                <a ui-sref="scores.show({scoreId: score.token})">
+                    <points-progressbar points="score.points">
+                    </points-progressbar>
                 </a>
             </td>
             <td>

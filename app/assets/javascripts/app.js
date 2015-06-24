@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'rails', 'ui.slider', 'djds4rce.angular-socialshare'])
+angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'rails', 'ui.slider', 'djds4rce.angular-socialshare', 'angular-loading-bar'])
     .config(['$httpProvider', 'localStorageServiceProvider', '$locationProvider', function($httpProvider, localStorageServiceProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
         localStorageServiceProvider.setPrefix('scorethings');
@@ -18,6 +18,8 @@ angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-
             currentUser.get(
                 function success(currentUser) {
                     identity.username = currentUser.username;
+                    identity.userId = currentUser.id;
+                    console.log(identity);
                 },
                 function error(response) {
                 });
