@@ -42,42 +42,13 @@
                        Update
                    </button>
                </div>
+               <a ui-sref="scores.new({wikidataItemId: score.thing.wikidataItemId})"
+                  class="btn btn-default btn-sm">New Score For {{score.thing.title}}</a>
            </td>
        </tr>
    </table>
 </div>
-<div class="col-xs-12 col-sm-6" ng-show="score">
-    <table class="table table-bordered">
-        <tr>
-            <th>Score Stats for {{score.thing.title}}</th>
-            <td><buttton class="btn btn-default btn-sm" ng-click="getThingStats()">Refresh</buttton></td>
-        </tr>
-        <tr>
-            <th>Total Scores</th>
-            <td>
-                {{thingStats.total | number}}
-            </td>
-        </tr>
-        <tr>
-            <th>Avg {{score.criterion && score.criterion.name}} Points</th>
-            <td>
-                <points-progressbar points="thingStats.avg">
-                </points-progressbar>
-            </td>
-        </tr>
-        <tr>
-            <th>Min {{score.criterion && score.criterion.name}} Points</th>
-            <td>
-                <points-progressbar points="thingStats.min">
-                </points-progressbar>
-            </td>
-        </tr>
-        <tr>
-            <th>Max {{score.criterion && score.criterion.name}} Points</th>
-            <td>
-                <points-progressbar points="thingStats.max">
-                </points-progressbar>
-            </td>
-        </tr>
-    </table>
+<div class="col-xs-12 col-sm-6" ng-show="userStats">
+    <stats-display stats="userStats" title="'How has ' + score.user.username + ' scored things?'">
+    </stats-display>
 </div>

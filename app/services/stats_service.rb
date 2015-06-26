@@ -1,21 +1,22 @@
 class StatsService
-  def thing_stats_by_criterion(thing_id, criterion_id)
-    thing = Thing.find(thing_id)
-    total = thing.scores.where(criterion_id: criterion_id).length
-    max = thing.scores.where(criterion_id: criterion_id).max(:points)
-    min = thing.scores.where(criterion_id: criterion_id).min(:points)
-    avg = thing.scores.where(criterion_id: criterion_id).avg(:points)
+  def get_score_stats(filters)
+    scores = Score.all
+    unless filters[:user].nil?
+      scores = scores.where(user: filters[:user])
+    end
 
-    return Stats.new(total: total, max: max, min: min, avg: avg)
-  end
+    unless filters[:criterion].nil?
+      scores = scores.where(criterion: filters[:criterion])
+    end
 
-  def thing_stats(thing_id)
-    thing = Thing.find(thing_id)
-    total = thing.scores.length
-    max = thing.scores.max(:points)
-    min = thing.scores.min(:points)
-    avg = thing.scores.avg(:points)
+    unless filters[:thing].nil?
+      scores = scores.where(thing: filters[:thing])
+    end
 
-    return Stats.new(total: total, max: max, min: min, avg: avg)
+    Stats.new(
+        total: scores.length,
+        max: scores.max(:points),
+        min: scores.min(:points),
+        avg: scores.avg(:points))
   end
 end

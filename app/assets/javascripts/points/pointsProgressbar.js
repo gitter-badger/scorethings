@@ -8,9 +8,9 @@ angular.module('app').directive('pointsProgressbar', ['pointsToLevel', function(
         },
         link: function($scope, $element) {
             var levelToProgressTypes = {
-                NO: 'danger',
-                MEH: 'info',
-                YES: 'success'
+                No: 'danger',
+                Meh: 'info',
+                Yes: 'success'
             };
             $scope.progressType = levelToProgressTypes['MEH'];
             $scope.$watch('points', function(newValue) {

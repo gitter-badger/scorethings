@@ -19,7 +19,7 @@ Rails.application.routes.draw do
       get '/scores/search' => 'scores#search'
       resources :scores, only: [:create, :show, :update, :destroy]
 
-      get '/thing_stats/:id' => 'thing_stats#show'
+      get '/stats' => 'stats#index'
 
       get '/users' => 'users#show'
       get '/users/search' => 'users#search'
