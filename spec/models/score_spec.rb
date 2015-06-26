@@ -24,20 +24,20 @@ RSpec.describe Score do
 
   describe "updating points" do
     it "should update the points and put into old points" do
-      score = create(:score, points: 75, user: @user)
+      score = create(:score, points: 7, user: @user)
 
-      expect(score.points).to eq(75)
+      expect(score.points).to eq(7)
       expect(score.old_points.length).to eq(0)
 
-      score.update_points(80)
-      score.update_points(60)
+      score.update_points(8)
+      score.update_points(6)
 
       # TODO write specs for old_points started_at/ended_at dates
 
-      expect(score.points).to eq(60)
+      expect(score.points).to eq(6)
       expect(score.old_points.length).to eq(2)
-      expect(score.old_points.first.points).to eq(75)
-      expect(score.old_points.second.points).to eq(80)
+      expect(score.old_points.first.points).to eq(7)
+      expect(score.old_points.second.points).to eq(8)
     end
   end
 end

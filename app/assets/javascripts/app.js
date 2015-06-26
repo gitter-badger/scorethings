@@ -19,7 +19,6 @@ angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-
                 function success(currentUser) {
                     identity.username = currentUser.username;
                     identity.userId = currentUser.id;
-                    console.log(identity);
                 },
                 function error(response) {
                 });

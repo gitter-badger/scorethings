@@ -27,9 +27,10 @@
     <thead>
         <tr>
             <td>Thing</td>
-            <td>Criterion</td>
+            <td class="hidden-xs">User</td>
+            <td class="hidden-xs">Criterion</td>
             <td>Points</td>
-            <td>User</td>
+            <td></td>
         </tr>
     </thead>
     <tbody>
@@ -39,19 +40,20 @@
                     {{score.thing.title}}
                 </a>
             </td>
-            <td>
-                {{score.criterion}}
-            </td>
-            <td>
-                <a ui-sref="scores.show({scoreId: score.token})">
-                    <points-progressbar points="score.points">
-                    </points-progressbar>
-                </a>
-            </td>
-            <td>
+            <td class="hidden-xs">
                 <a ui-sref="users.show({username: score.user.username})">
                     {{score.user.username}}
                 </a>
+            </td>
+            <td class="hidden-xs">
+                {{score.criterion && score.criterion.name}}
+            </td>
+            <td>
+                <points-progressbar points="score.points">
+                </points-progressbar>
+            </td>
+            <td>
+                <a ui-sref="scores.show({scoreId: score.token})" class="btn btn-default">View</a>
             </td>
         </tr>
     </tbody>

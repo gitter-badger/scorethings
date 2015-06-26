@@ -15,7 +15,7 @@ class Thing
 
   token :contains => :fixed_numeric, :length => 8
 
-  search_in :title, :description, :official_websites
+  search_in :title, :description, :official_websites, :instance_of_values
 
   validates_presence_of :title, :wikidata_item_id
 

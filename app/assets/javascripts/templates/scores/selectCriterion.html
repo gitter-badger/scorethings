@@ -1,15 +1,14 @@
 <div class="select-criterion">
     <div class="modal-header">
-        <h3 class="modal-title">Select a criterion</h3>
+        <h3 class="modal-title">Choose a criterion for the score</h3>
     </div>
     <div class="modal-body">
-        <div ng-repeat="criterion in validCriteria"
+        <div ng-repeat="criterion in criteria"
              class="panel panel-default criterion"
-             ng-class="{'selected': criterion.name == scoreCriterion}"
-             ng-click="selectCriterion(criterion.name)">
+             ng-class="{'selected': criterion.id == selectedCriterion.id}"
+             ng-click="selectCriterion(criterion)">
             <div class="panel-body">
                 <h5>{{criterion.name}}</h5>
-                {{criterion.definition}}
             </div>
         </div>
     </div>

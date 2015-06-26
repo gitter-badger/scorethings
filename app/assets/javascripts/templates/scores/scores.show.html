@@ -1,94 +1,83 @@
-<h3>Score by <a ui-sref="users.show({username: score.user.username})">{{score.user.username}}</a></h3>
 <div ng-show="notFound">
     <h2>Could not find score</h2>
 </div>
-<div ng-show="score">
-    <div class="row">
-        <div class="col-xs-12 col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Thing</h3>
-                </div>
-                <div class="panel-body">
-                    <div>
-                        <h5>Title</h5>
-                        <a ui-sref="things.show({thingId: score.thing.token})">
-                            {{score.thing.title}}
-                        </a>
-                    </div>
-                    <div ng-show="score.thing.description">
-                        <h5>Description</h5>
-                        {{score.thing.description}}
-                    </div>
-                    <div ng-show="score.thing.instanceOfValues">
-                        <ul style="list-style-type: none; padding:0; margin:0;">
-                            <li ng-repeat="instanceOf in score.thing.instanceOfValues">
-                                {{instanceOf}}
-                            </li>
-                        </ul>
-                    </div>
-                    <a ui-sref="scores.new({wikidataItemId: score.thing.wikidataItemId})"
-                            class="btn btn-default">New Score For {{score.thing.title}}</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Score</h3>
-                </div>
-                <div class="panel-body">
-                    <h3 style="text-align: center;">{{score.criterion}}</h3>
-                    <points-progressbar points="score.points">
-                    </points-progressbar>
-                    <br>
-                    <div ng-show="identity.userId == score.user.id" ng-form="updateScoreForm">
-                        <div ui-slider
-                             ng-model="score.points"
-                             min="0"
-                             step="1"
-                             max="100">
-                        </div>
-                        <br>
-                        <button ng-disabled="updateScoreForm.$pristine" class="btn btn-default" ng-click="updatePoints()">Update Points</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{score.user.username}}'s old points for "{{score.thing.title}}" being {{score.criterion}}</h3>
-                </div>
-                <div class="panel-body">
-                    <h3 ng-show="!score.oldPoints.length">No Old Points Yet</h3>
-                    <table ng-show="score.oldPoints.length" class="table table-striped">
-                        <thead>
-                        <tr>
-                            <td>Points</td>
-                            <td>Start</td>
-                            <td>End</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="oldPoints in score.oldPoints | orderBy:'-startedAt'">
-                            <td>
-                                <points-progressbar points="oldPoints.points">
-                                </points-progressbar>
-                            </td>
-                            <td>
-                                {{oldPoints.startedAt | date:'medium'}}
-                            </td>
-                            <td>
-                                {{oldPoints.endedAt | date:'medium'}}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+<div ng-show="score" class="col-xs-12 col-sm-6">
+   <table class="table table-bordered">
+       <tr>
+           <th colspan="2">Score Details</th>
+       </tr>
+       <tr>
+           <th>User</th>
+           <td>
+               <a ui-sref="users.show({username: score.user.username})">{{score.user.username}}</a>
+           </td>
+       </tr>
+       <tr>
+           <th>Thing</th>
+           <td>
+               <a ui-sref="things.show({thingId: score.thing.token})">{{score.thing.title}}</a>
+           </td>
+       </tr>
+       <tr>
+           <th>Criterion</th>
+           <td>{{score.criterion && score.criterion.name}}</td>
+       </tr>
+       <tr>
+           <th>Points</th>
+           <td>
+               <points-progressbar points="score.points">
+               </points-progressbar>
+               <div ng-form="updatePointsForm" ng-show="canEditScore">
+                   <div ui-slider
+                        ng-model="score.points"
+                        min="0"
+                        step="1"
+                        max="10">
+                   </div>
+                   <br>
+                   <button class="btn btn-default btn-sm"
+                           type="submit"
+                           ng-click="updatePoints()"
+                           ng-disabled="updatePointsForm.$pristine">
+                       Update
+                   </button>
+               </div>
+           </td>
+       </tr>
+   </table>
+</div>
+<div class="col-xs-12 col-sm-6" ng-show="score">
+    <table class="table table-bordered">
+        <tr>
+            <th>Score Stats for {{score.thing.title}}</th>
+            <td><buttton class="btn btn-default btn-sm" ng-click="getThingStats()">Refresh</buttton></td>
+        </tr>
+        <tr>
+            <th>Total Scores</th>
+            <td>
+                {{thingStats.total | number}}
+            </td>
+        </tr>
+        <tr>
+            <th>Avg {{score.criterion && score.criterion.name}} Points</th>
+            <td>
+                <points-progressbar points="thingStats.avg">
+                </points-progressbar>
+            </td>
+        </tr>
+        <tr>
+            <th>Min {{score.criterion && score.criterion.name}} Points</th>
+            <td>
+                <points-progressbar points="thingStats.min">
+                </points-progressbar>
+            </td>
+        </tr>
+        <tr>
+            <th>Max {{score.criterion && score.criterion.name}} Points</th>
+            <td>
+                <points-progressbar points="thingStats.max">
+                </points-progressbar>
+            </td>
+        </tr>
+    </table>
 </div>

@@ -2,8 +2,8 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
     var wikidataItemId = $location.search()['wikidataItemId'];
 
     $scope.score = {
-        points: 70,
-        criterion: 'General',
+        points: 7,
+        criterion: null,
         thing: {
             wikidataItemId: wikidataItemId
         }
@@ -21,13 +21,13 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
     );
 
     $scope.save = function() {
+        console.log($scope.score);
         new Score($scope.score).create().then(
             function successCreate(score) {
                 console.log(score);
                 $state.go('scores.show', {scoreId: score.token});
             },
             function errorCreate(response) {
-                console.log(response);
                 if(response.status == 409) {
                     // conflict with existing score with same
                     // user, thing, and criterion
@@ -51,9 +51,9 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
     $scope.showCriterionSelectionModal = function() {
         var modalInstance = $modal.open({
             templateUrl: 'scores/selectCriterion.html',
-            controller: ['$scope', '$modalInstance', 'scoreCriterion', 'validCriteria', function($scope, $modalInstance, scoreCriterion, validCriteria) {
-                $scope.scoreCriterion = scoreCriterion;
-                $scope.validCriteria = validCriteria;
+            controller: ['$scope', '$modalInstance', 'criteria', 'criteria', function($scope, $modalInstance, criteria, criteria) {
+                $scope.criteria = criteria;
+                $scope.criteria_id = criteria.id;
 
                 $scope.cancel = function() {
                     $modalInstance.dismiss('cancel');
@@ -63,18 +63,20 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
                     $modalInstance.close(criterion);
                 };
             }],
-            size: 'lg',
+            size: 'sm',
             resolve: {
-                scoreCriterion: function() {
+                selectedCriterion: function() {
                     return $scope.score.criterion;
                 },
-                validCriteria: function() {
-                    return $scope.validCriteria;
+                criteria: function() {
+                    return $scope.criteria;
                 }
             }
         });
 
         modalInstance.result.then(function (criterion) {
+            console.log(criterion)
+            $scope.score.criterion_id = criterion.id;
             $scope.score.criterion = criterion;
         }, function () {
 

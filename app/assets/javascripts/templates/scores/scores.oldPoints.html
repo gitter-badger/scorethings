@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{score.user.username}}'s old points for "{{score.thing.title}}" being {{score.criterion}}</h3>
+            </div>
+            <div class="panel-body">
+                <h3 ng-show="!score.oldPoints.length">No Old Points Yet</h3>
+                <table ng-show="score.oldPoints.length" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td>Points</td>
+                        <td>Start</td>
+                        <td>End</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="oldPoints in score.oldPoints | orderBy:'-startedAt'">
+                        <td>
+                            <points-progressbar points="oldPoints.points">
+                            </points-progressbar>
+                        </td>
+                        <td>
+                            {{oldPoints.startedAt | date:'medium'}}
+                        </td>
+                        <td>
+                            {{oldPoints.endedAt | date:'medium'}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

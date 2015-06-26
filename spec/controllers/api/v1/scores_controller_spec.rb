@@ -7,13 +7,15 @@ RSpec.describe Api::V1::ScoresController do
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
     @thing = create(:thing)
+    @criterion = create(:criterion)
+
     @params = {
         score: {
             thing: {
                 wikidata_item_id: @thing.wikidata_item_id
             },
-            criterion: 'Funny',
-            points: 21
+            criterion_id: @criterion._id,
+            points: 2
         }
     }
   end
@@ -67,7 +69,8 @@ RSpec.describe Api::V1::ScoresController do
       expect(response).to have_http_status(:created)
       expect(Score.all.length).to eq(1)
       expect(Score.all.first.thing).to eq(@thing)
-      expect(Score.all.first.points).to eq(21)
+      expect(Score.all.first.points).to eq(2)
+      expect(Score.all.first.criterion).to eq(@criterion)
     end
 
     it "should not create a score if not authenticated" do
@@ -84,8 +87,8 @@ RSpec.describe Api::V1::ScoresController do
               thing: {
                   wikidata_item_id: existing_score.thing.wikidata_item_id
               },
-              criterion: existing_score.criterion,
-              points: 21
+              criterion_id: existing_score.criterion._id,
+              points: 2
           }
       }
 
@@ -110,7 +113,7 @@ RSpec.describe Api::V1::ScoresController do
     it "should not create a score with invalid points" do
       expect(Score.all.length).to eq(0)
 
-      @params[:score][:points] = 1000
+      @params[:score][:points] = 2000
 
       post :create, @params
       expect(response).to have_http_status(:bad_request)
@@ -136,10 +139,10 @@ RSpec.describe Api::V1::ScoresController do
     end
 
     it "should update a score" do
-      @params[:score][:points] = 55
+      @params[:score][:points] = 5
       put :update, @params
       expect(assigns(:score)).to_not be_nil
-      expect(assigns(:score).points).to eq(55)
+      expect(assigns(:score).points).to eq(5)
     end
 
     it "should not update a score points if invalid" do
@@ -154,10 +157,10 @@ RSpec.describe Api::V1::ScoresController do
       other_user_score = build(:score)
       other_user.create_score(other_user_score)
 
-      @params[:score][:points] = 55
+      @params[:score][:points] = 5
       @params[:id] = other_user_score._id
       put :update, @params
-      expect(@score.points).to_not eq(55)
+      expect(@score.points).to_not eq(5)
       expect(response).to have_http_status(:forbidden)
     end
 

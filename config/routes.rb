@@ -11,19 +11,23 @@ Rails.application.routes.draw do
       get '/auth/failure' => 'auth_token#failure'
 
       get '/things/:id' => 'things#show'
+      get '/things/:id/stats' => 'things#stats'
 
       get '/wikidata_items/search' => 'wikidata_items#search'
       get '/wikidata_items/:wikidata_item_id' => 'wikidata_items#find'
 
-      get '/scores/valid_criteria' => 'scores#valid_criteria'
       get '/scores/search' => 'scores#search'
       resources :scores, only: [:create, :show, :update, :destroy]
+
+      get '/thing_stats/:id' => 'thing_stats#show'
 
       get '/users' => 'users#show'
       get '/users/search' => 'users#search'
       get '/users/current' => 'users#current'
       put '/users' => 'users#update'
       delete '/users' => 'users#destroy'
+
+      get '/criteria' => 'criteria#index'
     end
   end
 

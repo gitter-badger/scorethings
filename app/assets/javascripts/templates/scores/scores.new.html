@@ -1,18 +1,19 @@
 <div style="text-align: center">
     <h2>Score For {{wikidataItem.title}}</h2>
     <h2>
-        <a class="criterion" ng-click="showCriterionSelectionModal()">Criteiron: {{score.criterion}}</a>
+        <a class="criterion" ng-click="showCriterionSelectionModal()">
+            {{score.criterion && score.criterion.name || 'Select A Criterion'}}
+        </a>
     </h2>
-    <br>
-    <h2>No, Yes, or Meh?</h2>
+    <h2><a ng-click="score.points=5">No</a>, <a ng-click="score.points=7">Meh</a>, or <a ng-click="score.points=8">Yes</a>?</h2>
 
-    <points-progressbar points="score.points">
+    <points-progressbar class="lg" points="score.points">
     </points-progressbar>
     <div ui-slider ng-model="score.points"
          id="points"
          min="0"
          step="1"
-         max="100">
+         max="10">
     </div>
     <br>
     <button ng-click="save()" class="btn btn-primary btn-lg">Save</button>

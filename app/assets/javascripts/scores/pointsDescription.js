@@ -1,11 +1,5 @@
-angular.module('app').filter('pointsDescription', function() {
+angular.module('app').filter('pointsDescription', ['pointsToLevel', function(pointsToLevel) {
     return function(points) {
-        if(points < 60) {
-            return 'NO';
-        } else if(points < 80) {
-            return 'MEH';
-        } else {
-            return 'YES';
-        }
+        return pointsToLevel.translate(points);
     };
-});
+}]);

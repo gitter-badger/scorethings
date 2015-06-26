@@ -73,7 +73,7 @@ RSpec.describe User do
   describe "scoring things" do
     before do
       @user = create(:user)
-      @score = build(:score, criterion: 'General')
+      @score = build(:score)
     end
 
     it "should allow the user to score a things" do
@@ -86,23 +86,23 @@ RSpec.describe User do
     describe "updating a score" do
       it "should update a score" do
         @user.create_score(@score)
-        @user.update_points(@score, 33)
+        @user.update_points(@score, 3)
         @score.reload
-        expect(@score.points).to eq(33)
+        expect(@score.points).to eq(3)
       end
 
       it "should not allow updating a score if the user doesn't own it" do
         other_user = create(:user)
         @user.create_score(@score)
         expect {
-          other_user.update_points(@score, 75)
+          other_user.update_points(@score, 7)
         }.to raise_error(Exceptions::UnauthorizedModificationError)
       end
     end
 
     it "should have more than one score with the same user and thing but different criterion" do
       @user.create_score(@score)
-      other_score = build(:score, thing: @score.thing, criterion: 'Funny')
+      other_score = build(:score, thing: @score.thing, criterion: create(:criterion))
 
       expect(Score.all.length).to eq(1)
       @user.create_score(other_score)
@@ -111,7 +111,7 @@ RSpec.describe User do
 
     it "should not have more than one score with the same user and thing and criterion" do
       @user.create_score(@score)
-      other_score = build(:score, thing: @score.thing, criterion: 'General')
+      other_score = build(:score, thing: @score.thing, criterion: @score.criterion)
 
       expect(Score.all.length).to eq(1)
       expect {
@@ -119,7 +119,7 @@ RSpec.describe User do
       }.to raise_error(Exceptions::ScoreNotUniqueError)
       expect(Score.all.length).to eq(1)
 
-      other_score.criterion = 'Funny'
+      other_score.criterion = create(:criterion)
       @user.create_score(other_score)
       expect(Score.all.length).to eq(2)
     end

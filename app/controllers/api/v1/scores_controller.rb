@@ -36,11 +36,16 @@ module Api
       end
 
       def create
-        score_params = params.require(:score).permit(:points, :criterion, thing: [:wikidata_item_id])
+        score_params = params.require(:score).permit(:points, :criterion_id, thing: [:wikidata_item_id])
 
         begin
           thing = $thing_service.find_thing_or_create_from_wikidata(score_params[:thing][:wikidata_item_id])
           score_params[:thing] = thing
+
+          unless score_params[:criterion_id].nil?
+            criterion = Criterion.find(score_params[:criterion_id])
+            score_params[:criterion] = criterion
+          end
 
           @score = Score.new(score_params)
           @current_user.create_score(@score)

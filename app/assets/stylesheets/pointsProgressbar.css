@@ -1,0 +1,17 @@
+.lg .progress-bar {
+    font-size: 2em;
+    padding-top: .3em;
+}
+
+.lg .progress {
+    height: 2.5em;
+}
+
+.md .progress-bar {
+    font-size: 1.5em;
+    padding-top: .2em;
+}
+
+.md .progress {
+    height: 2.0em;
+}

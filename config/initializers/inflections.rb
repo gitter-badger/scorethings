@@ -8,6 +8,7 @@
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'
 #   inflect.uncountable %w( fish sheep )
+   inflect.irregular 'criterion', 'criteria'
    inflect.uncountable %w( points old_points )
  end
 
