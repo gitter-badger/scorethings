@@ -1,36 +1,29 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Stats: {{title}}</h3>
-    </div>
-    <div class="panel-body">
-        <table class="table table-bordered">
-            <tr>
-                <th>Total</th>
-                <td>
-                    {{stats.total | number}}
-                </td>
-            </tr>
-            <tr>
-                <th>Average</th>
-                <td>
-                    <points-progressbar points="stats.avg">
-                    </points-progressbar>
-                </td>
-            </tr>
-            <tr>
-                <th>Minimum</th>
-                <td>
-                    <points-progressbar points="stats.min">
-                    </points-progressbar>
-                </td>
-            </tr>
-            <tr>
-                <th>Maximum</th>
-                <td>
-                    <points-progressbar points="stats.max">
-                    </points-progressbar>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
+<table class="table table-bordered">
+    <tr>
+        <th>Total</th>
+        <td>
+            {{stats.total | number}}
+        </td>
+    </tr>
+    <tr>
+        <th>Average</th>
+        <td>
+            <points-progressbar points="stats.avg">
+            </points-progressbar>
+        </td>
+    </tr>
+    <tr>
+        <th>Minimum</th>
+        <td>
+            <points-progressbar points="stats.min">
+            </points-progressbar>
+        </td>
+    </tr>
+    <tr>
+        <th>Maximum</th>
+        <td>
+            <points-progressbar points="stats.max">
+            </points-progressbar>
+        </td>
+    </tr>
+</table>

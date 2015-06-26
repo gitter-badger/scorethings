@@ -71,4 +71,6 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
             }
         )
     };
+
+    $scope.getStats = getStats;
 }]);
