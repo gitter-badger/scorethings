@@ -1,52 +1,52 @@
-<form ng-submit="search()">
-    <div class="col-xs-12">
-        <h3>Search For A Thing To Score</h3>
-        <div class="form-group">
-            <div class="input-group">
-                <input type="text"
-                       id="query"
-                       class="form-control"
-                       placeholder="A thing, like Batman or Patton Oswalt"
-                       ng-change="notFound = false"
-                       ng-model="query">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" ng-disabled="!query" type="submit">
-                        Search
-                    </button>
-                </span>
-            </div>
+<div class="col-xs-12">
+    <form ng-submit="search()">
+    <h3>Search For A Thing To Score</h3>
+    <div class="form-group">
+        <div class="input-group">
+            <input type="text"
+                   id="query"
+                   class="form-control"
+                   placeholder="A thing, like Batman or Patton Oswalt"
+                   ng-change="notFound = false"
+                   ng-model="query">
+            <span class="input-group-btn">
+                <button class="btn btn-default" ng-disabled="!query" type="submit">
+                    Search
+                </button>
+            </span>
         </div>
     </div>
-</form>
-
-<div class="col-xs-12" ng-show="notFound">
-    <h5>Sorry, no results found for "{{query}}".</h5>
+    </form>
 </div>
-<table class="table table-hover" ng-show="searchResults.length">
-    <thead>
-        <tr>
-            <td>Title</td>
-            <td>Instance Of</td>
-            <td>Description</td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="searchResult in searchResults">
-            <td>
-                <a ui-sref="scores.new({wikidataItemId: searchResult.id})">
-                    {{searchResult.title}}
-                </a>
-            </td>
-            <td>
-                <ul style="list-style-type: none; padding:0; margin:0;">
-                    <li ng-repeat="instanceOf in searchResult.instanceOfValues">
-                        {{instanceOf}}
-                    </li>
-                </ul>
-            </td>
-            <td>
-                {{searchResult.description}}
-            </td>
-        </tr>
-    </tbody>
-</table>
+
+<div class="col-xs-12">
+    <h5 ng-show="notFound">Sorry, no results found for "{{query}}".</h5>
+    <table ng-show="searchResults.length" class="table table-hover">
+        <thead>
+            <tr>
+                <td>Title</td>
+                <td>Instance Of</td>
+                <td>Description</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="searchResult in searchResults">
+                <td>
+                    <a ui-sref="scores.new({wikidataItemId: searchResult.id})">
+                        {{searchResult.title}}
+                    </a>
+                </td>
+                <td>
+                    <ul style="list-style-type: none; padding:0; margin:0;">
+                        <li ng-repeat="instanceOf in searchResult.instanceOfValues">
+                            {{instanceOf}}
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    {{searchResult.description}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,7 +1,7 @@
 <div ng-show="notFound">
     <h2>Could not find score</h2>
 </div>
-<div ng-show="score" class="col-xs-12 col-sm-6">
+<div ng-show="score" class="col-xs-12">
    <table class="table table-bordered">
        <tr>
            <th colspan="2">Score Details</th>
@@ -48,7 +48,23 @@
        </tr>
    </table>
 </div>
+
 <div class="col-xs-12 col-sm-6" ng-show="userStats">
-    <stats-display stats="userStats" title="'How has ' + score.user.username + ' scored things?'">
+    <stats-display stats="userStats" title="'How has this user scored things?'">
+    </stats-display>
+</div>
+
+<div class="col-xs-12 col-sm-6" ng-show="userCriterionStats">
+    <stats-display stats="userCriterionStats" title="'How has this user scored things using ' + score.criterion.name + '?'">
+    </stats-display>
+</div>
+
+<div class="col-xs-12 col-sm-6" ng-show="thingStats">
+    <stats-display stats="thingStats" title="'How has everyone scored ' + score.thing.title + '?'">
+    </stats-display>
+</div>
+
+<div class="col-xs-12 col-sm-6" ng-show="thingCriterionStats">
+    <stats-display stats="thingCriterionStats" title="'How has everyone scored ' + score.thing.title + ' using ' + score.criterion.name + '?'">
     </stats-display>
 </div>

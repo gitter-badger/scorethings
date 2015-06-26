@@ -7,6 +7,7 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
         function successGet(score) {
             $scope.score = score;
             getStats();
+            updateCanEditScore();
         },
         function errorGet() {
             $scope.notFound = true;
@@ -32,22 +33,25 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
 
         var criterionId = $scope.score.criterion && $scope.score.criterion.id;
 
-        Stats.get({userId: $scope.score.user.id}).then(function(stats) {
+        if(!!criterionId) {
+            // these stats have the criterionId filter
+            // without the criterionId, they are redundant
+            Stats.query({userId: $scope.score.user.id, criterionId: criterionId}).then(function(stats) {
+                console.log(stats);
+                $scope.userCriterionStats = stats;
+            });
+            Stats.query({thingId: $scope.score.thing.id, criterionId: criterionId}).then(function(stats) {
+                console.log(stats);
+                $scope.thingCriterionStats = stats;
+            });
+        }
+
+        Stats.query({userId: $scope.score.user.id}).then(function(stats) {
             console.log(stats);
             $scope.userStats = stats;
         });
 
-        Stats.get({userId: $scope.score.user.id, criterionId: criterionId}).then(function(stats) {
-            console.log(stats);
-            $scope.userCriterionStats = stats;
-        });
-
-        Stats.get({thingId: $scope.score.user.id, criterionId: criterionId}).then(function(stats) {
-            console.log(stats);
-            $scope.thingCriterionStats = stats;
-        });
-
-        Stats.get({thingId: $scope.score.thing.id}).then(function(stats) {
+        Stats.query({thingId: $scope.score.thing.id}).then(function(stats) {
             console.log(stats);
             $scope.thingStats = stats;
         });
