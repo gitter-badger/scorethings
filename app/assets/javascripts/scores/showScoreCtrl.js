@@ -7,21 +7,21 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
         function successGet(score) {
             $scope.score = score;
             getStats();
-            updateCanEditScore();
+            updateIsEditable();
         },
         function errorGet() {
             $scope.notFound = true;
         });
 
     $scope.$watch('identity.userId', function(val) {
-        updateCanEditScore();
+        updateIsEditable();
     });
 
-    function updateCanEditScore() {
+    function updateIsEditable() {
         if($scope.score) {
-            $scope.canEditScore = (identity.userId == $scope.score.user.id);
+            $scope.isEditable = (identity.userId == $scope.score.user.id);
         } else {
-            $scope.canEditScore = false;
+            $scope.isEditable = false;
         }
     }
 
@@ -36,7 +36,6 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
 
 
         Stats.query({thingId: $scope.score.thing.id, criterionId: criterionId}).then(function(stats) {
-            console.log(stats);
             $scope.thingCriterionStats = stats;
         });
     }

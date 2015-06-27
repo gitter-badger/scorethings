@@ -2,10 +2,10 @@
     <h2>Score For {{wikidataItem.title}}</h2>
     <h2>
         <a class="criterion" ng-click="showCriterionSelectionModal()">
-            {{score.criterion && score.criterion.name || 'Select A Criterion'}}
+            {{score.criterion && score.criterion.name || 'No Criterion'}}
         </a>
     </h2>
-    <h2><a ng-click="score.points=5">No</a>, <a ng-click="score.points=7">Meh</a>, or <a ng-click="score.points=8">Yes</a>?</h2>
+    <h2><a ng-click="score.points=5">No</a>, <a ng-click="score.points=7">Meh</a>, or <a ng-click="score.points=8">Yes</a></h2>
 
     <points-progressbar class="lg" points="score.points">
     </points-progressbar>
@@ -16,5 +16,11 @@
          max="10">
     </div>
     <br>
-    <button ng-click="save()" class="btn btn-primary btn-lg">Save</button>
+    <div ng-show="!isLoggedIn()" class="alert alert-warning" role="alert">Before scoring a thing, please <a ng-click="login()">log in</a>.</div>
+    <button ng-click="save()" ng-disabled="!isLoggedIn()" class="btn btn-primary btn-lg">Save</button>
+    <br>
+    <twitter-share-new-score-button wikidata-item="wikidataItem" criterion="score.criterion">
+    </twitter-share-new-score-button>
+    <tumblr-share-new-score-button wikidata-item="wikidataItem" criterion="score.criterion">
+    </tumblr-share-new-score-button>
 </div>

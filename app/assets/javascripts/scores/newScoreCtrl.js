@@ -1,9 +1,25 @@
-angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'WikidataItem', 'Score', '$modal', '$state', function($scope, $location, WikidataItem, Score, $modal, $state) {
-    var wikidataItemId = $location.search()['wikidataItemId'];
+angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'WikidataItem', 'Score', '$modal', '$state', '$rootScope', function($scope, $location, WikidataItem, Score, $modal, $state, $rootScope) {
+    var wikidataItemId = $state.params.wikidataItemId;
+    var criterionNameParam = $state.params.criterion;
+    var criterionFromParam = null;
+
+
+    if(criterionNameParam) {
+        // FIXME is there a way to avoid this waiting for criteria data to come from server?
+        $scope.$watch('criteria', function(criteria) {
+            angular.forEach(criteria, function(criterion) {
+                if(criterion.name == criterionNameParam) {
+                    selectCriterion(criterion);
+                    return;
+                }
+            });
+
+        });
+    }
 
     $scope.score = {
         points: 7,
-        criterion: null,
+        criterion: criterionFromParam,
         thing: {
             wikidataItemId: wikidataItemId
         }
@@ -37,7 +53,6 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
                     existingScore.points = $scope.score.points;
                     new Score(existingScore).update().then(
                         function successUpdate(score) {
-                            console.log(score);
                             $state.go('scores.show', {scoreId: score.token});
                         },
                         function errorUpdate(response) {
@@ -51,9 +66,9 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
     $scope.showCriterionSelectionModal = function() {
         var modalInstance = $modal.open({
             templateUrl: 'scores/selectCriterion.html',
-            controller: ['$scope', '$modalInstance', 'criteria', function($scope, $modalInstance, criteria) {
+            controller: ['$scope', '$modalInstance', 'criteria', 'selectedCriterion', function($scope, $modalInstance, criteria, selectedCriterion) {
                 $scope.criteria = criteria;
-                $scope.criteria_id = criteria.id;
+                $scope.selectedCriterionId = selectedCriterion && selectedCriterion.id;
 
                 $scope.cancel = function() {
                     $modalInstance.dismiss('cancel');
@@ -74,12 +89,18 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
             }
         });
 
-        modalInstance.result.then(function (criterion) {
-            console.log(criterion)
-            $scope.score.criterion_id = criterion.id;
-            $scope.score.criterion = criterion;
-        }, function () {
-
-        });
+        modalInstance.result.then(
+            function dismiss(criterion) {
+                selectCriterion(criterion);
+            },
+            function close() {
+            });
     };
+
+    function selectCriterion(criterion) {
+        $scope.score.criterion_id = criterion && criterion.id;
+        $scope.score.criterion = criterion;
+        $state.params.criterion = criterion && criterion.name;
+        $location.search($state.params);
+    }
 }]);

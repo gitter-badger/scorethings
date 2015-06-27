@@ -7,62 +7,78 @@
             <h2 class="panel-title">Score Info</h2>
         </div>
         <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <tr>
-                        <th>User</th>
-                        <td>
+            <form name="updatePointsForm" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">User</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
                             <a ui-sref="users.show({username: score.user.username})">{{score.user.username}}</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Thing</th>
-                        <td>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Thing</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
                             <a ui-sref="things.show({thingId: score.thing.token})">{{score.thing.title}}</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Criterion</th>
-                        <td>{{score.criterion && score.criterion.name}}</td>
-                    </tr>
-                    <tr>
-                        <th>Points</th>
-                        <td>
-                            <points-progressbar points="score.points">
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="score.criterion">
+                    <label class="col-sm-3 control-label">Criterion</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            {{score.criterion && score.criterion.name}}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Points</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            <points-progressbar class="md" points="score.points">
                             </points-progressbar>
-                            <div ng-form="updatePointsForm" ng-show="canEditScore">
+                            <div ng-form="updatePointsForm" ng-show="isEditable">
                                 <div ui-slider
                                      ng-model="score.points"
                                      min="0"
                                      step="1"
                                      max="10">
                                 </div>
-                                <br>
-                                <button class="btn btn-default btn-sm"
-                                        type="submit"
-                                        ng-click="updatePoints()"
-                                        ng-disabled="updatePointsForm.$pristine">
-                                    Update
-                                </button>
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="isEditable">
+                    <div class="col-sm-12">
+                        <p class="form-control-static">
+                            <button class="btn btn-default btn-sm"
+                                    type="submit"
+                                    style="width: 100%;"
+                                    ng-click="updatePoints()"
+                                    ng-disabled="updatePointsForm.$pristine">
+                                Update
+                            </button>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <p class="form-control-static">
                             <a ui-sref="scores.new({wikidataItemId: score.thing.wikidataItemId})"
                                class="btn btn-default btn-sm">New Score For {{score.thing.title}}</a>
                             <button class="btn btn-default btn-sm" ng-click="showScoreHistoryModal()">History</button>
+                            <button class="btn btn-danger btn-sm" ng-show="isEditable">Delete</button>
+                            <br>
+                            <br>
                             <twitter-share-score-button score="score">
                             </twitter-share-score-button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button class="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                            <tumblr-share-score-button score="score">
+                            </tumblr-share-score-button>
+                        </p>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

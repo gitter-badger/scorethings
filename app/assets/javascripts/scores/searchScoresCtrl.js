@@ -19,7 +19,7 @@ angular.module('app').controller('ScoresSearchCtrl', ['$scope', 'Score', '$locat
             },
             function unsuccessfulSearchScore(response) {
                 $scope.notFound = true;
-                console.log(response);
+                console.error(response);
                 if(response.status == 404) {
                     // this could be because the username filter in response
                     // had no user

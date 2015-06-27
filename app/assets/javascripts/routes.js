@@ -17,7 +17,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'ScoresSearchCtrl'
                 }).
                 state('scores.new', {
-                    url: '/new?wikidataItemId',
+                    url: '/new?wikidataItemId&criterion',
                     templateUrl: 'scores/scores.new.html',
                     controller: 'NewScoreCtrl'
                 }).

@@ -15,6 +15,7 @@ angular.module('app').factory('AuthInterceptor', ['$q', '$injector', 'notifier',
                 notifier.error(response.statusText)
                 if(!authService.isLoggedIn()) {
                     notifier.error('You need to login to do that.');
+                    return $q.reject(response);
                 } else {
                     notifier.error(response.statusText)
                 }

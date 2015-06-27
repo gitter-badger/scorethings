@@ -16,6 +16,7 @@
  *= require bootstrap-social/bootstrap-social.css
  *= require angular-loading-bar/build/loading-bar.min.css
  *= require jquery-ui/themes/overcast/jquery-ui.min
+ *= require angular-socialshare/angular-socialshare.min.css
  *= require_self
  */
 
