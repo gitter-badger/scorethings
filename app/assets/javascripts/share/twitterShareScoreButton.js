@@ -1,16 +1,25 @@
-angular.module('app').directive('twitterShareScoreButton', ['$location', function($location) {
+angular.module('app').directive('twitterShareScoreButton', ['$location', 'pointsToLevel', function($location, pointsToLevel) {
     return {
         restrict: 'E',
         replace: 'false',
         templateUrl: "share/twitterShareScoreButton.html",
         scope: {
-            thingTitle: '=thingTitle',
-            thingType: '=thingType',
-            points: '=points',
-            good: '=good'
+            score: '='
         },
         controller: ['$scope', function($scope) {
-            $scope.url = $location.absUrl();
+            $scope.$watch('score', function(score) {
+                if(!score) return;
+
+                console.log(score);
+                var pointsLevel = pointsToLevel.translate(score.points);
+
+                $scope.url = $location.absUrl();
+                $scope.text = "Score for " + score.thing.title + ".  ";
+                if($scope.score.criterion) {
+                    $scope.text += score.criterion.name + "?  ";
+                }
+                $scope.text += pointsLevel + " (" + score.points + "/10)";
+            });
         }]
     };
 }]);

@@ -1,4 +1,4 @@
-angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '$stateParams', 'identity', 'notifier', function($scope, Score, Stats, $stateParams, identity, notifier) {
+angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '$stateParams', 'identity', 'notifier', '$modal', function($scope, Score, Stats, $stateParams, identity, notifier, $modal) {
     $scope.identity = identity;
     var scoreId = $stateParams.scoreId;
     $scope.notFound = false;
@@ -26,34 +26,18 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
     }
 
     function getStats() {
-        $scope.userStats = {};
-        $scope.userCriterionStats = {};
-        $scope.thingStats = {};
         $scope.thingCriterionStats = {};
-
         var criterionId = $scope.score.criterion && $scope.score.criterion.id;
 
-        if(!!criterionId) {
-            // these stats have the criterionId filter
-            // without the criterionId, they are redundant
-            Stats.query({userId: $scope.score.user.id, criterionId: criterionId}).then(function(stats) {
-                console.log(stats);
-                $scope.userCriterionStats = stats;
-            });
-            Stats.query({thingId: $scope.score.thing.id, criterionId: criterionId}).then(function(stats) {
-                console.log(stats);
-                $scope.thingCriterionStats = stats;
-            });
+        $scope.statsTitle = "All Scores For " + $scope.score.thing.title;
+        if(criterionId) {
+            $scope.statsTitle += " Using " + $scope.score.criterion.name;
         }
 
-        Stats.query({userId: $scope.score.user.id}).then(function(stats) {
-            console.log(stats);
-            $scope.userStats = stats;
-        });
 
-        Stats.query({thingId: $scope.score.thing.id}).then(function(stats) {
+        Stats.query({thingId: $scope.score.thing.id, criterionId: criterionId}).then(function(stats) {
             console.log(stats);
-            $scope.thingStats = stats;
+            $scope.thingCriterionStats = stats;
         });
     }
 
@@ -71,6 +55,32 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
             }
         )
     };
+
+    $scope.showScoreHistoryModal = function() {
+        $modal.open({
+            templateUrl: 'scores/scoreHistory.html',
+            controller: ['$scope', '$modalInstance', 'score', function($scope, $modalInstance, score) {
+                $scope.score = score;
+
+                $scope.cancel = function() {
+                    $modalInstance.dismiss('cancel');
+                };
+            }],
+            size: 'md',
+            resolve: {
+                score: function() {
+                    return $scope.score;
+                }
+            }
+        });
+    };
+
+    $scope.getDeleteConfirmation = function() {
+    };
+
+    function deleteScore() {
+
+    }
 
     $scope.getStats = getStats;
 }]);

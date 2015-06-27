@@ -1,107 +1,80 @@
 <div ng-show="notFound">
     <h2>Could not find score</h2>
 </div>
-<div class="col-xs-12">
+<div class="col-xs-12 col-sm-6">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="panel-title">Score Info</h2>
         </div>
         <div class="panel-body">
-            <tabset>
-                <tab heading="Current">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th>User</th>
-                            <td>
-                                <a ui-sref="users.show({username: score.user.username})">{{score.user.username}}</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Thing</th>
-                            <td>
-                                <a ui-sref="things.show({thingId: score.thing.token})">{{score.thing.title}}</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Criterion</th>
-                            <td>{{score.criterion && score.criterion.name}}</td>
-                        </tr>
-                        <tr>
-                            <th>Points</th>
-                            <td>
-                                <points-progressbar points="score.points">
-                                </points-progressbar>
-                                <div ng-form="updatePointsForm" ng-show="canEditScore">
-                                    <div ui-slider
-                                         ng-model="score.points"
-                                         min="0"
-                                         step="1"
-                                         max="10">
-                                    </div>
-                                    <br>
-                                    <button class="btn btn-default btn-sm"
-                                            type="submit"
-                                            ng-click="updatePoints()"
-                                            ng-disabled="updatePointsForm.$pristine">
-                                        Update
-                                    </button>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>User</th>
+                        <td>
+                            <a ui-sref="users.show({username: score.user.username})">{{score.user.username}}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Thing</th>
+                        <td>
+                            <a ui-sref="things.show({thingId: score.thing.token})">{{score.thing.title}}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Criterion</th>
+                        <td>{{score.criterion && score.criterion.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Points</th>
+                        <td>
+                            <points-progressbar points="score.points">
+                            </points-progressbar>
+                            <div ng-form="updatePointsForm" ng-show="canEditScore">
+                                <div ui-slider
+                                     ng-model="score.points"
+                                     min="0"
+                                     step="1"
+                                     max="10">
                                 </div>
-                                <a ui-sref="scores.new({wikidataItemId: score.thing.wikidataItemId})"
-                                   class="btn btn-default btn-sm">New Score For {{score.thing.title}}</a>
-                            </td>
-                        </tr>
-                    </table>
-                </tab>
-                <tab heading="History">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Points</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="oldPoints in score.oldPoints | orderBy:'-endedAt'">
-                                <td>{{oldPoints.startedAt  | date:"MM/dd/yyyy 'at' h:mma"}}</td>
-                                <td>{{oldPoints.endedAt | date:"MM/dd/yyyy 'at' h:mma"}}</td>
-                                <td>{{oldPoints.points}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </tab>
-            </tabset>
+                                <br>
+                                <button class="btn btn-default btn-sm"
+                                        type="submit"
+                                        ng-click="updatePoints()"
+                                        ng-disabled="updatePointsForm.$pristine">
+                                    Update
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a ui-sref="scores.new({wikidataItemId: score.thing.wikidataItemId})"
+                               class="btn btn-default btn-sm">New Score For {{score.thing.title}}</a>
+                            <button class="btn btn-default btn-sm" ng-click="showScoreHistoryModal()">History</button>
+                            <twitter-share-score-button score="score">
+                            </twitter-share-score-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="col-xs-12">
+<div class="col-xs-12 col-sm-6">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h2 class="panel-title">Stats
-                <button class="btn btn-default btn-sm" ng-click="getStats()">Refresh</button>
-            </h2>
-
+            <h2 class="panel-title">{{statsTitle}}</h2>
         </div>
         <div class="panel-body">
-            <tabset>
-                <tab heading="User + Everything">
-                    <stats-display stats="userStats">
-                    </stats-display>
-                </tab>
-                <tab heading="User + Everything + {{score.criterion.name}}">
-                    <stats-display stats="userCriterionStats">
-                    </stats-display>
-                </tab>
-                <tab heading="Everyone + {{score.thing.title}}">
-                    <stats-display stats="thingStats">
-                    </stats-display>
-                </tab>
-                <tab heading="Everyone + {{score.thing.title}} + {{score.criterion.name}}">
-                    <stats-display stats="thingCriterionStats">
-                    </stats-display>
-                </tab>
-            </tabset>
+            <stats-display stats="thingCriterionStats">
+            </stats-display>
         </div>
     </div>
 </div>
