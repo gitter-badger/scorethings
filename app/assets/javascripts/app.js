@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'rails', 'ui.slider', 'djds4rce.angular-socialshare', 'angular-loading-bar'])
+angular.module('app', ['ui.router', 'templates', 'LocalStorageModule', 'angular-jwt', 'ui.bootstrap', 'rails', 'ui.slider', 'djds4rce.angular-socialshare', 'angular-loading-bar', 'ngSanitize', 'dbaq.emoji'])
     .config(['$httpProvider', 'localStorageServiceProvider', '$locationProvider', function($httpProvider, localStorageServiceProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
         localStorageServiceProvider.setPrefix('scorethings');

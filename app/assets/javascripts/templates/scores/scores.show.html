@@ -28,7 +28,7 @@
                     <label class="col-sm-3 control-label">Criterion</label>
                     <div class="col-sm-9">
                         <p class="form-control-static">
-                            {{score.criterion && score.criterion.name}}
+                            <criterion-emoji-display criterion="score.criterion"></criterion-emoji-display>{{score.criterion && score.criterion.name}}
                         </p>
                     </div>
                 </div>
@@ -65,16 +65,16 @@
                 <div class="form-group">
                     <div class="col-sm-12">
                         <p class="form-control-static">
-                            <a ui-sref="scores.new({thingId: score.scoredThing.thingId})"
-                               class="btn btn-default btn-sm">New Score For {{score.scoredThing.title}}</a>
-                            <button class="btn btn-default btn-sm" ng-click="showScoreHistoryModal()">History</button>
-                            <button class="btn btn-danger btn-sm" ng-show="isEditable">Delete</button>
+                            <a ui-sref="scores.new({thingId: score.scoredThing.thingId})" style="width: 100%;"
+                               class="btn btn-default btn-sm">Create A New Score</a>
+                        </p>
+                        <p class="form-control-static">
+                            <button class="btn btn-default btn-sm" style="width: 100%;" ng-disabled="!score" ng-click="share()">Share This Score</button>
+                            <br>
+                            <button class="btn btn-default btn-sm" style="width: 100%;" ng-click="showScorePointsHistoryModal()">View This Score's Points History</button>
                             <br>
                             <br>
-                            <twitter-share-score-button score="score">
-                            </twitter-share-score-button>
-                            <tumblr-share-score-button score="score">
-                            </tumblr-share-score-button>
+                            <button class="btn btn-danger btn-sm" style="min-width: 100%;" ng-show="isEditable">Delete Score</button>
                         </p>
                     </div>
                 </div>

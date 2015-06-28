@@ -1,16 +1,16 @@
 angular.module('app').service('shareText', ['pointsToLevel', function(pointsToLevel) {
     return {
-        generateScoreTitle: function(thingTitle) {
-            if(!thingTitle) return;
-            return "Score for " + thingTitle;
+        generateCreatedScoreTitle: function(score) {
+            if(!score) return;
+            return "Score for " + score.scoredThing.title;
         },
-        generateScoreText: function(points, thingTitle, criterionName) {
-            if(!thingTitle) return;
+        generateCreatedScoreText: function(score) {
+            if(!score) return;
 
-            var pointsLevel = pointsToLevel.translate(points);
-            var text = "Score for " + thingTitle + ".  ";
-            if(criterionName) {
-                text += criterionName + "?  ";
+            var pointsLevel = pointsToLevel.translate(score.points);
+            var text = "Score for " + score.scoredThing.title + ".  ";
+            if(score.criterion) {
+                text += score.criterion.name + "?  ";
             }
             text += pointsLevel + ".";
             return text;
@@ -20,7 +20,7 @@ angular.module('app').service('shareText', ['pointsToLevel', function(pointsToLe
 
             var text = "How would you score " + thingTitle;
             if(criterionName) {
-                text += " for " + criterionName;
+                text += " on " + criterionName;
             }
             text += "?";
             return text;

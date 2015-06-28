@@ -3,11 +3,12 @@ class Criterion
   include Mongoid::Token
 
   field :name, type: String
+  field :definition, type: String
+  field :emoji, type: String, default: ':question:'
 
   has_many :scores, dependent: :delete
 
-  token :contains => :fixed_numeric, :length => 8
+  token :contains => :fixed_numeric, :length => 4
 
-  validates_presence_of :name
-  validates_length_of :name, minimum: 2, maximum: 20
+  validates_presence_of :name, :emoji
 end

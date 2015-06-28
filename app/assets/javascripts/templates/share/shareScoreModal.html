@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h3 class="modal-title">Share</h3>
+</div>
+<div class="modal-body">
+    <a twitter
+       data-lang="en"
+       data-count="horizontal"
+       data-url="{{url}}"
+       data-via="scorethings"
+       data-size="large"
+       data-text="{{text}}">
+    </a>
+    <br>
+    <br>
+    <div tumblr-text
+         data-url="{{url}}"
+         data-name="{{title}}"
+         data-title="{{title}}"
+         data-buttontext="Share On Tumblr"
+         data-styling="display:inline-block; text-indent:-9999px; overflow:hidden; width:129px; height:20px; background:url('http://platform.tumblr.com/v1/share_3.png') top left no-repeat transparent;"
+         data-description="{{text}} You can score things on scorethings {{url}}"></div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="close()">Close</button>
+</div>

@@ -1,4 +1,4 @@
-angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '$stateParams', 'identity', 'notifier', '$modal', function($scope, Score, Stats, $stateParams, identity, notifier, $modal) {
+angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '$stateParams', 'identity', 'notifier', '$modal', 'shareScoreModalFactory', function($scope, Score, Stats, $stateParams, identity, notifier, $modal, shareScoreModalFactory) {
     $scope.identity = identity;
     var scoreId = $stateParams.scoreId;
     $scope.notFound = false;
@@ -55,14 +55,14 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
         )
     };
 
-    $scope.showScoreHistoryModal = function() {
+    $scope.showScorePointsHistoryModal = function() {
         $modal.open({
-            templateUrl: 'scores/scoreHistory.html',
+            templateUrl: 'scores/pointsHistory.html',
             controller: ['$scope', '$modalInstance', 'score', function($scope, $modalInstance, score) {
                 $scope.score = score;
 
-                $scope.cancel = function() {
-                    $modalInstance.dismiss('cancel');
+                $scope.close = function() {
+                    $modalInstance.dismiss('close');
                 };
             }],
             size: 'md',
@@ -72,6 +72,10 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
                 }
             }
         });
+    };
+
+    $scope.share = function() {
+        shareScoreModalFactory.shareCreatedScore($scope.score);
     };
 
     $scope.getDeleteConfirmation = function() {

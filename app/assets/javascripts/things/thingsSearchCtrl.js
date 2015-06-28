@@ -16,7 +16,7 @@ angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', '$locat
         Thing.get('search', {query: $scope.query}).then(
             function successfulGetThing(response) {
                 $scope.searchResults = response.searchResults;
-                $scope.notFound = !$scope.searchResults;
+                $scope.notFound = !$scope.searchResults.length;
             },
             function unsuccessfulGetThing(response) {
                 if(response.status == 404) {

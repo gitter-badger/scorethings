@@ -1,4 +1,4 @@
-angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Thing', 'Score', '$modal', '$state', '$rootScope', function($scope, $location, Thing, Score, $modal, $state, $rootScope) {
+angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Thing', 'Score', '$modal', '$state', 'shareScoreModalFactory', function($scope, $location, Thing, Score, $modal, $state, shareScoreModalFactory) {
     var thingId = $state.params.thingId;
     var criterionNameParam = $state.params.criterion;
     var criterionFromParam = null;
@@ -95,6 +95,14 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Thing'
             },
             function close() {
             });
+    };
+
+    $scope.shareNewScore = function() {
+        if(!$scope.thing) {
+            console.error('cannot share without thing');
+            return;
+        }
+        shareScoreModalFactory.shareNewScore($scope.thing, $scope.score.criterion);
     };
 
     function selectCriterion(criterion) {

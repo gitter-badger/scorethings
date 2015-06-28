@@ -1,8 +1,9 @@
 <div class="select-criterion">
     <div class="modal-header">
-        <h3 class="modal-title">Choose a criterion for the score</h3>
+        <h3 class="modal-title">Select A Criterion</h3>
+        <small>How should the thing be judged?</small>
     </div>
-    <div class="modal-body" style="text-align: center;">
+    <div class="modal-body">
         <div class="panel panel-default criterion"
              ng-class="{'selected': null == selectedCriterionId}"
              ng-click="selectCriterion(null)">
@@ -15,7 +16,7 @@
              ng-class="{'selected': criterion.id == selectedCriterionId}"
              ng-click="selectCriterion(criterion)">
             <div class="panel-body">
-                <h4>{{criterion.name}}</h4>
+                <h4><criterion-emoji-display criterion="criterion"></criterion-emoji-display> {{criterion.name}}</h4>
             </div>
         </div>
     </div>

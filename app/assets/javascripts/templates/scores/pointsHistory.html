@@ -12,6 +12,9 @@
             </tr>
             </thead>
             <tbody>
+            <tr  ng-show="!score.oldPoints.length">
+                <td colspan="3">No points history.  Score points were never changed.</td>
+            </tr>
             <tr ng-repeat="oldPoints in score.oldPoints | orderBy:'-endedAt'">
                 <td>{{oldPoints.startedAt  | date:"MM/dd/yyyy 'at' h:mma"}}</td>
                 <td>{{oldPoints.endedAt | date:"MM/dd/yyyy 'at' h:mma"}}</td>
@@ -21,6 +24,6 @@
         </table>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-default" ng-click="cancel()">Close</button>
+        <button class="btn btn-default" ng-click="close()">Close</button>
     </div>
 </div>

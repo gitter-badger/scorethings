@@ -2,7 +2,7 @@
     <h2>Score For {{thing.title}}</h2>
     <h2>
         <a class="criterion" ng-click="showCriterionSelectionModal()">
-            {{score.criterion && score.criterion.name || 'No Criterion'}}
+            <criterion-emoji-display criterion="score.criterion"></criterion-emoji-display> {{score.criterion && score.criterion.name || 'No Criterion'}}
         </a>
     </h2>
     <h2><a ng-click="score.points=5">No</a>, <a ng-click="score.points=7">Meh</a>, or <a ng-click="score.points=8">Yes</a></h2>
@@ -17,10 +17,6 @@
     </div>
     <br>
     <div ng-show="!isLoggedIn()" class="alert alert-warning" role="alert">Before scoring a thing, please <a ng-click="login()">log in</a>.</div>
+    <button ng-click="shareNewScore()" class="btn btn-default btn-lg" ng-disabled="!thing">Share</button>
     <button ng-click="save()" ng-disabled="!isLoggedIn()" class="btn btn-primary btn-lg">Save</button>
-    <br>
-    <twitter-share-new-score-button thing="thing" criterion="score.criterion">
-    </twitter-share-new-score-button>
-    <tumblr-share-new-score-button thing="thing" criterion="score.criterion">
-    </tumblr-share-new-score-button>
 </div>
