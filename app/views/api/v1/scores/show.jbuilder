@@ -2,7 +2,7 @@ json.score do
   json.id @score._id.to_s
   json.token @score.token
   json.user @score.user.to_builder
-  json.thing @score.thing.to_builder
+  json.scored_thing @score.scored_thing.to_builder
   json.points @score.points
   json.criterion @score.criterion
 

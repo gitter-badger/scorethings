@@ -1,5 +1,5 @@
 <div style="text-align: center">
-    <h2>Score For {{wikidataItem.title}}</h2>
+    <h2>Score For {{thing.title}}</h2>
     <h2>
         <a class="criterion" ng-click="showCriterionSelectionModal()">
             {{score.criterion && score.criterion.name || 'No Criterion'}}
@@ -19,8 +19,8 @@
     <div ng-show="!isLoggedIn()" class="alert alert-warning" role="alert">Before scoring a thing, please <a ng-click="login()">log in</a>.</div>
     <button ng-click="save()" ng-disabled="!isLoggedIn()" class="btn btn-primary btn-lg">Save</button>
     <br>
-    <twitter-share-new-score-button wikidata-item="wikidataItem" criterion="score.criterion">
+    <twitter-share-new-score-button thing="thing" criterion="score.criterion">
     </twitter-share-new-score-button>
-    <tumblr-share-new-score-button wikidata-item="wikidataItem" criterion="score.criterion">
+    <tumblr-share-new-score-button thing="thing" criterion="score.criterion">
     </tumblr-share-new-score-button>
 </div>

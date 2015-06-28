@@ -15,7 +15,7 @@ angular.module('app').directive('tumblrShareScoreButton', ['$location', 'shareTe
             $scope.$watch('score', function(score) {
                 if(!score) return;
 
-                var thingTitle = score.thing.title;
+                var thingTitle = score.scoredThing.title;
                 var points = score.points;
                 var criterionName = score.criterion && score.criterion.name;
 

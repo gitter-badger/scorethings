@@ -17,10 +17,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">Thing</label>
+                    <label class="col-sm-3 control-label">Scored Thing</label>
                     <div class="col-sm-9">
                         <p class="form-control-static">
-                            <a ui-sref="things.show({thingId: score.thing.token})">{{score.thing.title}}</a>
+                            <a ui-sref="scoredThings.show({scoredThingId: score.scoredThing.token})">{{score.scoredThing.title}}</a>
                         </p>
                     </div>
                 </div>
@@ -65,8 +65,8 @@
                 <div class="form-group">
                     <div class="col-sm-12">
                         <p class="form-control-static">
-                            <a ui-sref="scores.new({wikidataItemId: score.thing.wikidataItemId})"
-                               class="btn btn-default btn-sm">New Score For {{score.thing.title}}</a>
+                            <a ui-sref="scores.new({thingId: score.scoredThing.thingId})"
+                               class="btn btn-default btn-sm">New Score For {{score.scoredThing.title}}</a>
                             <button class="btn btn-default btn-sm" ng-click="showScoreHistoryModal()">History</button>
                             <button class="btn btn-danger btn-sm" ng-show="isEditable">Delete</button>
                             <br>

@@ -1,18 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ScoresController do
-  # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
+  # TODO clean up similar specs to keep scoredThings DRY (Don't Repeat Yourself)
   before do
     @user = create(:user)
     auth_token = @user.generate_auth_token.to_s
     @request.env['HTTP_AUTHORIZATION'] = "Bearer #{auth_token}"
-    @thing = create(:thing)
+    @scored_thing = create(:scored_thing)
     @criterion = create(:criterion)
 
     @params = {
         score: {
-            thing: {
-                wikidata_item_id: @thing.wikidata_item_id
+            scored_thing: {
+                thing_id: @scored_thing.thing_id
             },
             criterion_id: @criterion._id,
             points: 2
@@ -23,11 +23,11 @@ RSpec.describe Api::V1::ScoresController do
   describe "GET search" do
 
     before do
-      @batman_thing = create(:thing, title: 'Batman')
-      @seattle_thing = create(:thing, title: 'Seattle')
+      @batman_scored_thing = create(:scored_thing, title: 'Batman')
+      @seattle_scored_thing = create(:scored_thing, title: 'Seattle')
 
-      @batman_score = create(:score, thing: @batman_thing, user: @user)
-      @seattle_score = create(:score, thing: @seattle_thing, user: @user)
+      @batman_score = create(:score, scored_thing: @batman_scored_thing, user: @user)
+      @seattle_score = create(:score, scored_thing: @seattle_scored_thing, user: @user)
     end
 
     it "should search for scores" do
@@ -40,8 +40,8 @@ RSpec.describe Api::V1::ScoresController do
 
     it "should search by username" do
       other_user = create(:user)
-      other_users_batman_score = create(:score, thing: @batman_thing, user: other_user)
-      other_users_seattle_score = create(:score, thing: @seattle_thing, user: other_user)
+      other_users_batman_score = create(:score, scored_thing: @batman_scored_thing, user: other_user)
+      other_users_seattle_score = create(:score, scored_thing: @seattle_scored_thing, user: other_user)
 
       get :search, {query: 'Batman'}
       expect(assigns(:scores)).to eq([@batman_score, other_users_batman_score])
@@ -68,7 +68,7 @@ RSpec.describe Api::V1::ScoresController do
       expect(assigns(:score)).to_not be_nil
       expect(response).to have_http_status(:created)
       expect(Score.all.length).to eq(1)
-      expect(Score.all.first.thing).to eq(@thing)
+      expect(Score.all.first.scored_thing).to eq(@scored_thing)
       expect(Score.all.first.points).to eq(2)
       expect(Score.all.first.criterion).to eq(@criterion)
     end
@@ -79,13 +79,13 @@ RSpec.describe Api::V1::ScoresController do
       expect(response).to have_http_status(:unauthorized)
     end
 
-    it "should not create a score if a score exists for user, thing, and criterion" do
+    it "should not create a score if a score exists for user, scored thing, and criterion" do
       existing_score = create(:score, user: @user)
       expect(Score.all.length).to eq(1)
       params_with_conflict = {
           score: {
-              thing: {
-                  wikidata_item_id: existing_score.thing.wikidata_item_id
+              scored_thing: {
+                  thing_id: existing_score.scored_thing.thing_id
               },
               criterion_id: existing_score.criterion._id,
               points: 2
@@ -99,11 +99,11 @@ RSpec.describe Api::V1::ScoresController do
     end
 
     it "should not create a score for a thing that doesn't exist in wikipedia or database" do
-      @params[:score][:thing] = {
-          wikidata_item_id: 'Q9283'
+      @params[:score][:scored_thing] = {
+          thing_id: 'Q9283'
       }
       expect_any_instance_of(WikidataService).to receive(:find).with('Q9283')
-                                                  .and_raise(Exceptions::WikidataItemNotFoundError)
+                                                  .and_raise(Exceptions::ThingNotFoundError)
       expect(Score.all.length).to eq(0)
       post :create, @params
       expect(response).to have_http_status(:not_found)

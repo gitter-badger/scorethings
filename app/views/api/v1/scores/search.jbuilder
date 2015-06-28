@@ -4,5 +4,5 @@ json.array! @scores do |score|
   json.criterion score.criterion
   json.points score.points
   json.user score.user.to_builder
-  json.thing score.thing.to_builder
+  json.scored_thing score.scored_thing.to_builder
 end

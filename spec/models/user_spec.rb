@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User do
-  # TODO clean up similar specs to keep things DRY (Don't Repeat Yourself)
+  # TODO clean up similar specs to keep scoredThings DRY (Don't Repeat Yourself)
 
   def mock_auth(provider, uid, info_attrs)
     OmniAuth.config.test_mode = true
@@ -70,13 +70,13 @@ RSpec.describe User do
     end
   end
 
-  describe "scoring things" do
+  describe "scoring scoredThings" do
     before do
       @user = create(:user)
       @score = build(:score)
     end
 
-    it "should allow the user to score a things" do
+    it "should allow the user to score a scoredThings" do
       expect(@user.scores.length).to eq(0)
       @user.create_score(@score)
       expect(@user.scores.length).to eq(1)
@@ -102,16 +102,16 @@ RSpec.describe User do
 
     it "should have more than one score with the same user and thing but different criterion" do
       @user.create_score(@score)
-      other_score = build(:score, thing: @score.thing, criterion: create(:criterion))
+      other_score = build(:score, scored_thing: @score.scored_thing, criterion: create(:criterion))
 
       expect(Score.all.length).to eq(1)
       @user.create_score(other_score)
       expect(Score.all.length).to eq(2)
     end
 
-    it "should not have more than one score with the same user and thing and criterion" do
+    it "should not have more than one score with the same user and scored thing and criterion" do
       @user.create_score(@score)
-      other_score = build(:score, thing: @score.thing, criterion: @score.criterion)
+      other_score = build(:score, scored_thing: @score.scored_thing, criterion: @score.criterion)
 
       expect(Score.all.length).to eq(1)
       expect {

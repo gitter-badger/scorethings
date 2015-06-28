@@ -9,8 +9,8 @@ class StatsService
       scores = scores.where(criterion: filters[:criterion])
     end
 
-    unless filters[:thing].nil?
-      scores = scores.where(thing: filters[:thing])
+    unless filters[:scored_thing].nil?
+      scores = scores.where(scored_thing: filters[:scored_thing])
     end
 
     Stats.new(

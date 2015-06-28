@@ -5,7 +5,7 @@ angular.module('app').directive('tumblrShareNewScoreButton', ['$location', 'shar
         templateUrl: "share/tumblrShareScoreButton.html",
         scope: {
             criterion: '=',
-            wikidataItem: '='
+            thing: '='
         },
         controller: ['$scope', function($scope) {
             $scope.url = $location.absUrl();
@@ -23,10 +23,10 @@ angular.module('app').directive('tumblrShareNewScoreButton', ['$location', 'shar
                 updateTextAndTitle(thingTitle, criterionName);
             });
 
-            $scope.$watch('wikidataItem', function(wikidataItem) {
-                if(!wikidataItem) return;
+            $scope.$watch('thing', function(thing) {
+                if(!thing) return;
 
-                thingTitle = wikidataItem.title;
+                thingTitle = thing.title;
                 updateTextAndTitle(thingTitle, criterionName);
             });
 

@@ -36,11 +36,11 @@ module Api
       end
 
       def create
-        score_params = params.require(:score).permit(:points, :criterion_id, thing: [:wikidata_item_id])
+        score_params = params.require(:score).permit(:points, :criterion_id, scored_thing: [:thing_id])
 
         begin
-          thing = $thing_service.find_thing_or_create_from_wikidata(score_params[:thing][:wikidata_item_id])
-          score_params[:thing] = thing
+          scored_thing = $thing_service.find_scored_thing_or_create_from_thing(score_params[:scored_thing][:thing_id])
+          score_params[:scored_thing] = scored_thing
 
           unless score_params[:criterion_id].nil?
             criterion = Criterion.find(score_params[:criterion_id])
@@ -64,7 +64,7 @@ module Api
           return render json: {
                             status: :not_found
                         }, status: :not_found
-        rescue Exceptions::WikidataItemNotFoundError
+        rescue Exceptions::ThingNotFoundError
           return render json: {
                             status: :not_found
                         }, status: :not_found

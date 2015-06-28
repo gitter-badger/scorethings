@@ -15,7 +15,7 @@ angular.module('app').directive('twitterShareScoreButton', ['$location', 'shareT
             $scope.$watch('score', function(score) {
                 if(!score) return;
 
-                var thingTitle = score.thing.title;
+                var thingTitle = score.scoredThing.title;
                 var points = score.points;
                 var criterionName = score.criterion && score.criterion.name;
                 $scope.text = shareText.generateScoreText(points, thingTitle, criterionName);

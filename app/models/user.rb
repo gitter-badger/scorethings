@@ -27,7 +27,7 @@ class User
   end
 
   def create_score(score)
-    existing_score = self.scores.where(thing: score.thing, criterion: score.criterion).first
+    existing_score = self.scores.where(scored_thing: score.scored_thing, criterion: score.criterion).first
     unless existing_score.nil?
       raise Exceptions::ScoreNotUniqueError.new(existing_score)
     end

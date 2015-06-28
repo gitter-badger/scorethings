@@ -1,5 +1,5 @@
-angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'WikidataItem', 'Score', '$modal', '$state', '$rootScope', function($scope, $location, WikidataItem, Score, $modal, $state, $rootScope) {
-    var wikidataItemId = $state.params.wikidataItemId;
+angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Thing', 'Score', '$modal', '$state', '$rootScope', function($scope, $location, Thing, Score, $modal, $state, $rootScope) {
+    var thingId = $state.params.thingId;
     var criterionNameParam = $state.params.criterion;
     var criterionFromParam = null;
 
@@ -20,18 +20,18 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
     $scope.score = {
         points: 7,
         criterion: criterionFromParam,
-        thing: {
-            wikidataItemId: wikidataItemId
+        scoredThing: {
+            thingId: thingId
         }
     };
 
-    WikidataItem.get(wikidataItemId).then(
-        function successfulGetWikidataPage(wikidataItem) {
-            $scope.wikidataItem = wikidataItem;
-            $scope.score.thing.wikidataItemId = wikidataItem.id;
+    Thing.get(thingId).then(
+        function successfulGetThing(thing) {
+            $scope.thing = thing;
+            $scope.score.scoredThing.thingId = thing.id;
         },
-        function unsuccessfulGetWikidataPage(response) {
-            console.error('failed to get wikidata item');
+        function unsuccessfulGetThing(response) {
+            console.error('failed to get thing');
             // TODO redirect/show error message
         }
     );
@@ -46,7 +46,7 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Wikida
             function errorCreate(response) {
                 if(response.status == 409) {
                     // conflict with existing score with same
-                    // user, thing, and criterion
+                    // user, scored thing, and criterion
                     // TODO should ask user to confirm updating points?
                     response = humps.camelizeKeys(response);
                     var existingScore = response.data.existingScore;

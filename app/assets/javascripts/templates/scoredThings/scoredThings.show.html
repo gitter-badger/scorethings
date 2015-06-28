@@ -1,0 +1,10 @@
+<h4>Scored Thing: {{scoredThing.title}}</h4>
+
+<h5 ng-show="scoredThing.description">Description: {{scoredThing.description}}</h5>
+
+<div ng-show="scoredThing.officialWebsites.length">
+    <h6>Official Websites:</h6>
+    <ul>
+        <li ng-repeat="officialWebsite in scoredThing.officialWebsites"><a target="_blank" ng-href="{{officialWebsite}}">{{officialWebsite}}</a></li>
+    </ul>
+</div>

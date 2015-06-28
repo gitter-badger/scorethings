@@ -36,8 +36,8 @@
     <tbody>
         <tr ng-repeat="score in scores">
             <td>
-                <a ui-sref="things.show({thingId: score.thing.token})">
-                    {{score.thing.title}}
+                <a ui-sref="scoredThings.show({scoredThingId: score.scoredThing.token})">
+                    {{score.scoredThing.title}}
                 </a>
             </td>
             <td class="hidden-xs">

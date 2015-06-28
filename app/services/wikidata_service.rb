@@ -3,7 +3,8 @@ require 'wikidata/client'
 class WikidataService
 
   def search(query)
-    cached_search_results = Rails.cache.fetch(wikidata_search_cache_key(query), expires_in: 1.hour) do
+    # search wikidata items and return the search results of things
+    cached_search_results = Rails.cache.fetch(thing_search_cache_key(query), expires_in: 1.hour) do
       response = Wikidata::Item.search(query)
 
       if response.empty?
@@ -11,15 +12,15 @@ class WikidataService
       end
 
       search_results = response.results.map do |wikidata_item|
-        map_item(wikidata_item)
+        map_wikidata_item_to_thing(wikidata_item)
       end
 
       search_results.each do |search_result|
         # write the wikidata item to cache, so when finding it, it hits cache (probably happens soon after search)
-        Rails.cache.write(wikidata_item_cache_key(search_result[:id]), search_result, expires_in: 1.hour)
+        Rails.cache.write(thing_cache_key(search_result[:id]), search_result, expires_in: 1.hour)
       end
 
-      Rails.cache.write(wikidata_search_cache_key(query), search_results, expires_in: 1.hour)
+      Rails.cache.write(thing_search_cache_key(query), search_results, expires_in: 1.hour)
 
       return search_results
     end
@@ -27,33 +28,34 @@ class WikidataService
     return cached_search_results
   end
 
-  def find(wikidata_item_id)
-    cached_wikidata_item = Rails.cache.fetch(wikidata_item_cache_key(wikidata_item_id), expires_in: 1.hour) do
-      full_wikidata_item = Wikidata::Item.find(wikidata_item_id)
+  def find(thing_id)
+    # find a wikidata item by it's id, return that wikidata item mapped to a thing
+    cached_thing = Rails.cache.fetch(thing_cache_key(thing_id), expires_in: 1.hour) do
+      wikidata_item = Wikidata::Item.find(thing_id)
 
-      if full_wikidata_item.nil?
-        raise Exceptions::WikidataItemNotFoundError
+      if wikidata_item.nil?
+        raise Exceptions::ThingNotFoundError
       end
 
-      wikidata_item = map_item(full_wikidata_item)
-      Rails.cache.write(wikidata_item_cache_key(wikidata_item_cache_key(wikidata_item_id)), wikidata_item, expires_in: 1.hour)
+      thing = map_wikidata_item_to_thing(wikidata_item)
+      Rails.cache.write(thing_cache_key(thing_cache_key(thing_id)), thing, expires_in: 1.hour)
 
-      return wikidata_item
+      return thing
     end
 
-    return cached_wikidata_item
+    return cached_thing
   end
 
   private
-  def wikidata_item_cache_key(wikidata_item_id)
-    "wikidata_item(#{wikidata_item_id})"
+  def thing_cache_key(wikidata_item_id)
+    "thing(#{wikidata_item_id})"
   end
 
-  def wikidata_search_cache_key(query)
-    "wikidata_search(#{query})"
+  def thing_search_cache_key(query)
+    "thing_search(#{query})"
   end
 
-  def map_item(full_wikidata_item)
+  def map_wikidata_item_to_thing(full_wikidata_item)
     official_websites_values = full_wikidata_item.official_websites.map do |official_website|
       official_website.value
     end

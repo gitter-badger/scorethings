@@ -1,4 +1,3 @@
-Criterion.delete_all(global: true)
 Criterion.create!(name: 'Funny')
 Criterion.create!(name: 'Intelligent')
 Criterion.create!(name: 'Brave')

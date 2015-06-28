@@ -32,7 +32,7 @@
         <tbody>
             <tr ng-repeat="searchResult in searchResults">
                 <td>
-                    <a ui-sref="scores.new({wikidataItemId: searchResult.id})">
+                    <a ui-sref="scores.new({thingId: searchResult.id})">
                         {{searchResult.title}}
                     </a>
                 </td>

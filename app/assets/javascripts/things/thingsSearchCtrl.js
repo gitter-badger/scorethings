@@ -1,4 +1,4 @@
-angular.module('app').controller('WikidataItemsSearchCtrl', ['$scope', 'WikidataItem', '$location', '$state', function($scope, WikidataItem, $location, $state) {
+angular.module('app').controller('ThingsSearchCtrl', ['$scope', 'Thing', '$location', '$state', function($scope, Thing, $location, $state) {
     $scope.notFound = false;
 
     $scope.query = $state.params.query;
@@ -13,12 +13,12 @@ angular.module('app').controller('WikidataItemsSearchCtrl', ['$scope', 'Wikidata
 
         $location.search({query: $scope.query});
 
-        WikidataItem.get('search', {query: $scope.query}).then(
-            function successfulGetWikidataItem(response) {
+        Thing.get('search', {query: $scope.query}).then(
+            function successfulGetThing(response) {
                 $scope.searchResults = response.searchResults;
                 $scope.notFound = !$scope.searchResults;
             },
-            function unsuccessfulGetWikidataItem(response) {
+            function unsuccessfulGetThing(response) {
                 if(response.status == 404) {
                     $scope.notFound = true;
                 }

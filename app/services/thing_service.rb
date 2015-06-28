@@ -3,23 +3,23 @@ class ThingService
     @wikidata_service = WikidataService.new
   end
 
-  def find(wikidata_item_id)
-    @wikidata_service.find(wikidata_item_id)
+  def find(thing_id)
+    @wikidata_service.find(thing_id)
   end
 
   def search(query)
     @wikidata_service.search(query)
   end
 
-  def find_thing_or_create_from_wikidata(wikidata_item_id)
-    thing = Thing.where(wikidata_item_id: wikidata_item_id).first
-    return thing unless thing.nil?
+  def find_scored_thing_or_create_from_thing(thing_id)
+    scored_thing = ScoredThing.where(thing_id: thing_id).first
+    return scored_thing unless scored_thing.nil?
 
     # if wikidata doesn't have it, error should be raised
-    wikipedia_page_info = @wikidata_service.find(wikidata_item_id)
+    thing = @wikidata_service.find(thing_id)
 
-    thing = Thing.build_from_wikidata_item(wikipedia_page_info)
-    thing.save!
-    thing
+    scored_thing = ScoredThing.build_from_thing(thing)
+    scored_thing.save!
+    scored_thing
   end
 end

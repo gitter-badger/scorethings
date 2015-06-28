@@ -17,7 +17,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'ScoresSearchCtrl'
                 }).
                 state('scores.new', {
-                    url: '/new?wikidataItemId&criterion',
+                    url: '/new?thingId&criterion',
                     templateUrl: 'scores/scores.new.html',
                     controller: 'NewScoreCtrl'
                 }).
@@ -28,35 +28,30 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 }).
 
             /*
-             wikidataItems
-             */
-            state('wikidataItems', {
-                url: '/wikidataItems',
-                abstract: true,
-                templateUrl: 'wikidataItems/wikidataItems.html'
-            }).
-                state('wikidataItems.search', {
-                    url: '/search?query',
-                    templateUrl: 'wikidataItems/wikidataItems.search.html',
-                    controller: 'WikidataItemsSearchCtrl'
-                }).
-                state('wikidataItems.show', {
-                    url: '/:wikidataItemId',
-                    templateUrl: 'wikidataItems/wikidataItems.show.html',
-                    controller: 'WikidataItemsShowCtrl'
-                }).
-            /*
              things
-            */
+             */
             state('things', {
                 url: '/things',
                 abstract: true,
                 templateUrl: 'things/things.html'
             }).
-                state('things.show', {
-                    url: '/:thingId',
-                    templateUrl: 'things/things.show.html',
-                    controller: 'ThingsShowCtrl'
+                state('things.search', {
+                    url: '/search?query',
+                    templateUrl: 'things/things.search.html',
+                    controller: 'ThingsSearchCtrl'
+                }).
+            /*
+             scored scoredThings
+            */
+            state('scoredThings', {
+                url: '/scoredThings',
+                abstract: true,
+                templateUrl: 'scoredThings/scoredThings.html'
+            }).
+                state('scoredThings.show', {
+                    url: '/:scoredThingId',
+                    templateUrl: 'scoredThings/scoredThings.show.html',
+                    controller: 'ScoredThingsShowCtrl'
                 }).
 
             /*

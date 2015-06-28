@@ -5,14 +5,14 @@ module Api
 
       def index
         begin
-          thing_id = params[:thing_id]
+          scored_thing_id = params[:scored_thing_id]
           criterion_id = params[:criterion_id]
           user_id = params[:user_id]
 
           filters = {}
 
-          unless thing_id.nil?
-            filters[:thing] = Thing.find(thing_id)
+          unless scored_thing_id.nil?
+            filters[:scored_thing] = ScoredThing.find(scored_thing_id)
           end
 
           unless criterion_id.nil?

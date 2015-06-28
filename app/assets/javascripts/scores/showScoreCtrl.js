@@ -29,13 +29,13 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
         $scope.thingCriterionStats = {};
         var criterionId = $scope.score.criterion && $scope.score.criterion.id;
 
-        $scope.statsTitle = "All Scores For " + $scope.score.thing.title;
+        $scope.statsTitle = "All Scores For " + $scope.score.scoredThing.title;
         if(criterionId) {
             $scope.statsTitle += " Using " + $scope.score.criterion.name;
         }
 
 
-        Stats.query({thingId: $scope.score.thing.id, criterionId: criterionId}).then(function(stats) {
+        Stats.query({scoredThingId: $scope.score.scoredThing.id, criterionId: criterionId}).then(function(stats) {
             $scope.thingCriterionStats = stats;
         });
     }

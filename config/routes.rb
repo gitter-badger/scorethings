@@ -10,11 +10,10 @@ Rails.application.routes.draw do
       get '/auth/:provider/callback' => 'auth_token#create'
       get '/auth/failure' => 'auth_token#failure'
 
-      get '/things/:id' => 'things#show'
-      get '/things/:id/stats' => 'things#stats'
+      get '/scored_things/:id' => 'scored_things#show'
 
-      get '/wikidata_items/search' => 'wikidata_items#search'
-      get '/wikidata_items/:wikidata_item_id' => 'wikidata_items#find'
+      get '/things/search' => 'things#search'
+      get '/things/:thing_id' => 'things#find'
 
       get '/scores/search' => 'scores#search'
       resources :scores, only: [:create, :show, :update, :destroy]
