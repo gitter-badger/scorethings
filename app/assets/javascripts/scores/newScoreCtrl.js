@@ -36,11 +36,9 @@ angular.module('app').controller('NewScoreCtrl', ['$scope', '$location', 'Thing'
         }
     );
 
-    $scope.save = function() {
-        console.log($scope.score);
+    $scope.scoreThing = function() {
         new Score($scope.score).create().then(
             function successCreate(score) {
-                console.log(score);
                 $state.go('scores.show', {scoreId: score.token});
             },
             function errorCreate(response) {
