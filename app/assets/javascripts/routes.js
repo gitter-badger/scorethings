@@ -55,7 +55,7 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 state('scoredThings.show', {
                     url: '/:scoredThingId',
                     templateUrl: 'scoredThings/scoredThings.show.html',
-                    controller: 'ScoredThingsShowCtrl'
+                    controller: 'ShowScoredThingsCtrl'
                 }).
 
             /*

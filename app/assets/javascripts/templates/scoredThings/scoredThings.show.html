@@ -1,10 +1,69 @@
-<h4>Scored Thing: {{scoredThing.title}}</h4>
-
-<h5 ng-show="scoredThing.description">Description: {{scoredThing.description}}</h5>
-
-<div ng-show="scoredThing.officialWebsites.length">
-    <h6>Official Websites:</h6>
-    <ul>
-        <li ng-repeat="officialWebsite in scoredThing.officialWebsites"><a target="_blank" ng-href="{{officialWebsite}}">{{officialWebsite}}</a></li>
-    </ul>
+<div ng-show="notFound">
+    <h2>Could not find scored thing</h2>
 </div>
+<div class="col-xs-12 col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">Scored Thing Info</h2>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Title</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            {{scoredThing.title}}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Description</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            {{scoredThing.description}}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Is a type of</label>
+                    <div class="col-sm-9">
+                            <ul style="list-style-type: none; padding:0; margin:0;">
+                                <li ng-repeat="instanceOfValue in scoredThing.instanceOfValues">{{instanceOfValue}}</li>
+                            </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Websites</label>
+                    <div class="col-sm-9">
+                            <ul style="list-style-type: none; padding:0; margin:0;">
+                                <li ng-repeat="officialWebsite in scoredThing.officialWebsites">
+                                    <a ng-href="{{officialWebsite}}" target="_blank">{{officialWebsite}}</a>
+                                </li>
+                            </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <p class="form-control-static">
+                            <a ui-sref="scores.new({thingId: scoredThing.thingId})" style="width: 100%;"
+                               class="btn btn-default btn-sm">Create A New Score</a>
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="col-xs-12 col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">How did everyone score {{scoredThing.title}}?</h2>
+        </div>
+        <div class="panel-body">
+            <stats-display stats="scoredThingStats">
+            </stats-display>
+        </div>
+    </div>
+</div>
+
