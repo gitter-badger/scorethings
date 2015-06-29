@@ -4,6 +4,10 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
                 url: '/',
                 templateUrl: 'main/home.html'
             }).
+            state('stem', {
+                url: '/stem',
+                templateUrl: 'main/stem.html'
+            }).
             /*
                  scores
             */
@@ -114,9 +118,5 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
             state('help.faq', {
                 url: '/faq',
                 templateUrl: 'help/help.faq.html'
-            }).
-            state('help.donate', {
-                url: '/donate',
-                templateUrl: 'help/help.donate.html'
             });
 }]);

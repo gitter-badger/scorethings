@@ -15,7 +15,7 @@ angular.module('app').controller('ScoresSearchCtrl', ['$scope', 'Score', '$locat
         Score.get('search', {query: $scope.query}).then(
             function successfulSearchScore(scores) {
                 $scope.scores = scores;
-                $scope.notFound = !$scope.scores;
+                $scope.notFound = !$scope.scores.length;
             },
             function unsuccessfulSearchScore(response) {
                 $scope.notFound = true;

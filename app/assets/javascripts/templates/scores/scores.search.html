@@ -20,7 +20,8 @@
 </form>
 
 <div class="col-xs-12" ng-show="notFound">
-    <h5>Sorry, no results found for "{{query}}".</h5>
+    <h5>Sorry, no results found for "{{query}}".  It might just be that no one has scored it yet.</h5>
+    <a ui-sref="things.search({query: query})">CLICK HERE to find the thing "{{query}}", and score it.</a>
     <h6 ng-show="error">{{error}}</h6>
 </div>
 <table class="table table-hover" ng-show="scores.length">
