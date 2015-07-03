@@ -25,19 +25,34 @@ angular.module('app').controller('ShowScoreCtrl', ['$scope', 'Score', 'Stats', '
         }
     }
 
-    function getStats() {
+    function getThingCriterionStats() {
         $scope.thingCriterionStats = {};
-        var criterionId = $scope.score.criterion && $scope.score.criterion.id;
 
-        $scope.statsTitle = "All Scores For " + $scope.score.scoredThing.title;
-        if(criterionId) {
-            $scope.statsTitle += " Using " + $scope.score.criterion.name;
+        $scope.thingCriterionStatsTitle = $scope.score.criterion.name + " Scores For " + $scope.score.scoredThing.title;
+
+        Stats.query({scoredThingId: $scope.score.scoredThing.id, criterionId: $scope.score.criterion.id})
+            .then(function(stats) {
+                $scope.thingCriterionStats = stats;
+            });
+    }
+
+    function getThingStats() {
+        $scope.thingStats = {};
+
+        $scope.thingStatsTitle = "Scores For " + $scope.score.scoredThing.title;
+
+        Stats.query({scoredThingId: $scope.score.scoredThing.id})
+            .then(function(stats) {
+                $scope.thingStats = stats;
+            });
+    }
+
+    function getStats() {
+        if($scope.score.criterion) {
+            getThingCriterionStats();
         }
 
-
-        Stats.query({scoredThingId: $scope.score.scoredThing.id, criterionId: criterionId}).then(function(stats) {
-            $scope.thingCriterionStats = stats;
-        });
+        getThingStats();
     }
 
     $scope.updatePoints = function() {

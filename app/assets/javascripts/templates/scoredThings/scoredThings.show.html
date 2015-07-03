@@ -40,7 +40,7 @@
                               ng-repeat="officialWebsite in scoredThing.officialWebsites"
                               target="_blank">{{officialWebsite}}</a>
                         </p>
-                    </ul>
+                    </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-12">
@@ -68,9 +68,38 @@
 </div>
 
 <div class="col-xs-12">
-    <ui-view>
-        <a ui-sref="scoredThings.show.scores({scoredThingId: scoredThing.token})"
-                class="btn btn-default">Show Scores</a>
-    </ui-view>
+    <h4>Scores</h4>
+    <div ng-show="!scores.length">
+        <h6>No Scores</h6>
+        <a ui-sref="scores.new({thingId: scoredThing.thingId})" style="width: 100%;"
+           class="btn btn-default btn-sm">Create A New Score</a>
+    </div>
+    <table class="table table-hover" ng-show="scores.length">
+        <thead>
+        <tr>
+            <td>User</td>
+            <td>Criterion</td>
+            <td>Points</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="score in scores">
+            <td>
+                <a ui-sref="users.show({username: score.user.username})">
+                    {{score.user.username}}
+                </a>
+            </td>
+            <td>
+                <criterion-emoji-display criterion="score.criterion"></criterion-emoji-display>{{score.criterion && score.criterion.name}}
+            </td>
+            <td>
+                <a ui-sref="scores.show({scoreId: score.token})">
+                    <points-progressbar points="score.points">
+                    </points-progressbar>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
