@@ -4,7 +4,7 @@ class WikidataService
 
   def search(query)
     # search wikidata items and return the search results of things
-    cached_search_results = Rails.cache.fetch(thing_search_cache_key(query), expires_in: 1.hour) do
+    cached_search_results = Rails.cache.fetch(thing_search_cache_key(query), expires_in: 1.day) do
       response = Wikidata::Item.search(query)
 
       if response.empty?
@@ -17,10 +17,10 @@ class WikidataService
 
       search_results.each do |search_result|
         # write the wikidata item to cache, so when finding it, it hits cache (probably happens soon after search)
-        Rails.cache.write(thing_cache_key(search_result[:id]), search_result, expires_in: 1.hour)
+        Rails.cache.write(thing_cache_key(search_result[:id]), search_result, expires_in: 1.day)
       end
 
-      Rails.cache.write(thing_search_cache_key(query), search_results, expires_in: 1.hour)
+      Rails.cache.write(thing_search_cache_key(query), search_results, expires_in: 1.day)
 
       return search_results
     end
@@ -30,7 +30,7 @@ class WikidataService
 
   def find(thing_id)
     # find a wikidata item by it's id, return that wikidata item mapped to a thing
-    cached_thing = Rails.cache.fetch(thing_cache_key(thing_id), expires_in: 1.hour) do
+    cached_thing = Rails.cache.fetch(thing_cache_key(thing_id), expires_in: 1.day) do
       wikidata_item = Wikidata::Item.find(thing_id)
 
       if wikidata_item.nil?
@@ -38,7 +38,7 @@ class WikidataService
       end
 
       thing = map_wikidata_item_to_thing(wikidata_item)
-      Rails.cache.write(thing_cache_key(thing_cache_key(thing_id)), thing, expires_in: 1.hour)
+      Rails.cache.write(thing_cache_key(thing_cache_key(thing_id)), thing, expires_in: 1.day)
 
       return thing
     end

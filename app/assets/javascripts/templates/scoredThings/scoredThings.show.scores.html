@@ -1,0 +1,28 @@
+<h2>Scores</h2>
+<table class="table table-hover" ng-show="scores.length">
+    <thead>
+    <tr>
+        <td>User</td>
+        <td>Criterion</td>
+        <td>Points</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="score in scores">
+        <td>
+            <a ui-sref="users.show({username: score.user.username})">
+                {{score.user.username}}
+            </a>
+        </td>
+        <td>
+            <criterion-emoji-display criterion="score.criterion"></criterion-emoji-display>{{score.criterion && score.criterion.name}}
+        </td>
+        <td>
+            <a ui-sref="scores.show({scoreId: score.token})">
+                <points-progressbar points="score.points">
+                </points-progressbar>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>

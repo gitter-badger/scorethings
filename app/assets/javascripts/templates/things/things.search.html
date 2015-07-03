@@ -24,9 +24,9 @@
     <table ng-show="searchResults.length" class="table table-hover">
         <thead>
             <tr>
-                <td>Title</td>
-                <td>Instance Of</td>
-                <td>Description</td>
+                <th class="col-xs-4">Title</th>
+                <th class="col-xs-4">Instance Of</th>
+                <th class="col-sm-4 hidden-xs">Description</th>
             </tr>
         </thead>
         <tbody>
@@ -43,7 +43,7 @@
                         </li>
                     </ul>
                 </td>
-                <td>
+                <td class="hidden-xs">
                     {{searchResult.description}}
                 </td>
             </tr>

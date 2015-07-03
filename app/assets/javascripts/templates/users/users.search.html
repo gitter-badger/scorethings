@@ -7,6 +7,7 @@
                        id="query"
                        class="form-control"
                        placeholder="username"
+                       ng-change="notFound = false"
                        ng-model="query">
                 <span class="input-group-btn">
                     <button class="btn btn-default" ng-disabled="!query" type="submit">
@@ -18,22 +19,17 @@
     </div>
 </form>
 
-<div class="col-xs-12" ng-show="users.length">
-    <h3>Users</h3>
-    <table class="table table-striped">
+<div class="col-xs-12">
+    <h5 ng-show="notFound">Sorry, no users found for "{{query}}"</h5>
+    <table class="table table-striped" ng-show="users.length">
         <thead>
             <tr>
-                <th>username</th>
-                <th class="hidden-xs">description</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="user in users">
                 <td>
                     <a ui-sref="users.show({username: user.username})">{{user.username}}</a>
-                </td>
-                <td>
-                    {{user.description}}
                 </td>
             </tr>
         </tbody>

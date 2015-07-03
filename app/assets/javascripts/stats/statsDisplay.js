@@ -4,7 +4,8 @@ angular.module('app').directive('statsDisplay', function() {
         replace: false,
         templateUrl: 'stats/statsDisplay.html',
         scope: {
-            stats: '='
+            stats: '=',
+            totalsUrl: '=?'
         }
     };
 });

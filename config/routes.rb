@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       get '/auth/failure' => 'auth_token#failure'
 
       get '/scored_things/:id' => 'scored_things#show'
+      get '/scored_things/:id/scores' => 'scored_things#scores'
 
       get '/things/search' => 'things#search'
       get '/things/:thing_id' => 'things#find'

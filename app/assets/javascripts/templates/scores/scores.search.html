@@ -28,10 +28,9 @@
     <thead>
         <tr>
             <td>Thing</td>
-            <td class="hidden-xs">User</td>
+            <td>User</td>
             <td class="hidden-xs">Criterion</td>
             <td>Points</td>
-            <td></td>
         </tr>
     </thead>
     <tbody>
@@ -41,7 +40,7 @@
                     {{score.scoredThing.title}}
                 </a>
             </td>
-            <td class="hidden-xs">
+            <td>
                 <a ui-sref="users.show({username: score.user.username})">
                     {{score.user.username}}
                 </a>
@@ -50,11 +49,10 @@
                 <criterion-emoji-display criterion="score.criterion"></criterion-emoji-display>{{score.criterion && score.criterion.name}}
             </td>
             <td>
-                <points-progressbar points="score.points">
-                </points-progressbar>
-            </td>
-            <td>
-                <a ui-sref="scores.show({scoreId: score.token})" class="btn btn-default">View</a>
+                <a ui-sref="scores.show({scoreId: score.token})">
+                    <points-progressbar points="score.points">
+                    </points-progressbar>
+                </a>
             </td>
         </tr>
     </tbody>
