@@ -1,7 +1,7 @@
 module Api
   module V1
     class ScoredThingsController < ApplicationController
-      skip_before_action :authenticate_request, :current_user, only: [:show]
+      skip_before_action :authenticate_request, :current_user, only: [:show, :scores]
 
       def show
         begin
