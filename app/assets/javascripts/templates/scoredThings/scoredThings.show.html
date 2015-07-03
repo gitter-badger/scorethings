@@ -33,11 +33,13 @@
                     </div>
                 </div>
                 <div class="form-group" ng-show="scoredThing.officialWebsites.length">
-                    <h4 class="col-sm-3 control-label">Websites</h4>
-                    <ul style="list-style-type: none; padding:0; margin:0;">
-                        <li ng-repeat="officialWebsite in scoredThing.officialWebsites">
-                            <a ng-href="{{officialWebsite}}" target="_blank">{{officialWebsite}}</a>
-                        </li>
+                    <label class="col-sm-3 control-label">Official Websites</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            <a ng-href="{{officialWebsite}}"
+                              ng-repeat="officialWebsite in scoredThing.officialWebsites"
+                              target="_blank">{{officialWebsite}}</a>
+                        </p>
                     </ul>
                 </div>
                 <div class="form-group">
